@@ -54,9 +54,17 @@ export default function Navbar() {
           <button
             onClick={toggleDark}
             title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-            style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--card-bg)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 17, cursor: 'pointer', flexShrink: 0 }}
-            onMouseOver={e => e.currentTarget.style.background = 'var(--nav-hover-bg)'}
-            onMouseOut={e => e.currentTarget.style.background = 'var(--card-bg)'}
+            style={{
+              width: 38, height: 38, borderRadius: '50%',
+              background: 'rgba(201,162,39,0.18)',
+              border: '2px solid #C9A227',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 18, cursor: 'pointer', flexShrink: 0,
+              boxShadow: '0 0 8px rgba(201,162,39,0.35)',
+              transition: 'all 0.2s',
+            }}
+            onMouseOver={e => { e.currentTarget.style.background = 'rgba(201,162,39,0.35)'; e.currentTarget.style.transform = 'scale(1.1)'; }}
+            onMouseOut={e => { e.currentTarget.style.background = 'rgba(201,162,39,0.18)'; e.currentTarget.style.transform = 'scale(1)'; }}
           >
             {dark ? '☀️' : '🌙'}
           </button>
