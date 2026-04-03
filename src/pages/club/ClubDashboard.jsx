@@ -38,7 +38,7 @@ const TYPE_BADGE_STYLE = {
 // ── Sub-components ────────────────────────────────────────────────────────────
 function Card({ children, className = '' }) {
   return (
-    <div className={`rounded-2xl border shadow-sm p-6 ${className}`} style={{ background: 'var(--primary-bg)', borderColor: 'var(--secondary-bg)' }}>
+    <div className={`rounded-2xl p-6 ${className}`} style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
       {children}
     </div>
   );
@@ -47,12 +47,12 @@ function Card({ children, className = '' }) {
 function SectionHeader({ icon, title, action, onAction }) {
   return (
     <div className="flex items-center justify-between mb-5">
-      <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--brown)' }}>
+      <h2 style={{ fontSize: 14, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-primary)', margin: 0 }}>
         {icon}{title}
       </h2>
       {action && (
         <button onClick={onAction}
-          className="text-xs font-semibold flex items-center gap-0.5 hover:underline" style={{ color: 'var(--gold)' }}>
+          style={{ fontSize: 12, fontWeight: 600, color: '#C9A227', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 2 }}>
           {action} <ArrowForwardIcon sx={{ fontSize: 13 }} />
         </button>
       )}
@@ -137,9 +137,9 @@ export default function ClubDashboard() {
 
       {/* ── Header ── */}
       <div className="mb-7">
-        <p className="text-sm" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>{greeting},</p>
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--brown)' }}>{user?.name} 👋</h1>
-        <p className="text-sm mt-0.5" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>Manage your clubs and events from here.</p>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 13, margin: 0 }}>{greeting},</p>
+        <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text-primary)', margin: '4px 0' }}>{user?.name} 👋</h1>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 13, margin: 0 }}>Manage your clubs and events from here.</p>
       </div>
 
       {/* ── Quick Actions ── */}
@@ -173,18 +173,21 @@ export default function ClubDashboard() {
       {/* ── Stat Cards ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-7">
         {STATS.map((s) => (
-          <Card key={s.label} className="!p-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: 'var(--secondary-bg)', color: 'var(--gold)' }}>
+          <div key={s.label} style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow)', transition: 'all 0.2s' }}
+            onMouseOver={e => { e.currentTarget.style.background = 'var(--card-bg-hover)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+            onMouseOut={e => { e.currentTarget.style.background = 'var(--card-bg)'; e.currentTarget.style.transform = 'none'; }}
+          >
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(201,162,39,0.15)', color: '#C9A227', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
               {s.icon}
             </div>
-            <div className="text-2xl font-bold" style={{ color: 'var(--brown)' }}>
-              {loading ? <CircularProgress size={18} sx={{ color: 'var(--gold)' }} /> : s.value}
+            <div style={{ fontSize: 28, fontWeight: 700, color: '#C9A227', lineHeight: 1.1 }}>
+              {loading ? <CircularProgress size={18} sx={{ color: '#C9A227' }} /> : s.value}
             </div>
-            <div className="text-xs font-medium mt-0.5" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>{s.label}</div>
-            <div className="flex items-center gap-1 mt-2 text-xs font-medium" style={{ color: 'var(--gold)' }}>
+            <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', marginTop: 4 }}>{s.label}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: 12, fontWeight: 500, color: '#C9A227' }}>
               <TrendingUpIcon sx={{ fontSize: 13 }} /> Active
             </div>
-          </Card>
+          </div>
         ))}
       </div>
 
