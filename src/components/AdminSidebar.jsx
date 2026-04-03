@@ -7,12 +7,13 @@ import WorkIcon from '@mui/icons-material/Work';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from './ThemeToggle';
 
 const NAV = [
-  { label: 'Dashboard',        to: '/admin/dashboard',   icon: <DashboardIcon fontSize="small" /> },
-  { label: 'Manage Students',  to: '/admin/students',    icon: <SchoolIcon fontSize="small" /> },
-  { label: 'Manage Clubs',     to: '/admin/clubs',       icon: <GroupsIcon fontSize="small" /> },
-  { label: 'Manage Placements',to: '/admin/placements',  icon: <WorkIcon fontSize="small" /> },
+  { label: 'Dashboard',         to: '/admin/dashboard',   icon: <DashboardIcon fontSize="small" /> },
+  { label: 'Manage Students',   to: '/admin/students',    icon: <SchoolIcon fontSize="small" /> },
+  { label: 'Manage Clubs',      to: '/admin/clubs',       icon: <GroupsIcon fontSize="small" /> },
+  { label: 'Manage Placements', to: '/admin/placements',  icon: <WorkIcon fontSize="small" /> },
 ];
 
 export default function AdminSidebar() {
@@ -23,7 +24,7 @@ export default function AdminSidebar() {
     <aside style={{ width: 256, minHeight: '100vh', background: 'var(--sidebar-bg)', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column', flexShrink: 0, transition: 'background 0.3s, border-color 0.3s' }}>
       <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg,var(--primary),var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(159,18,57,0.4)' }}>
+          <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg,var(--primary),var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(201,162,39,0.3)' }}>
             <AdminPanelSettingsIcon sx={{ fontSize: 20, color: 'white' }} />
           </div>
           <div>
@@ -36,16 +37,13 @@ export default function AdminSidebar() {
       <nav style={{ flex: 1, padding: '20px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
         <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0 12px', marginBottom: 8 }}>Menu</p>
         {NAV.map(({ label, to, icon }) => (
-          <NavLink
-            key={to}
-            to={to}
+          <NavLink key={to} to={to}
             style={({ isActive }) => ({
               display: 'flex', alignItems: 'center', gap: 12,
               padding: '10px 12px', borderRadius: 12,
-              fontSize: 14, fontWeight: 500, textDecoration: 'none',
-              transition: 'all 0.2s',
-              background: isActive ? 'linear-gradient(135deg,var(--primary),var(--accent))' : 'transparent',
-              color: isActive ? '#fff' : 'var(--text-secondary)',
+              fontSize: 14, fontWeight: 500, textDecoration: 'none', transition: 'all 0.2s',
+              background: isActive ? 'var(--primary)' : 'transparent',
+              color: isActive ? '#1C1917' : 'var(--text-secondary)',
               boxShadow: isActive ? 'var(--nav-active-shadow)' : 'none',
             })}
           >
@@ -55,8 +53,8 @@ export default function AdminSidebar() {
       </nav>
 
       <div style={{ padding: '12px', borderTop: '1px solid var(--border)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 12px', marginBottom: 4 }}>
-          <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,var(--primary),var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#fff', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 12px', marginBottom: 8 }}>
+          <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,var(--primary),var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#1C1917', flexShrink: 0 }}>
             {user?.name?.[0]?.toUpperCase() || 'A'}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -64,6 +62,7 @@ export default function AdminSidebar() {
             <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.email}</p>
           </div>
         </div>
+        <ThemeToggle />
         <Tooltip title="Logout" placement="right">
           <button
             onClick={() => { logout(); navigate('/login'); }}

@@ -5,6 +5,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import EventIcon from '@mui/icons-material/Event';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from '../components/ThemeToggle';
 
 const NAV = [
   { label: 'Dashboard', to: '/club/dashboard', icon: <DashboardIcon fontSize="small" /> },
@@ -22,7 +23,7 @@ export default function ClubLayout() {
       <aside style={{ width: 256, minHeight: '100vh', background: 'var(--sidebar-bg)', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column', flexShrink: 0, transition: 'background 0.3s, border-color 0.3s' }}>
         <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg,var(--primary),var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(159,18,57,0.4)' }}>
+            <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg,var(--primary),var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(201,162,39,0.3)' }}>
               <GroupsIcon sx={{ fontSize: 20, color: 'white' }} />
             </div>
             <div>
@@ -40,8 +41,8 @@ export default function ClubLayout() {
                 display: 'flex', alignItems: 'center', gap: 12,
                 padding: '10px 12px', borderRadius: 12,
                 fontSize: 14, fontWeight: 500, textDecoration: 'none', transition: 'all 0.2s',
-                background: isActive ? 'linear-gradient(135deg,var(--primary),var(--accent))' : 'transparent',
-                color: isActive ? '#fff' : 'var(--text-secondary)',
+                background: isActive ? 'var(--primary)' : 'transparent',
+                color: isActive ? '#1C1917' : 'var(--text-secondary)',
                 boxShadow: isActive ? 'var(--nav-active-shadow)' : 'none',
               })}
             >
@@ -51,8 +52,8 @@ export default function ClubLayout() {
         </nav>
 
         <div style={{ padding: '12px', borderTop: '1px solid var(--border)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 12px', marginBottom: 4 }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,var(--primary),var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#fff', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 12px', marginBottom: 8 }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,var(--primary),var(--accent))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#1C1917', flexShrink: 0 }}>
               {user?.name?.[0]?.toUpperCase()}
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -60,6 +61,7 @@ export default function ClubLayout() {
               <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.email}</p>
             </div>
           </div>
+          <ThemeToggle />
           <Tooltip title="Logout" placement="right">
             <button
               onClick={() => { logout(); navigate('/login'); }}
