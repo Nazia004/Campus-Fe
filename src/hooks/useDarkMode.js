@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 
 export default function useDarkMode() {
   const [dark, setDark] = useState(() => {
+    // clear old key from previous theme system
+    localStorage.removeItem('campushub_theme');
     const saved = localStorage.getItem('theme');
     return saved ? saved === 'dark' : true; // default: dark
   });
