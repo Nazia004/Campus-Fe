@@ -63,31 +63,44 @@ export default function PlacementApplicants() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                {['#', 'Student', 'Email', 'Roll No', 'Department', 'Year'].map((h) => (
+                {['#', 'Name', 'Email', 'Phone', 'Branch', 'Year', 'CGPA', 'Resume', 'Status'].map((h) => (
                   <th key={h} className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {applicants.map((a, i) => (
-                <tr key={a._id} className="hover:bg-slate-50/70 transition-colors">
-                  <td className="px-5 py-4 text-slate-400 text-xs">{i + 1}</td>
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold flex-shrink-0">
-                        {a.name[0].toUpperCase()}
+              {applicants.map((a, i) => {
+                const u = a.user || a;
+                return (
+                  <tr key={a._id} className="hover:bg-slate-50/70 transition-colors">
+                    <td className="px-5 py-4 text-slate-400 text-xs">{i + 1}</td>
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                          {(a.fullName || u.name || '?')[0].toUpperCase()}
+                        </div>
+                        <span className="font-semibold text-slate-800">{a.fullName || u.name}</span>
                       </div>
-                      <span className="font-semibold text-slate-800">{a.name}</span>
-                    </div>
-                  </td>
-                  <td className="px-5 py-4 text-slate-500">{a.email}</td>
-                  <td className="px-5 py-4">
-                    {a.rollNumber ? <Chip label={a.rollNumber} size="small" sx={{ bgcolor: '#ecfdf5', color: '#059669', fontWeight: 600, fontSize: '0.7rem' }} /> : <span className="text-slate-300">—</span>}
-                  </td>
-                  <td className="px-5 py-4 text-slate-600">{a.department || <span className="text-slate-300">—</span>}</td>
-                  <td className="px-5 py-4 text-slate-600">{a.year ? `Year ${a.year}` : <span className="text-slate-300">—</span>}</td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-5 py-4 text-slate-500">{a.email || u.email}</td>
+                    <td className="px-5 py-4 text-slate-600">{a.phone || <span className="text-slate-300">—</span>}</td>
+                    <td className="px-5 py-4 text-slate-600">{a.branch || u.department || <span className="text-slate-300">—</span>}</td>
+                    <td className="px-5 py-4 text-slate-600">{a.year ? `Year ${a.year}` : <span className="text-slate-300">—</span>}</td>
+                    <td className="px-5 py-4 text-slate-600">{a.cgpa || <span className="text-slate-300">—</span>}</td>
+                    <td className="px-5 py-4">
+                      {a.resumeUrl ? (
+                        <a href={a.resumeUrl} target="_blank" rel="noopener noreferrer"
+                          className="text-indigo-600 hover:text-indigo-800 font-medium text-xs underline">
+                          📄 View
+                        </a>
+                      ) : <span className="text-slate-300">—</span>}
+                    </td>
+                    <td className="px-5 py-4">
+                      <Chip label={a.status || 'Applied'} size="small" sx={{ bgcolor: '#eff6ff', color: '#3b82f6', fontWeight: 600, fontSize: '0.7rem' }} />
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}

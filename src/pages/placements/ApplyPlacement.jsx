@@ -12,6 +12,8 @@ export default function ApplyPlacement() {
   const [placement, setPlacement] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [resumeFile, setResumeFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState('');
 
   useEffect(() => {
     getPlacementById(id)
@@ -21,15 +23,40 @@ export default function ApplyPlacement() {
   }, [id]);
 
   const handleApply = async () => {
+    if (!resumeFile) {
+      return toast.error('Please upload your resume to apply');
+    }
+    if (resumeFile.type !== 'application/pdf') {
+      return toast.error('Only PDF resumes are allowed');
+    }
+
     setSubmitting(true);
+    setUploadStatus('Uploading resume to Cloud...');
     try {
-      await applyPlacement(id);
+      // Direct Cloudinary Upload from Frontend
+      const formData = new FormData();
+      formData.append('file', resumeFile);
+      // Fallback variables so UI doesn't crash if environment is missing
+      const preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'unsigned_preset';
+      const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'demo';
+      formData.append('upload_preset', preset);
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message || 'Failed to upload resume to Cloudinary');
+
+      setUploadStatus('Submitting application...');
+      await applyPlacement(id, { resumeUrl: data.secure_url });
       toast.success('Application submitted successfully! 🎉');
-      navigate(user?.role === 'student' ? '/dashboard' : '/placements');
+      navigate(user?.role === 'student' ? '/student/jobs' : '/placements');
     } catch (err) {
       toast.error(err.message || 'Failed to apply');
     } finally {
       setSubmitting(false);
+      setUploadStatus('');
     }
   };
 
@@ -89,6 +116,20 @@ export default function ApplyPlacement() {
               <p className="font-semibold text-gray-700">{user?.name}</p>
             </div>
           </div>
+        </div>
+
+        {/* Resume Upload */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 space-y-4">
+          <label className="block text-sm font-semibold text-gray-700 mb-1">
+            Upload your Resume (PDF only) <span className="text-red-500">*</span>
+          </label>
+          <input 
+            type="file" 
+            accept="application/pdf"
+            onChange={(e) => setResumeFile(e.target.files[0])}
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer"
+          />
+          {uploadStatus && <p className="text-sm font-medium text-indigo-600 animate-pulse">{uploadStatus}</p>}
         </div>
 
         {/* Notice */}

@@ -118,14 +118,14 @@ export default function StudentPlacementPage({ type }) {
     }
   };
 
-  const handleApply = async (item) => {
+  const handleApply = async (item, applicationData) => {
     setLoadingId(item._id);
     try {
       if (item.hasApplied) {
         await api.delete(`/placement/${item._id}/withdraw`);
         toast.success('Application withdrawn');
       } else {
-        await api.post(`/placement/${item._id}/apply`);
+        await api.post(`/placement/${item._id}/apply`, applicationData || {});
         toast.success('Applied successfully!');
       }
       fetchItems(activeTab);

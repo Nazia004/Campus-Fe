@@ -24,12 +24,22 @@ export default function ManageStudents() {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
+  
+  // Pagination
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalStudents, setTotalStudents] = useState(0);
 
-  const fetchStudents = async () => {
+  const fetchStudents = async (currentPage = 1) => {
+    setFetching(true);
     try {
-      const { data } = await api.get('/admin/students');
+      const { data } = await api.get(`/admin/students?page=${currentPage}&limit=50`);
       setStudents(data.data);
       setFiltered(data.data);
+      if (data.pagination) {
+        setTotalPages(data.pagination.pages);
+        setTotalStudents(data.pagination.total);
+      }
     } catch {
       toast.error('Failed to load students');
     } finally {
@@ -37,7 +47,7 @@ export default function ManageStudents() {
     }
   };
 
-  useEffect(() => { fetchStudents(); }, []);
+  useEffect(() => { fetchStudents(page); }, [page]);
 
   useEffect(() => {
     const q = search.toLowerCase();
@@ -111,7 +121,7 @@ export default function ManageStudents() {
           <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
             <SchoolIcon sx={{ color: 'var(--primary)' }} /> Manage Students
           </h1>
-          <p className="text-slate-400 text-sm mt-0.5">{students.length} students registered</p>
+          <p className="text-slate-400 text-sm mt-0.5">{totalStudents || students.length} students registered</p>
         </div>
         <Button
           variant="contained"
@@ -195,6 +205,31 @@ export default function ManageStudents() {
           </table>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between mt-6 px-2">
+          <p className="text-sm text-slate-500">
+            Page <span className="font-semibold text-slate-800">{page}</span> of <span className="font-semibold text-slate-800">{totalPages}</span>
+          </p>
+          <div className="flex gap-2">
+            <button
+              disabled={page === 1}
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              className="px-4 py-2 border border-slate-200 rounded-xl text-sm font-medium hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed text-slate-700"
+            >
+              Previous
+            </button>
+            <button
+              disabled={page === totalPages}
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              className="px-4 py-2 border border-slate-200 rounded-xl text-sm font-medium hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed text-slate-700"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Add/Edit Dialog */}
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: '20px', p: 1 } }}>

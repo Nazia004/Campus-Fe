@@ -1,9 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.PROD
-    ? 'https://campus-be-akqn.onrender.com/api'
-    : 'http://localhost:5000/api',
+  baseURL: 'https://campus-be-akqn.onrender.com/api',
 });
 
 api.interceptors.request.use((config) => {
