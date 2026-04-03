@@ -108,14 +108,14 @@ const TYPE_BADGE_STYLE = {
 // ── Sub-components ────────────────────────────────────────────────────────────
 function Card({ children, className = '' }) {
   return (
-    <div className={`rounded-2xl border shadow-sm p-6 ${className}`} style={{ background: 'var(--primary-bg)', borderColor: 'var(--secondary-bg)' }}>
+    <div className={`rounded-2xl p-6 ${className}`} style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
       {children}
     </div>
   );
 }
 
 function SectionTitle({ children }) {
-  return <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--brown)' }}>{children}</h2>;
+  return <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>{children}</h2>;
 }
 
 // ── Tab content components ────────────────────────────────────────────────────
@@ -293,21 +293,21 @@ export default function StudentDashboard() {
 
       {/* ── Header ── */}
       <div className="mb-6">
-        <p className="text-sm" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>{greeting},</p>
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--brown)' }}>{user?.name} 👋</h1>
-        <p className="text-sm mt-0.5" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>Welcome back to your student portal.</p>
+        <p className="text-sm" style={{ color: 'var(--text-secondary)', opacity: 0.8 }}>{greeting},</p>
+        <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{user?.name} 👋</h1>
+        <p className="text-sm mt-0.5" style={{ color: 'var(--text-secondary)' }}>Welcome back to your student portal.</p>
       </div>
 
       {/* ── Tabs ── */}
-      <div className="flex gap-1 mb-7 rounded-2xl p-1.5 shadow-sm overflow-x-auto" style={{ background: 'var(--primary-bg)', border: '1px solid var(--secondary-bg)' }}>
+      <div className="flex gap-1 mb-7 rounded-2xl p-1.5 overflow-x-auto" style={{ background: 'var(--card-bg)', border: '1px solid var(--border)' }}>
         {TABS.map((t) => (
           <button
             key={t.key}
             onClick={() => setActiveTab(t.key)}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all"
             style={activeTab === t.key
-              ? { background: 'var(--gold)', color: 'var(--brown)', fontWeight: 700 }
-              : { color: 'var(--text-dark)', opacity: 0.6 }}
+              ? { background: 'var(--primary)', color: '#1C1917', fontWeight: 700 }
+              : { color: 'var(--text-secondary)' }}
           >
             {t.icon}{t.label}
           </button>
@@ -337,15 +337,18 @@ export default function StudentDashboard() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {STATS.map((s) => (
               <button key={s.label} onClick={() => navigate(s.to)}
-                className="rounded-2xl p-5 shadow-sm text-left hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
-                style={{ background: 'var(--primary-bg)', border: '1px solid var(--secondary-bg)' }}>
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: 'var(--secondary-bg)', color: 'var(--gold)' }}>
+                className="rounded-2xl p-5 text-left transition-all duration-200"
+                style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}
+                onMouseOver={e => { e.currentTarget.style.background = 'var(--card-bg-hover)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseOut={e => { e.currentTarget.style.background = 'var(--card-bg)'; e.currentTarget.style.transform = 'none'; }}
+              >
+                <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(201,162,39,0.15)', color: '#C9A227', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
                   {s.icon}
                 </div>
-                <div className="text-2xl font-bold" style={{ color: 'var(--brown)' }}>
-                  {loading ? <CircularProgress size={18} sx={{ color: 'var(--gold)' }} /> : s.value}
+                <div style={{ fontSize: 28, fontWeight: 700, color: '#C9A227', lineHeight: 1.1 }}>
+                  {loading ? <CircularProgress size={20} sx={{ color: '#C9A227' }} /> : s.value}
                 </div>
-                <div className="text-xs font-medium mt-0.5" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>{s.label}</div>
+                <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', marginTop: 4 }}>{s.label}</div>
               </button>
             ))}
           </div>

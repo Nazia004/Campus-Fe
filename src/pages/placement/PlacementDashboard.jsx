@@ -40,43 +40,46 @@ export default function PlacementDashboard() {
   return (
     <div>
       <div className="mb-8">
-        <p className="text-slate-500 text-sm">{greeting},</p>
-        <h1 className="text-3xl font-extrabold text-slate-900">{user?.name} 👋</h1>
-        <p className="text-slate-400 text-sm mt-1">Manage all placement activities from here.</p>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 13, margin: 0 }}>{greeting},</p>
+        <h1 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text-primary)', margin: '4px 0' }}>{user?.name} 👋</h1>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 13, margin: 0 }}>Manage all placement activities from here.</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         {TYPES.map((t) => (
           <button key={t.key} onClick={() => navigate(t.to)}
-            className={`bg-white rounded-2xl border ${t.border} p-5 shadow-sm text-left hover:shadow-md hover:-translate-y-0.5 transition-all`}>
-            <div className={`w-10 h-10 rounded-xl ${t.color} flex items-center justify-center mb-3`}>{t.icon}</div>
-            <div className="text-2xl font-extrabold text-slate-900">
-              {loading ? <CircularProgress size={18} /> : (counts[t.key] || 0)}
+            style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s', boxShadow: 'var(--shadow)' }}
+            onMouseOver={e => { e.currentTarget.style.background = 'var(--card-bg-hover)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+            onMouseOut={e => { e.currentTarget.style.background = 'var(--card-bg)'; e.currentTarget.style.transform = 'none'; }}
+          >
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(201,162,39,0.15)', color: '#C9A227', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>{t.icon}</div>
+            <div style={{ fontSize: 28, fontWeight: 700, color: '#C9A227', lineHeight: 1.1 }}>
+              {loading ? <CircularProgress size={18} sx={{ color: '#C9A227' }} /> : (counts[t.key] || 0)}
             </div>
-            <div className="text-xs text-slate-500 font-medium mt-0.5">{t.label}</div>
+            <div style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500, marginTop: 4 }}>{t.label}</div>
           </button>
         ))}
       </div>
 
       {/* Recent listings */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-        <h2 className="font-bold text-slate-800 mb-5">Recent Listings</h2>
-        {loading ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: '#059669' }} /></div>
+      <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, boxShadow: 'var(--shadow)' }}>
+        <h2 style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: 20, fontSize: 15 }}>Recent Listings</h2>
+        {loading ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: '#C9A227' }} /></div>
           : recent.length === 0 ? (
-            <p className="text-slate-400 text-sm text-center py-8">No listings yet. Start by creating one from the sidebar.</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No listings yet. Start by creating one from the sidebar.</p>
           ) : (
             <div className="space-y-3">
               {recent.map((r) => {
                 const t = TYPES.find((x) => x.key === r.type);
                 return (
-                  <div key={r._id} className="flex items-center gap-4 p-3 bg-slate-50 rounded-xl">
-                    <div className={`w-9 h-9 rounded-lg ${t?.color} flex items-center justify-center flex-shrink-0`}>{t?.icon}</div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-slate-800 truncate">{r.title}</p>
-                      <p className="text-xs text-slate-400">{r.company || t?.label} · {r.location || 'Location TBD'}</p>
+                  <div key={r._id} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: 12, background: 'var(--bg-secondary)', borderRadius: 12 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(201,162,39,0.15)', color: '#C9A227', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{t?.icon}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.title}</p>
+                      <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0 }}>{r.company || t?.label} · {r.location || 'Location TBD'}</p>
                     </div>
-                    <button onClick={() => navigate(t?.to)} className="text-xs text-emerald-600 font-semibold flex items-center gap-0.5 hover:underline flex-shrink-0">
+                    <button onClick={() => navigate(t?.to)} style={{ fontSize: 12, color: '#C9A227', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
                       View <ArrowForwardIcon sx={{ fontSize: 13 }} />
                     </button>
                   </div>
