@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { Button, Chip } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import GroupsIcon from '@mui/icons-material/Groups';
 import WorkIcon from '@mui/icons-material/Work';
@@ -12,38 +11,10 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const FEATURES = [
-  {
-    icon: <SchoolIcon sx={{ fontSize: 32 }} />,
-    title: 'Student Portal',
-    desc: 'Access academic records, attendance, timetables and announcements all in one place.',
-    color: 'from-blue-500 to-indigo-600',
-    bg: 'bg-blue-50',
-    text: 'text-blue-600',
-  },
-  {
-    icon: <GroupsIcon sx={{ fontSize: 32 }} />,
-    title: 'Club Management',
-    desc: 'Discover, join and manage college clubs. Post events and connect with members.',
-    color: 'from-purple-500 to-pink-600',
-    bg: 'bg-purple-50',
-    text: 'text-purple-600',
-  },
-  {
-    icon: <WorkIcon sx={{ fontSize: 32 }} />,
-    title: 'Placement Cell',
-    desc: 'Browse job listings, apply for internships and track your placement journey.',
-    color: 'from-emerald-500 to-teal-600',
-    bg: 'bg-emerald-50',
-    text: 'text-emerald-600',
-  },
-  {
-    icon: <AdminPanelSettingsIcon sx={{ fontSize: 32 }} />,
-    title: 'Admin Control',
-    desc: 'Manage users, monitor activity and configure the entire campus platform.',
-    color: 'from-orange-500 to-red-600',
-    bg: 'bg-orange-50',
-    text: 'text-orange-600',
-  },
+  { icon: <SchoolIcon sx={{ fontSize: 32 }} />, title: 'Student Portal', desc: 'Access academic records, attendance, timetables and announcements all in one place.', accent: 'rgba(59,130,246,0.2)', iconColor: '#93C5FD' },
+  { icon: <GroupsIcon sx={{ fontSize: 32 }} />, title: 'Club Management', desc: 'Discover, join and manage college clubs. Post events and connect with members.', accent: 'rgba(124,58,237,0.2)', iconColor: '#C4B5FD' },
+  { icon: <WorkIcon sx={{ fontSize: 32 }} />, title: 'Placement Cell', desc: 'Browse job listings, apply for internships and track your placement journey.', accent: 'rgba(16,185,129,0.2)', iconColor: '#6EE7B7' },
+  { icon: <AdminPanelSettingsIcon sx={{ fontSize: 32 }} />, title: 'Admin Control', desc: 'Manage users, monitor activity and configure the entire campus platform.', accent: 'rgba(249,115,22,0.2)', iconColor: '#FCA5A5' },
 ];
 
 const STATS = [
@@ -63,131 +34,108 @@ const HIGHLIGHTS = [
 ];
 
 const LOGIN_CARDS = [
-  { role: 'student', label: 'Student', icon: <SchoolIcon />, color: 'bg-blue-600 hover:bg-blue-700', desc: 'Access your academic portal' },
-  { role: 'club', label: 'Club', icon: <GroupsIcon />, color: 'bg-purple-600 hover:bg-purple-700', desc: 'Manage your club activities' },
-  { role: 'placement', label: 'Placement', icon: <WorkIcon />, color: 'bg-emerald-600 hover:bg-emerald-700', desc: 'Placement cell dashboard' },
-  { role: 'admin', label: 'Admin', icon: <AdminPanelSettingsIcon />, color: 'bg-slate-800 hover:bg-slate-900', desc: 'Full platform control' },
+  { role: 'student', label: 'Student', icon: <SchoolIcon />, accent: 'rgba(59,130,246,0.25)', border: 'rgba(59,130,246,0.4)', desc: 'Access your academic portal' },
+  { role: 'club', label: 'Club', icon: <GroupsIcon />, accent: 'rgba(124,58,237,0.25)', border: 'rgba(124,58,237,0.4)', desc: 'Manage your club activities' },
+  { role: 'placement', label: 'Placement', icon: <WorkIcon />, accent: 'rgba(16,185,129,0.25)', border: 'rgba(16,185,129,0.4)', desc: 'Placement cell dashboard' },
+  { role: 'admin', label: 'Admin', icon: <AdminPanelSettingsIcon />, accent: 'rgba(249,115,22,0.25)', border: 'rgba(249,115,22,0.4)', desc: 'Full platform control' },
 ];
+
+const glass = { background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 16 };
 
 export default function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg,#0F172A 0%,#1E293B 50%,#4C1D95 100%)', backgroundAttachment: 'fixed' }}>
+
       {/* ── Navbar ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center">
-              <SchoolIcon sx={{ fontSize: 18, color: 'white' }} />
-            </div>
-            <span className="text-lg font-bold text-slate-900">CampusHub</span>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: 'rgba(15,23,42,0.75)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.1)', padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg,#7C3AED,#3B82F6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <SchoolIcon sx={{ fontSize: 18, color: 'white' }} />
           </div>
-          <button
-            onClick={() => navigate('/login')}
-            className="text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
-          >
-            Sign In
-          </button>
+          <span style={{ fontSize: 17, fontWeight: 700, color: '#F8FAFC' }}>CampusHub</span>
         </div>
+        <button
+          onClick={() => navigate('/login')}
+          style={{ background: 'linear-gradient(135deg,#7C3AED,#3B82F6)', color: '#fff', border: 'none', borderRadius: 10, padding: '8px 20px', fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 16px rgba(124,58,237,0.4)', transition: 'all 0.2s' }}
+          onMouseOver={e => { e.currentTarget.style.filter = 'brightness(1.15)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+          onMouseOut={e => { e.currentTarget.style.filter = 'none'; e.currentTarget.style.transform = 'none'; }}
+        >
+          Sign In
+        </button>
       </nav>
 
       {/* ── Hero ── */}
-      <section className="pt-32 pb-24 px-6 bg-gradient-to-br from-slate-50 via-indigo-50/40 to-purple-50/30 relative overflow-hidden">
-        {/* decorative blobs */}
-        <div className="absolute top-20 right-0 w-96 h-96 bg-indigo-200/30 rounded-full blur-3xl -z-0" />
-        <div className="absolute bottom-0 left-10 w-72 h-72 bg-purple-200/30 rounded-full blur-3xl -z-0" />
+      <section style={{ paddingTop: 128, paddingBottom: 96, paddingLeft: 24, paddingRight: 24, position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: 80, right: 0, width: 400, height: 400, background: 'rgba(124,58,237,0.15)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 40, width: 300, height: 300, background: 'rgba(59,130,246,0.1)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <Chip
-            label="🎓 All-in-one Campus Platform"
-            size="small"
-            sx={{ mb: 3, bgcolor: '#eef2ff', color: '#4f46e5', fontWeight: 600, fontSize: '0.75rem' }}
-          />
-          <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
+        <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+          <span style={{ display: 'inline-block', background: 'rgba(124,58,237,0.2)', border: '1px solid rgba(124,58,237,0.4)', color: '#C4B5FD', fontSize: 12, fontWeight: 600, padding: '4px 14px', borderRadius: 20, marginBottom: 24 }}>
+            🎓 All-in-one Campus Platform
+          </span>
+          <h1 style={{ fontSize: 'clamp(2.5rem,6vw,4rem)', fontWeight: 800, color: '#F8FAFC', lineHeight: 1.15, marginBottom: 24 }}>
             Your Campus,{' '}
-            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <span style={{ background: 'linear-gradient(135deg,#A78BFA,#60A5FA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               Reimagined
             </span>
           </h1>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p style={{ fontSize: 17, color: 'rgba(203,213,225,0.8)', maxWidth: 600, margin: '0 auto 40px', lineHeight: 1.7 }}>
             CampusHub brings students, clubs, placement cell and administration together on a single unified platform — streamlining every aspect of college life.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              variant="contained"
-              size="large"
-              endIcon={<ArrowForwardIcon />}
+          <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button
               onClick={() => navigate('/login')}
-              sx={{
-                bgcolor: '#4f46e5',
-                '&:hover': { bgcolor: '#4338ca' },
-                borderRadius: '10px',
-                px: 4,
-                py: 1.5,
-                fontWeight: 700,
-                textTransform: 'none',
-                fontSize: '1rem',
-                boxShadow: '0 4px 24px rgba(79,70,229,0.35)',
-              }}
+              style={{ background: 'linear-gradient(135deg,#7C3AED,#3B82F6)', color: '#fff', border: 'none', borderRadius: 12, padding: '14px 32px', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 24px rgba(124,58,237,0.45)', display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.2s' }}
+              onMouseOver={e => { e.currentTarget.style.filter = 'brightness(1.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+              onMouseOut={e => { e.currentTarget.style.filter = 'none'; e.currentTarget.style.transform = 'none'; }}
             >
-              Get Started Free
-            </Button>
-            <Button
-              variant="outlined"
-              size="large"
+              Get Started Free <ArrowForwardIcon sx={{ fontSize: 18 }} />
+            </button>
+            <button
               onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}
-              sx={{
-                borderColor: '#e2e8f0',
-                color: '#475569',
-                borderRadius: '10px',
-                px: 4,
-                py: 1.5,
-                fontWeight: 600,
-                textTransform: 'none',
-                fontSize: '1rem',
-                '&:hover': { borderColor: '#4f46e5', color: '#4f46e5', bgcolor: '#eef2ff' },
-              }}
+              style={{ background: 'rgba(255,255,255,0.07)', color: '#CBD5E1', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12, padding: '14px 32px', fontSize: 15, fontWeight: 600, cursor: 'pointer', backdropFilter: 'blur(8px)', transition: 'all 0.2s' }}
+              onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = '#F8FAFC'; }}
+              onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#CBD5E1'; }}
             >
               Explore Features
-            </Button>
+            </button>
           </div>
         </div>
 
         {/* Hero visual */}
-        <div className="max-w-5xl mx-auto mt-16 relative z-10">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden">
-            <div className="bg-slate-100 px-4 py-3 flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-400" />
-              <div className="w-3 h-3 rounded-full bg-yellow-400" />
-              <div className="w-3 h-3 rounded-full bg-green-400" />
-              <div className="flex-1 mx-4 bg-white rounded-md px-3 py-1 text-xs text-slate-400">campushub.edu.in/dashboard</div>
+        <div style={{ maxWidth: 900, margin: '64px auto 0', position: 'relative', zIndex: 1 }}>
+          <div style={{ ...glass, overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.5)' }}>
+            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#EF4444' }} />
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#F59E0B' }} />
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#10B981' }} />
+              <div style={{ flex: 1, marginLeft: 16, background: 'rgba(255,255,255,0.07)', borderRadius: 6, padding: '4px 12px', fontSize: 11, color: 'rgba(203,213,225,0.5)' }}>campushub.edu.in/dashboard</div>
             </div>
-            <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div style={{ padding: 24, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
               {[
-                { label: 'Total Students', value: '5,248', color: 'bg-blue-50 text-blue-700', icon: <SchoolIcon sx={{ fontSize: 20 }} /> },
-                { label: 'Active Clubs', value: '124', color: 'bg-purple-50 text-purple-700', icon: <GroupsIcon sx={{ fontSize: 20 }} /> },
-                { label: 'Job Listings', value: '89', color: 'bg-emerald-50 text-emerald-700', icon: <WorkIcon sx={{ fontSize: 20 }} /> },
-                { label: 'Notifications', value: '12 New', color: 'bg-orange-50 text-orange-700', icon: <NotificationsActiveIcon sx={{ fontSize: 20 }} /> },
+                { label: 'Total Students', value: '5,248', icon: <SchoolIcon sx={{ fontSize: 20 }} />, accent: 'rgba(59,130,246,0.2)', color: '#93C5FD' },
+                { label: 'Active Clubs', value: '124', icon: <GroupsIcon sx={{ fontSize: 20 }} />, accent: 'rgba(124,58,237,0.2)', color: '#C4B5FD' },
+                { label: 'Job Listings', value: '89', icon: <WorkIcon sx={{ fontSize: 20 }} />, accent: 'rgba(16,185,129,0.2)', color: '#6EE7B7' },
+                { label: 'Notifications', value: '12 New', icon: <NotificationsActiveIcon sx={{ fontSize: 20 }} />, accent: 'rgba(249,115,22,0.2)', color: '#FCA5A5' },
               ].map((card) => (
-                <div key={card.label} className={`${card.color} rounded-xl p-4`}>
-                  <div className="mb-2 opacity-70">{card.icon}</div>
-                  <div className="text-2xl font-bold">{card.value}</div>
-                  <div className="text-xs font-medium opacity-70 mt-1">{card.label}</div>
+                <div key={card.label} style={{ background: card.accent, border: `1px solid ${card.color}30`, borderRadius: 12, padding: 16 }}>
+                  <div style={{ color: card.color, marginBottom: 8, opacity: 0.9 }}>{card.icon}</div>
+                  <div style={{ fontSize: 22, fontWeight: 700, color: '#F8FAFC' }}>{card.value}</div>
+                  <div style={{ fontSize: 11, color: 'rgba(203,213,225,0.6)', marginTop: 4 }}>{card.label}</div>
                 </div>
               ))}
             </div>
-            <div className="px-6 pb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div style={{ padding: '0 24px 24px', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
               {[
-                { title: 'Upcoming: Tech Fest 2025', tag: 'Event', tagColor: 'bg-indigo-100 text-indigo-700' },
-                { title: 'TCS Campus Drive — Apply Now', tag: 'Placement', tagColor: 'bg-emerald-100 text-emerald-700' },
-                { title: 'Semester Results Published', tag: 'Academic', tagColor: 'bg-blue-100 text-blue-700' },
+                { title: 'Upcoming: Tech Fest 2025', tag: 'Event', tagColor: 'rgba(124,58,237,0.2)', tagText: '#C4B5FD' },
+                { title: 'TCS Campus Drive — Apply Now', tag: 'Placement', tagColor: 'rgba(16,185,129,0.2)', tagText: '#6EE7B7' },
+                { title: 'Semester Results Published', tag: 'Academic', tagColor: 'rgba(59,130,246,0.2)', tagText: '#93C5FD' },
               ].map((item) => (
-                <div key={item.title} className="bg-slate-50 rounded-xl p-4 flex items-start gap-3">
-                  <div className="flex-1">
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${item.tagColor}`}>{item.tag}</span>
-                    <p className="text-sm font-medium text-slate-700 mt-2">{item.title}</p>
-                  </div>
+                <div key={item.title} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: 16 }}>
+                  <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 20, background: item.tagColor, color: item.tagText }}>{item.tag}</span>
+                  <p style={{ fontSize: 13, fontWeight: 500, color: '#CBD5E1', marginTop: 10, marginBottom: 0 }}>{item.title}</p>
                 </div>
               ))}
             </div>
@@ -196,33 +144,36 @@ export default function Landing() {
       </section>
 
       {/* ── Stats ── */}
-      <section className="py-16 bg-gradient-to-r from-indigo-600 to-purple-700">
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+      <section style={{ padding: '64px 24px', background: 'rgba(124,58,237,0.15)', borderTop: '1px solid rgba(255,255,255,0.08)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32, textAlign: 'center' }}>
           {STATS.map((s) => (
             <div key={s.label}>
-              <div className="text-4xl font-extrabold mb-1">{s.value}</div>
-              <div className="text-indigo-200 text-sm font-medium">{s.label}</div>
+              <div style={{ fontSize: 36, fontWeight: 800, color: '#F8FAFC', marginBottom: 4 }}>{s.value}</div>
+              <div style={{ fontSize: 13, color: 'rgba(203,213,225,0.7)', fontWeight: 500 }}>{s.label}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* ── Features ── */}
-      <section id="features" className="py-24 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <Chip label="Features" size="small" sx={{ mb: 2, bgcolor: '#eef2ff', color: '#4f46e5', fontWeight: 600 }} />
-            <h2 className="text-4xl font-extrabold text-slate-900 mb-4">Everything your campus needs</h2>
-            <p className="text-slate-500 max-w-xl mx-auto">Four powerful portals, one seamless experience for every stakeholder in your institution.</p>
+      <section id="features" style={{ padding: '96px 24px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 64 }}>
+            <span style={{ display: 'inline-block', background: 'rgba(124,58,237,0.2)', border: '1px solid rgba(124,58,237,0.4)', color: '#C4B5FD', fontSize: 12, fontWeight: 600, padding: '4px 14px', borderRadius: 20, marginBottom: 16 }}>Features</span>
+            <h2 style={{ fontSize: 36, fontWeight: 800, color: '#F8FAFC', marginBottom: 12 }}>Everything your campus needs</h2>
+            <p style={{ color: 'rgba(203,213,225,0.7)', maxWidth: 500, margin: '0 auto' }}>Four powerful portals, one seamless experience for every stakeholder.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 24 }}>
             {FEATURES.map((f) => (
-              <div key={f.title} className="group border border-slate-100 rounded-2xl p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-default">
-                <div className={`w-14 h-14 rounded-2xl ${f.bg} ${f.text} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
+              <div key={f.title} style={{ ...glass, padding: 32, cursor: 'default', transition: 'all 0.25s' }}
+                onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.11)'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 16px 48px rgba(124,58,237,0.2)'; }}
+                onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.4)'; }}
+              >
+                <div style={{ width: 56, height: 56, borderRadius: 16, background: f.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, color: f.iconColor }}>
                   {f.icon}
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{f.title}</h3>
-                <p className="text-slate-500 leading-relaxed">{f.desc}</p>
+                <h3 style={{ fontSize: 19, fontWeight: 700, color: '#F8FAFC', marginBottom: 8 }}>{f.title}</h3>
+                <p style={{ color: 'rgba(203,213,225,0.7)', lineHeight: 1.65, margin: 0 }}>{f.desc}</p>
               </div>
             ))}
           </div>
@@ -230,36 +181,39 @@ export default function Landing() {
       </section>
 
       {/* ── Highlights ── */}
-      <section className="py-24 px-6 bg-slate-50">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+      <section style={{ padding: '96px 24px', background: 'rgba(255,255,255,0.02)' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
           <div>
-            <Chip label="Why CampusHub" size="small" sx={{ mb: 2, bgcolor: '#eef2ff', color: '#4f46e5', fontWeight: 600 }} />
-            <h2 className="text-4xl font-extrabold text-slate-900 mb-4 leading-tight">Built for modern campus life</h2>
-            <p className="text-slate-500 mb-8 leading-relaxed">
-              We've designed CampusHub from the ground up to handle the complexity of a modern educational institution — with security, speed and simplicity at its core.
+            <span style={{ display: 'inline-block', background: 'rgba(124,58,237,0.2)', border: '1px solid rgba(124,58,237,0.4)', color: '#C4B5FD', fontSize: 12, fontWeight: 600, padding: '4px 14px', borderRadius: 20, marginBottom: 16 }}>Why CampusHub</span>
+            <h2 style={{ fontSize: 34, fontWeight: 800, color: '#F8FAFC', marginBottom: 16, lineHeight: 1.2 }}>Built for modern campus life</h2>
+            <p style={{ color: 'rgba(203,213,225,0.7)', marginBottom: 32, lineHeight: 1.7 }}>
+              Designed from the ground up to handle the complexity of a modern educational institution — with security, speed and simplicity at its core.
             </p>
-            <div className="space-y-3">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {HIGHLIGHTS.map((h) => (
-                <div key={h} className="flex items-center gap-3">
-                  <CheckCircleIcon sx={{ color: '#4f46e5', fontSize: 20 }} />
-                  <span className="text-slate-700 font-medium">{h}</span>
+                <div key={h} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <CheckCircleIcon sx={{ color: '#A78BFA', fontSize: 20 }} />
+                  <span style={{ color: '#CBD5E1', fontWeight: 500 }}>{h}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             {[
-              { icon: <InsightsIcon sx={{ fontSize: 28 }} />, title: 'Analytics', desc: 'Track performance metrics across all departments', color: 'bg-indigo-600' },
-              { icon: <SecurityIcon sx={{ fontSize: 28 }} />, title: 'Secure', desc: 'Role-based access with JWT authentication', color: 'bg-purple-600' },
-              { icon: <NotificationsActiveIcon sx={{ fontSize: 28 }} />, title: 'Real-time', desc: 'Instant notifications for events and updates', color: 'bg-emerald-600' },
-              { icon: <EmojiEventsIcon sx={{ fontSize: 28 }} />, title: 'Achievements', desc: 'Celebrate student and club milestones', color: 'bg-orange-500' },
+              { icon: <InsightsIcon sx={{ fontSize: 28 }} />, title: 'Analytics', desc: 'Track performance metrics across all departments', accent: 'rgba(124,58,237,0.2)', color: '#C4B5FD' },
+              { icon: <SecurityIcon sx={{ fontSize: 28 }} />, title: 'Secure', desc: 'Role-based access with JWT authentication', accent: 'rgba(59,130,246,0.2)', color: '#93C5FD' },
+              { icon: <NotificationsActiveIcon sx={{ fontSize: 28 }} />, title: 'Real-time', desc: 'Instant notifications for events and updates', accent: 'rgba(16,185,129,0.2)', color: '#6EE7B7' },
+              { icon: <EmojiEventsIcon sx={{ fontSize: 28 }} />, title: 'Achievements', desc: 'Celebrate student and club milestones', accent: 'rgba(249,115,22,0.2)', color: '#FCA5A5' },
             ].map((card) => (
-              <div key={card.title} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-                <div className={`w-12 h-12 rounded-xl ${card.color} text-white flex items-center justify-center mb-4`}>
+              <div key={card.title} style={{ ...glass, padding: 24, transition: 'all 0.25s' }}
+                onMouseOver={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.11)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseOut={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.transform = 'none'; }}
+              >
+                <div style={{ width: 48, height: 48, borderRadius: 14, background: card.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, color: card.color }}>
                   {card.icon}
                 </div>
-                <h4 className="font-bold text-slate-900 mb-1">{card.title}</h4>
-                <p className="text-xs text-slate-500 leading-relaxed">{card.desc}</p>
+                <h4 style={{ fontWeight: 700, color: '#F8FAFC', marginBottom: 6, fontSize: 15 }}>{card.title}</h4>
+                <p style={{ fontSize: 12, color: 'rgba(203,213,225,0.6)', lineHeight: 1.6, margin: 0 }}>{card.desc}</p>
               </div>
             ))}
           </div>
@@ -267,27 +221,29 @@ export default function Landing() {
       </section>
 
       {/* ── Login Cards ── */}
-      <section className="py-24 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <Chip label="Get Started" size="small" sx={{ mb: 2, bgcolor: '#eef2ff', color: '#4f46e5', fontWeight: 600 }} />
-            <h2 className="text-4xl font-extrabold text-slate-900 mb-4">Choose your portal</h2>
-            <p className="text-slate-500">Select your role to access your personalized dashboard.</p>
+      <section style={{ padding: '96px 24px' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <span style={{ display: 'inline-block', background: 'rgba(124,58,237,0.2)', border: '1px solid rgba(124,58,237,0.4)', color: '#C4B5FD', fontSize: 12, fontWeight: 600, padding: '4px 14px', borderRadius: 20, marginBottom: 16 }}>Get Started</span>
+            <h2 style={{ fontSize: 34, fontWeight: 800, color: '#F8FAFC', marginBottom: 12 }}>Choose your portal</h2>
+            <p style={{ color: 'rgba(203,213,225,0.7)' }}>Select your role to access your personalized dashboard.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20 }}>
             {LOGIN_CARDS.map((card) => (
               <button
                 key={card.role}
                 onClick={() => navigate('/login', { state: { role: card.role } })}
-                className={`${card.color} text-white rounded-2xl p-6 text-left transition-all duration-200 hover:scale-105 hover:shadow-xl group`}
+                style={{ background: card.accent, border: `1px solid ${card.border}`, borderRadius: 16, padding: 24, textAlign: 'left', cursor: 'pointer', transition: 'all 0.25s', backdropFilter: 'blur(12px)' }}
+                onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)'; e.currentTarget.style.boxShadow = `0 16px 40px ${card.border}50`; }}
+                onMouseOut={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
               >
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-white/30 transition-colors">
+                <div style={{ width: 48, height: 48, background: 'rgba(255,255,255,0.12)', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, color: '#F8FAFC' }}>
                   {card.icon}
                 </div>
-                <div className="font-bold text-lg mb-1">{card.label}</div>
-                <div className="text-sm opacity-80">{card.desc}</div>
-                <div className="mt-4 flex items-center gap-1 text-sm font-semibold opacity-90">
-                  Login <ArrowForwardIcon sx={{ fontSize: 16 }} />
+                <div style={{ fontWeight: 700, fontSize: 16, color: '#F8FAFC', marginBottom: 4 }}>{card.label}</div>
+                <div style={{ fontSize: 12, color: 'rgba(203,213,225,0.7)', marginBottom: 16 }}>{card.desc}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 600, color: '#C4B5FD' }}>
+                  Login <ArrowForwardIcon sx={{ fontSize: 15 }} />
                 </div>
               </button>
             ))}
@@ -296,51 +252,40 @@ export default function Landing() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-24 px-6 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-20 w-64 h-64 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-20 w-80 h-80 bg-purple-300 rounded-full blur-3xl" />
-        </div>
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <h2 className="text-4xl font-extrabold text-white mb-4">Ready to transform your campus?</h2>
-          <p className="text-indigo-200 text-lg mb-10">Join thousands of students and faculty already using CampusHub.</p>
-          <Button
-            variant="contained"
-            size="large"
-            endIcon={<ArrowForwardIcon />}
+      <section style={{ padding: '96px 24px', position: 'relative', overflow: 'hidden', background: 'rgba(124,58,237,0.12)', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ position: 'absolute', top: 40, left: 80, width: 256, height: 256, background: 'rgba(124,58,237,0.15)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: 40, right: 80, width: 320, height: 320, background: 'rgba(59,130,246,0.1)', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
+        <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+          <h2 style={{ fontSize: 36, fontWeight: 800, color: '#F8FAFC', marginBottom: 16 }}>Ready to transform your campus?</h2>
+          <p style={{ color: 'rgba(203,213,225,0.7)', fontSize: 17, marginBottom: 40 }}>Join thousands of students and faculty already using CampusHub.</p>
+          <button
             onClick={() => navigate('/login')}
-            sx={{
-              bgcolor: 'white',
-              color: '#4f46e5',
-              '&:hover': { bgcolor: '#f0f0ff' },
-              borderRadius: '10px',
-              px: 5,
-              py: 1.8,
-              fontWeight: 700,
-              textTransform: 'none',
-              fontSize: '1rem',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
-            }}
+            style={{ background: 'linear-gradient(135deg,#7C3AED,#3B82F6)', color: '#fff', border: 'none', borderRadius: 12, padding: '16px 40px', fontSize: 16, fontWeight: 700, cursor: 'pointer', boxShadow: '0 8px 32px rgba(124,58,237,0.45)', display: 'inline-flex', alignItems: 'center', gap: 8, transition: 'all 0.2s' }}
+            onMouseOver={e => { e.currentTarget.style.filter = 'brightness(1.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+            onMouseOut={e => { e.currentTarget.style.filter = 'none'; e.currentTarget.style.transform = 'none'; }}
           >
-            Get Started Now
-          </Button>
+            Get Started Now <ArrowForwardIcon sx={{ fontSize: 20 }} />
+          </button>
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-slate-900 text-slate-400 py-10 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+      <footer style={{ background: 'rgba(15,23,42,0.9)', borderTop: '1px solid rgba(255,255,255,0.08)', padding: '40px 24px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 28, height: 28, borderRadius: 8, background: 'linear-gradient(135deg,#7C3AED,#3B82F6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <SchoolIcon sx={{ fontSize: 14, color: 'white' }} />
             </div>
-            <span className="text-white font-bold">CampusHub</span>
+            <span style={{ fontWeight: 700, color: '#F8FAFC' }}>CampusHub</span>
           </div>
-          <p className="text-sm">© 2025 CampusHub. All rights reserved.</p>
-          <div className="flex gap-6 text-sm">
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms</a>
-            <a href="#" className="hover:text-white transition-colors">Contact</a>
+          <p style={{ fontSize: 13, color: 'rgba(203,213,225,0.5)', margin: 0 }}>© 2025 CampusHub. All rights reserved.</p>
+          <div style={{ display: 'flex', gap: 24 }}>
+            {['Privacy', 'Terms', 'Contact'].map(l => (
+              <a key={l} href="#" style={{ fontSize: 13, color: 'rgba(203,213,225,0.5)', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseOver={e => e.currentTarget.style.color = '#F8FAFC'}
+                onMouseOut={e => e.currentTarget.style.color = 'rgba(203,213,225,0.5)'}
+              >{l}</a>
+            ))}
           </div>
         </div>
       </footer>

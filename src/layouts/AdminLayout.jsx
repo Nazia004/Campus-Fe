@@ -7,9 +7,9 @@ export default function AdminLayout() {
   if (!user || user.role !== 'admin') return <Navigate to="/login" replace />;
 
   return (
-    <div className="flex min-h-screen">
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'linear-gradient(135deg,#0F172A 0%,#1E293B 50%,#4C1D95 100%)', backgroundAttachment: 'fixed' }}>
       <AdminSidebar />
-      <main className="flex-1 p-8 bg-slate-100 overflow-auto">
+      <main style={{ flex: 1, padding: 32, overflowY: 'auto', background: 'transparent' }}>
         <Outlet />
       </main>
     </div>

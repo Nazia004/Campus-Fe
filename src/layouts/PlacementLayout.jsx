@@ -18,6 +18,14 @@ const NAV = [
   { label: 'Conferences', to: '/placement/conferences', icon: <EmojiEventsIcon fontSize="small" /> },
 ];
 
+const sidebarStyle = {
+  width: 256, minHeight: '100vh',
+  background: 'rgba(15,23,42,0.85)',
+  backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+  borderRight: '1px solid rgba(255,255,255,0.1)',
+  display: 'flex', flexDirection: 'column', flexShrink: 0,
+};
+
 export default function PlacementLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -25,55 +33,66 @@ export default function PlacementLayout() {
   if (!user || user.role !== 'placement') return <Navigate to="/login" replace />;
 
   return (
-    <div className="flex min-h-screen">
-      <aside className="w-64 min-h-screen bg-emerald-900 text-white flex flex-col shadow-2xl">
-        <div className="px-6 py-5 border-b border-emerald-700/60">
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'linear-gradient(135deg,#0F172A 0%,#1E293B 50%,#4C1D95 100%)', backgroundAttachment: 'fixed' }}>
+      <aside style={sidebarStyle}>
+        <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg">
+            <div style={{ width: 36, height: 36, borderRadius: 12, background: 'linear-gradient(135deg,#7C3AED,#3B82F6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(124,58,237,0.4)' }}>
               <WorkIcon sx={{ fontSize: 20, color: 'white' }} />
             </div>
             <div>
-              <p className="font-bold text-white text-sm">CampusHub</p>
-              <p className="text-xs text-emerald-300">Placement Cell</p>
+              <p style={{ fontWeight: 700, color: '#F8FAFC', fontSize: 14, margin: 0 }}>CampusHub</p>
+              <p style={{ fontSize: 11, color: 'rgba(203,213,225,0.6)', margin: 0 }}>Placement Cell</p>
             </div>
           </div>
         </div>
 
-        <nav className="flex-1 px-3 py-5 space-y-1">
-          <p className="text-xs font-semibold text-emerald-400 uppercase tracking-wider px-3 mb-3">Menu</p>
+        <nav style={{ flex: 1, padding: '20px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <p style={{ fontSize: 11, fontWeight: 600, color: 'rgba(203,213,225,0.5)', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0 12px', marginBottom: 8 }}>Menu</p>
           {NAV.map(({ label, to, icon }) => (
-            <NavLink key={to} to={to}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
-                  isActive ? 'bg-emerald-600 text-white shadow-lg' : 'text-emerald-300 hover:bg-emerald-800 hover:text-white'
-                }`
-              }
+            <NavLink
+              key={to}
+              to={to}
+              style={({ isActive }) => ({
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '10px 12px', borderRadius: 12,
+                fontSize: 14, fontWeight: 500,
+                textDecoration: 'none',
+                transition: 'all 0.2s',
+                background: isActive ? 'linear-gradient(135deg,#7C3AED,#3B82F6)' : 'transparent',
+                color: isActive ? '#fff' : 'rgba(203,213,225,0.75)',
+                boxShadow: isActive ? '0 4px 20px rgba(124,58,237,0.4)' : 'none',
+              })}
             >
               {icon}{label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="px-3 py-4 border-t border-emerald-700/60">
-          <div className="flex items-center gap-3 px-3 py-2 mb-2">
-            <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-xs font-bold">
+        <div style={{ padding: '12px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 12px', marginBottom: 4 }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg,#7C3AED,#3B82F6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#fff', flexShrink: 0 }}>
               {user?.name?.[0]?.toUpperCase()}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white truncate">{user?.name}</p>
-              <p className="text-xs text-emerald-400 truncate">{user?.email}</p>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ fontSize: 13, fontWeight: 600, color: '#F8FAFC', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.name}</p>
+              <p style={{ fontSize: 11, color: 'rgba(203,213,225,0.5)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.email}</p>
             </div>
           </div>
           <Tooltip title="Logout" placement="right">
-            <button onClick={() => { logout(); navigate('/login'); }}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-emerald-400 hover:bg-red-500/10 hover:text-red-400 transition-all">
+            <button
+              onClick={() => { logout(); navigate('/login'); }}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 12, fontSize: 14, fontWeight: 500, color: 'rgba(203,213,225,0.6)', background: 'transparent', border: 'none', cursor: 'pointer', transition: 'all 0.2s' }}
+              onMouseOver={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.12)'; e.currentTarget.style.color = '#FCA5A5'; }}
+              onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(203,213,225,0.6)'; }}
+            >
               <LogoutIcon fontSize="small" /> Logout
             </button>
           </Tooltip>
         </div>
       </aside>
 
-      <main className="flex-1 p-8 bg-slate-100 overflow-auto">
+      <main style={{ flex: 1, padding: 32, overflowY: 'auto', background: 'transparent' }}>
         <Outlet />
       </main>
     </div>
