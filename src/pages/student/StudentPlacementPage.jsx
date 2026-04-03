@@ -11,6 +11,7 @@ import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import CustomTypography from '@mui/material/Typography';
 import api from '../../api';
+import PlacementDetailsModal from '../../components/PlacementDetailsModal';
 
 // ── Shared styles matching Beige+Gold theme ──
 const T = {
@@ -48,6 +49,7 @@ export default function StudentPlacementPage({ type }) {
   const [statusFilter, setStatusFilter] = useState('All');
   const [fetching, setFetching] = useState(true);
   const [loadingId, setLoadingId] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   // Stats (derived and mocked for a real feel)
   const [stats, setStats] = useState({ applied: 0, shortlisted: 0, interviews: 0, offers: 0 });
@@ -325,10 +327,7 @@ export default function StudentPlacementPage({ type }) {
                       flex: 1, padding: '10px 0', borderRadius: 10, fontSize: 13, fontWeight: 600, textTransform: 'none',
                       color: T.brown, background: T.bgLight
                     }}
-                    onClick={() => {
-                      if (item.applyLink) window.open(item.applyLink, '_blank');
-                      else toast.error("No external link provided");
-                    }}
+                    onClick={() => setSelectedItem(item)}
                   >
                     View Details
                   </Button>
@@ -338,6 +337,15 @@ export default function StudentPlacementPage({ type }) {
           })}
         </div>
       )}
+
+      {/* ━━ 4. MODAL ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <PlacementDetailsModal 
+        open={!!selectedItem}
+        onClose={() => setSelectedItem(null)}
+        item={selectedItem}
+        loadingId={loadingId}
+        onApply={handleApply}
+      />
     </div>
   );
 }
