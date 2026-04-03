@@ -15,24 +15,17 @@ const CLUB_IMAGES = [
   'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=600&h=300&fit=crop',
 ];
 
-// Soft indigo-aligned badge palette
+// Soft beige-aligned badge palette
 const BADGE_STYLES = [
-  'bg-indigo-100 text-indigo-700',
-  'bg-purple-100 text-purple-700',
-  'bg-blue-100 text-blue-700',
-  'bg-teal-100 text-teal-700',
-  'bg-violet-100 text-violet-700',
-  'bg-sky-100 text-sky-700',
+  'bg-amber-50 text-amber-700',
+  'bg-orange-50 text-orange-700',
+  'bg-stone-100 text-stone-700',
 ];
 
-// Avatar gradient fallbacks
+// Avatar inline gradient fallbacks
 const GRADIENTS = [
-  'from-indigo-500 to-indigo-700',
-  'from-purple-500 to-purple-700',
-  'from-blue-500 to-blue-700',
-  'from-teal-500 to-teal-700',
-  'from-violet-500 to-violet-700',
-  'from-sky-500 to-sky-700',
+  'linear-gradient(135deg, #C9A227, #A67C00)',
+  'linear-gradient(135deg, #A67C00, #3E2723)',
 ];
 
 function getIndex(str) {
@@ -72,14 +65,14 @@ export default function ClubCard({
           }}
         />
         {/* fallback gradient */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} hidden items-center justify-center`}>
+        <div className={`absolute inset-0 hidden items-center justify-center`} style={{ background: gradient }}>
           <span className="text-5xl font-bold text-white">{c.name[0].toUpperCase()}</span>
         </div>
         {/* overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
         {/* Club initial avatar — top left */}
-        <div className={`absolute top-3 left-3 w-11 h-11 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-lg font-bold text-white shadow-md`}>
+        <div className={`absolute top-3 left-3 w-11 h-11 rounded-xl flex items-center justify-center text-lg font-bold text-white shadow-md`} style={{ background: gradient }}>
           {c.name[0].toUpperCase()}
         </div>
 
@@ -112,7 +105,7 @@ export default function ClubCard({
 
         {c.venue && (
           <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
-            <LocationOnIcon sx={{ fontSize: 13, color: '#4F46E5' }} />
+            <LocationOnIcon sx={{ fontSize: 13, color: '#C9A227' }} />
             <span className="truncate">{c.venue}</span>
           </div>
         )}
@@ -124,7 +117,8 @@ export default function ClubCard({
           {onViewDetails && (
             <button
               onClick={() => onViewDetails(c)}
-              className="w-full py-2 rounded-xl text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors flex items-center justify-center gap-1.5"
+              className="w-full py-2 rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-1.5"
+              style={{ background: 'var(--primary)', color: '#1C1917' }}
             >
               View Details <ArrowForwardIcon sx={{ fontSize: 14 }} />
             </button>
@@ -138,7 +132,7 @@ export default function ClubCard({
                   <VisibilityIcon sx={{ fontSize: 13 }} /> Members
                 </button>
               )}
-              <button onClick={() => onEdit(c)} className="flex-1 flex items-center justify-center gap-1 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 py-2 rounded-xl transition-colors">
+              <button onClick={() => onEdit(c)} className="flex-1 flex items-center justify-center gap-1 text-xs font-semibold py-2 rounded-xl transition-colors" style={{ color: 'var(--primary)', background: '#FAF3E0' }}>
                 <EditIcon sx={{ fontSize: 13 }} /> Edit
               </button>
               <button onClick={() => onDelete(c._id)} className="flex-1 flex items-center justify-center gap-1 text-xs font-semibold text-red-500 bg-red-50 hover:bg-red-100 py-2 rounded-xl transition-colors">

@@ -78,8 +78,8 @@ export default function StudentEvents() {
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-1">
-          <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
-            <CalendarMonthIcon sx={{ fontSize: 18, color: '#4F46E5' }} />
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#FAF3E0' }}>
+            <CalendarMonthIcon sx={{ fontSize: 18, color: 'var(--primary)' }} />
           </div>
           <h1 className="text-xl font-semibold text-gray-900">Events</h1>
         </div>
@@ -97,12 +97,12 @@ export default function StudentEvents() {
 
       {fetching ? (
         <div className="flex justify-center py-20">
-          <CircularProgress sx={{ color: '#4F46E5' }} />
+          <CircularProgress sx={{ color: 'var(--primary)' }} />
         </div>
       ) : filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col items-center justify-center py-20 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center mb-4">
-            <CalendarMonthIcon sx={{ fontSize: 28, color: '#4F46E5' }} />
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ background: '#FAF3E0' }}>
+            <CalendarMonthIcon sx={{ fontSize: 28, color: 'var(--primary)' }} />
           </div>
           <p className="text-base font-semibold text-gray-700 mb-1">No events found</p>
           <p className="text-sm text-gray-400">Try adjusting your search or filter</p>

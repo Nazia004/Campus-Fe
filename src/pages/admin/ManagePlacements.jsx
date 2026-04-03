@@ -92,7 +92,7 @@ export default function ManagePlacements() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-            <WorkIcon sx={{ color: '#059669' }} /> Manage Placements
+            <WorkIcon sx={{ color: 'var(--primary)' }} /> Manage Placements
           </h1>
           <p className="text-slate-400 text-sm mt-0.5">{placements.length} placement users registered</p>
         </div>
@@ -100,7 +100,7 @@ export default function ManagePlacements() {
           variant="contained"
           startIcon={<AddIcon />}
           onClick={openAdd}
-          sx={{ bgcolor: '#059669', '&:hover': { bgcolor: '#047857' }, borderRadius: '10px', fontWeight: 700, px: 3 }}
+          sx={{ bgcolor: 'var(--primary)', color: '#1C1917', '&:hover': { bgcolor: '#A67C00' }, borderRadius: '10px', fontWeight: 700, px: 3 }}
         >
           Add Placement User
         </Button>
@@ -113,7 +113,7 @@ export default function ManagePlacements() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by name or email..."
-          className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
+          className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A227] shadow-sm"
         />
       </div>
 
@@ -121,7 +121,7 @@ export default function ManagePlacements() {
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         {fetching ? (
           <div className="flex items-center justify-center py-16">
-            <CircularProgress sx={{ color: '#059669' }} />
+            <CircularProgress sx={{ color: 'var(--primary)' }} />
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16 text-slate-400">
@@ -143,7 +143,7 @@ export default function ManagePlacements() {
                 <tr key={p._id} className="hover:bg-slate-50/70 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: '#FAF3E0', color: '#1C1917' }}>
                         {p.name[0].toUpperCase()}
                       </div>
                       <span className="font-semibold text-slate-800">{p.name}</span>
@@ -153,7 +153,7 @@ export default function ManagePlacements() {
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-1">
                       <Tooltip title="Edit">
-                        <IconButton size="small" onClick={() => openEdit(p)} sx={{ color: '#059669', '&:hover': { bgcolor: '#ecfdf5' } }}>
+                        <IconButton size="small" onClick={() => openEdit(p)} sx={{ color: 'var(--primary)', '&:hover': { bgcolor: '#FAF3E0' } }}>
                           <EditIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
@@ -200,8 +200,8 @@ export default function ManagePlacements() {
           <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
             <Button onClick={() => setOpen(false)} sx={{ borderRadius: '10px', color: '#64748b' }}>Cancel</Button>
             <Button type="submit" variant="contained" disabled={loading}
-              sx={{ bgcolor: '#059669', '&:hover': { bgcolor: '#047857' }, borderRadius: '10px', fontWeight: 700, px: 3 }}>
-              {loading ? <CircularProgress size={18} sx={{ color: 'white' }} /> : editId ? 'Save Changes' : 'Add User'}
+              sx={{ bgcolor: 'var(--primary)', color: '#1C1917', '&:hover': { bgcolor: '#A67C00' }, borderRadius: '10px', fontWeight: 700, px: 3 }}>
+              {loading ? <CircularProgress size={18} sx={{ color: '#3E2723' }} /> : editId ? 'Save Changes' : 'Add User'}
             </Button>
           </DialogActions>
         </form>

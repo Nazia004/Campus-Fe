@@ -126,10 +126,10 @@ export default function ClubDashboard() {
   const totalMembers = clubs.reduce((sum, c) => sum + (c.members?.length || 0), 0);
 
   const STATS = [
-    { label: 'Total Clubs',     value: clubs.length,          icon: <GroupsIcon sx={{ fontSize: 20 }} />,        bg: 'bg-purple-50', text: 'text-purple-600', border: 'border-purple-100' },
-    { label: 'Total Events',    value: events.length,         icon: <EventIcon sx={{ fontSize: 20 }} />,          bg: 'bg-blue-50',   text: 'text-blue-600',   border: 'border-blue-100'   },
-    { label: 'Upcoming Events', value: upcomingEvents.length, icon: <CalendarMonthIcon sx={{ fontSize: 20 }} />,  bg: 'bg-emerald-50',text: 'text-emerald-600',border: 'border-emerald-100'},
-    { label: 'Total Members',   value: totalMembers,          icon: <PeopleIcon sx={{ fontSize: 20 }} />,         bg: 'bg-orange-50', text: 'text-orange-600', border: 'border-orange-100' },
+    { label: 'Total Clubs',     value: clubs.length,          icon: <GroupsIcon sx={{ fontSize: 20 }} /> },
+    { label: 'Total Events',    value: events.length,         icon: <EventIcon sx={{ fontSize: 20 }} /> },
+    { label: 'Upcoming Events', value: upcomingEvents.length, icon: <CalendarMonthIcon sx={{ fontSize: 20 }} /> },
+    { label: 'Total Members',   value: totalMembers,          icon: <PeopleIcon sx={{ fontSize: 20 }} /> },
   ];
 
   return (
@@ -197,20 +197,20 @@ export default function ClubDashboard() {
         {/* Upcoming Events */}
         <Card>
           <SectionHeader
-            icon={<EventIcon sx={{ color: '#4F46E5', fontSize: 18 }} />}
+            icon={<EventIcon sx={{ color: 'var(--primary)', fontSize: 18 }} />}
             title="Upcoming Events"
             action="View All"
             onAction={() => navigate('/club/events')}
           />
           {loading
-            ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: '#4F46E5' }} /></div>
+            ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: 'var(--primary)' }} /></div>
             : upcomingEvents.length === 0
               ? (
                 <div className="text-center py-10">
                   <EventIcon sx={{ fontSize: 32, color: '#e2e8f0' }} />
                   <p className="text-gray-400 text-sm mt-2">No upcoming events</p>
                   <button onClick={() => navigate('/club/events')}
-                    className="text-xs text-indigo-600 font-semibold mt-2 hover:underline">Create one →</button>
+                    className="text-xs font-semibold mt-2 hover:underline" style={{ color: 'var(--primary)' }}>Create one →</button>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -241,20 +241,20 @@ export default function ClubDashboard() {
         {/* Recent Club Activity */}
         <Card>
           <SectionHeader
-            icon={<GroupsIcon sx={{ color: '#7c3aed', fontSize: 18 }} />}
+            icon={<GroupsIcon sx={{ color: 'var(--primary)', fontSize: 18 }} />}
             title="Recent Club Activity"
             action="View All"
             onAction={() => navigate('/club/clubs')}
           />
           {loading
-            ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: '#7c3aed' }} /></div>
+            ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: 'var(--primary)' }} /></div>
             : clubs.length === 0
               ? (
                 <div className="text-center py-10">
                   <GroupsIcon sx={{ fontSize: 32, color: '#e2e8f0' }} />
                   <p className="text-gray-400 text-sm mt-2">No clubs yet</p>
                   <button onClick={() => navigate('/club/clubs')}
-                    className="text-xs text-purple-600 font-semibold mt-2 hover:underline">Create one →</button>
+                    className="text-xs font-semibold mt-2 hover:underline" style={{ color: 'var(--primary)' }}>Create one →</button>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -284,11 +284,11 @@ export default function ClubDashboard() {
         {/* Notifications Panel */}
         <Card>
           <SectionHeader
-            icon={<NotificationsNoneIcon sx={{ color: '#4F46E5', fontSize: 18 }} />}
+            icon={<NotificationsNoneIcon sx={{ color: 'var(--primary)', fontSize: 18 }} />}
             title="Recent Activity"
           />
           {loading
-            ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: '#4F46E5' }} /></div>
+            ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: 'var(--primary)' }} /></div>
             : notifications.length === 0
               ? <p className="text-sm text-gray-400 text-center py-8">No recent activity</p>
               : (
@@ -316,11 +316,11 @@ export default function ClubDashboard() {
         {/* Events per Month Chart */}
         <Card>
           <SectionHeader
-            icon={<TrendingUpIcon sx={{ color: '#4F46E5', fontSize: 18 }} />}
+            icon={<TrendingUpIcon sx={{ color: 'var(--primary)', fontSize: 18 }} />}
             title="Events This Period"
           />
           {loading
-            ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: '#4F46E5' }} /></div>
+            ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: 'var(--primary)' }} /></div>
             : <EventChart events={events} />}
           <p className="text-xs mt-3 text-center" style={{ color: 'var(--text-dark)', opacity: 0.5 }}>Events created over the last 6 months</p>
         </Card>

@@ -57,14 +57,16 @@ export default function MyActivities() {
       <div className="flex gap-2 mb-6 p-1 bg-white border border-slate-200 rounded-2xl w-fit shadow-sm">
         {TABS.map((t) => (
           <button key={t.key} onClick={() => setTab(t.key)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${tab === t.key ? 'bg-blue-600 text-white shadow' : 'text-slate-500 hover:text-slate-800'}`}>
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${tab === t.key ? 'shadow' : 'text-slate-500 hover:text-slate-800'}`}
+            style={tab === t.key ? { background: 'var(--primary)', color: '#1C1917' } : {}}
+          >
             {t.icon}{t.label}
           </button>
         ))}
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-16"><CircularProgress sx={{ color: '#2563eb' }} /></div>
+        <div className="flex justify-center py-16"><CircularProgress sx={{ color: 'var(--primary)' }} /></div>
       ) : tab === 'clubs' ? (
         <ClubsTab clubs={myClubs} navigate={navigate} />
       ) : tab === 'events' ? (
@@ -81,15 +83,15 @@ function ClubsTab({ clubs, navigate }) {
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center py-20 text-center">
       <GroupsIcon sx={{ fontSize: 48, color: '#e2e8f0', mb: 2 }} />
       <p className="font-semibold text-slate-600 mb-1">No clubs joined yet</p>
-      <button onClick={() => navigate('/student/clubs')} className="text-sm text-purple-600 font-semibold hover:underline">Browse clubs →</button>
+      <button onClick={() => navigate('/student/clubs')} className="text-sm font-semibold hover:underline" style={{ color: 'var(--primary)' }}>Browse clubs →</button>
     </div>
   );
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {clubs.map((c) => (
         <div key={c._id} className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden">
-          <div className="h-20 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
-            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl font-extrabold text-white border-2 border-white/30">
+          <div className="h-20 flex items-center justify-center border-b" style={{ background: '#FAF3E0', borderColor: '#E8DCCB' }}>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-extrabold border-2" style={{ background: 'rgba(232,220,203,0.5)', color: '#3E2723', borderColor: '#E8DCCB' }}>
               {c.name[0].toUpperCase()}
             </div>
           </div>
@@ -113,7 +115,7 @@ function EventsTab({ upcomingEvents, pastEvents, myEvents, navigate }) {
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center py-20 text-center">
       <EventIcon sx={{ fontSize: 48, color: '#e2e8f0', mb: 2 }} />
       <p className="font-semibold text-slate-600 mb-1">No events registered yet</p>
-      <button onClick={() => navigate('/student/events')} className="text-sm text-blue-600 font-semibold hover:underline">Browse events →</button>
+      <button onClick={() => navigate('/student/events')} className="text-sm font-semibold hover:underline" style={{ color: 'var(--primary)' }}>Browse events →</button>
     </div>
   );
   return (
@@ -121,7 +123,7 @@ function EventsTab({ upcomingEvents, pastEvents, myEvents, navigate }) {
       {upcomingEvents.length > 0 && (
         <div>
           <h2 className="text-sm font-bold text-slate-600 uppercase tracking-wider mb-3 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-blue-500 inline-block" /> Upcoming ({upcomingEvents.length})
+            <span className="w-2 h-2 rounded-full inline-block" style={{ background: 'var(--primary)' }} /> Upcoming ({upcomingEvents.length})
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {upcomingEvents.map((e) => <EventCard key={e._id} event={e} upcoming />)}
@@ -147,16 +149,16 @@ function PlacementsTab({ placements, navigate }) {
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center py-20 text-center">
       <WorkIcon sx={{ fontSize: 48, color: '#e2e8f0', mb: 2 }} />
       <p className="font-semibold text-slate-600 mb-1">No applications yet</p>
-      <button onClick={() => navigate('/student/internships')} className="text-sm text-emerald-600 font-semibold hover:underline">Browse placements →</button>
+      <button onClick={() => navigate('/student/internships')} className="text-sm font-semibold hover:underline" style={{ color: 'var(--primary)' }}>Browse placements →</button>
     </div>
   );
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {placements.map((item) => (
         <div key={item._id} className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden">
-          <div className="h-20 bg-gradient-to-br from-emerald-500 to-teal-600 flex flex-col items-center justify-center px-3">
-            <p className="text-white font-extrabold text-sm text-center line-clamp-2 leading-tight">{item.title}</p>
-            {item.company && <p className="text-white/70 text-xs mt-0.5 truncate">{item.company}</p>}
+          <div className="h-20 flex flex-col items-center justify-center px-3 border-b" style={{ background: '#FAF3E0', borderColor: '#E8DCCB' }}>
+            <p className="font-extrabold text-sm text-center line-clamp-2 leading-tight" style={{ color: '#3E2723' }}>{item.title}</p>
+            {item.company && <p className="text-xs mt-0.5 truncate" style={{ color: '#6D6D6D' }}>{item.company}</p>}
           </div>
           <div className="p-4 flex flex-col flex-1">
             <Chip label={item.type.replace('_', ' ')} size="small"
@@ -179,9 +181,9 @@ function PlacementsTab({ placements, navigate }) {
 function EventCard({ event: e, upcoming }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden">
-      <div className={`h-20 flex flex-col items-center justify-center ${upcoming ? 'bg-gradient-to-br from-blue-500 to-indigo-600' : 'bg-gradient-to-br from-slate-400 to-slate-600'}`}>
-        <span className="text-2xl font-extrabold text-white leading-none">{new Date(e.date).getDate()}</span>
-        <span className="text-xs text-blue-200">{new Date(e.date).toLocaleString('default', { month: 'short' })} {new Date(e.date).getFullYear()}</span>
+      <div className="h-20 flex flex-col items-center justify-center border-b" style={{ background: upcoming ? '#FAF3E0' : '#F3F4F6', borderColor: '#E8DCCB' }}>
+        <span className="text-2xl font-extrabold leading-none" style={{ color: upcoming ? '#3E2723' : '#9CA3AF' }}>{new Date(e.date).getDate()}</span>
+        <span className="text-xs font-semibold" style={{ color: upcoming ? 'var(--primary)' : '#9CA3AF' }}>{new Date(e.date).toLocaleString('default', { month: 'short' })} {new Date(e.date).getFullYear()}</span>
       </div>
       <div className="p-4 flex flex-col flex-1">
         <h3 className="font-bold text-slate-900 text-sm truncate mb-1">{e.title}</h3>

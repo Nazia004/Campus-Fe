@@ -109,7 +109,7 @@ export default function ManageStudents() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-            <SchoolIcon sx={{ color: '#2563eb' }} /> Manage Students
+            <SchoolIcon sx={{ color: 'var(--primary)' }} /> Manage Students
           </h1>
           <p className="text-slate-400 text-sm mt-0.5">{students.length} students registered</p>
         </div>
@@ -118,7 +118,7 @@ export default function ManageStudents() {
           startIcon={<AddIcon />}
           onClick={openAdd}
           sx={{
-            bgcolor: '#4f46e5', '&:hover': { bgcolor: '#4338ca' },
+            bgcolor: 'var(--primary)', color: '#1C1917', '&:hover': { bgcolor: '#A67C00' },
             borderRadius: '10px', textTransform: 'none', fontWeight: 700, px: 3,
           }}
         >
@@ -133,7 +133,7 @@ export default function ManageStudents() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by name, email, roll number or department..."
-          className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+          className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A227] shadow-sm"
         />
       </div>
 
@@ -141,7 +141,7 @@ export default function ManageStudents() {
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         {fetching ? (
           <div className="flex items-center justify-center py-16">
-            <CircularProgress sx={{ color: '#4f46e5' }} />
+            <CircularProgress sx={{ color: 'var(--primary)' }} />
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16 text-slate-400">
@@ -163,7 +163,7 @@ export default function ManageStudents() {
                 <tr key={s._id} className="hover:bg-slate-50/70 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs font-bold">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: '#FAF3E0', color: '#1C1917' }}>
                         {s.name[0].toUpperCase()}
                       </div>
                       <span className="font-semibold text-slate-800">{s.name}</span>
@@ -171,14 +171,14 @@ export default function ManageStudents() {
                   </td>
                   <td className="px-5 py-4 text-slate-500">{s.email}</td>
                   <td className="px-5 py-4">
-                    {s.rollNumber ? <Chip label={s.rollNumber} size="small" sx={{ bgcolor: '#eff6ff', color: '#2563eb', fontWeight: 600, fontSize: '0.7rem' }} /> : <span className="text-slate-300">—</span>}
+                    {s.rollNumber ? <Chip label={s.rollNumber} size="small" sx={{ bgcolor: '#FAF3E0', color: 'var(--primary)', fontWeight: 600, fontSize: '0.7rem' }} /> : <span className="text-slate-300">—</span>}
                   </td>
                   <td className="px-5 py-4 text-slate-600">{s.department || <span className="text-slate-300">—</span>}</td>
                   <td className="px-5 py-4 text-slate-600">{s.year ? `Year ${s.year}` : <span className="text-slate-300">—</span>}</td>
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-1">
                       <Tooltip title="Edit">
-                        <IconButton size="small" onClick={() => openEdit(s)} sx={{ color: '#4f46e5', '&:hover': { bgcolor: '#eef2ff' } }}>
+                        <IconButton size="small" onClick={() => openEdit(s)} sx={{ color: 'var(--primary)', '&:hover': { bgcolor: '#FAF3E0' } }}>
                           <EditIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
@@ -234,9 +234,9 @@ export default function ManageStudents() {
               type="submit"
               variant="contained"
               disabled={loading}
-              sx={{ bgcolor: '#4f46e5', '&:hover': { bgcolor: '#4338ca' }, borderRadius: '10px', textTransform: 'none', fontWeight: 700, px: 3 }}
+              sx={{ bgcolor: 'var(--primary)', color: '#1C1917', '&:hover': { bgcolor: '#A67C00' }, borderRadius: '10px', textTransform: 'none', fontWeight: 700, px: 3 }}
             >
-              {loading ? <CircularProgress size={18} sx={{ color: 'white' }} /> : editId ? 'Save Changes' : 'Add Student'}
+              {loading ? <CircularProgress size={18} sx={{ color: '#3E2723' }} /> : editId ? 'Save Changes' : 'Add Student'}
             </Button>
           </DialogActions>
         </form>
