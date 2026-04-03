@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress, Chip, LinearProgress } from '@mui/material';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -14,6 +14,15 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ForumIcon from '@mui/icons-material/Forum';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DownloadIcon from '@mui/icons-material/Download';
+import PersonIcon from '@mui/icons-material/Person';
+import RoomIcon from '@mui/icons-material/Room';
+import SendIcon from '@mui/icons-material/Send';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import CloseIcon from '@mui/icons-material/Close';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api';
 
@@ -45,11 +54,31 @@ const RESULTS = [
 ];
 
 const TIMETABLE = [
-  { day: 'Monday',    slots: ['9:00 Data Structures', '11:00 Maths III', '2:00 Lab: DS'] },
-  { day: 'Tuesday',   slots: ['10:00 OS', '12:00 CN', '3:00 DBMS'] },
-  { day: 'Wednesday', slots: ['9:00 SE', '11:00 Data Structures', '2:00 Lab: CN'] },
-  { day: 'Thursday',  slots: ['10:00 Maths III', '12:00 OS', '3:00 Lab: DBMS'] },
-  { day: 'Friday',    slots: ['9:00 CN', '11:00 SE', '1:00 Seminar'] },
+  { day: 'Monday',    slots: [
+    { time: '9:00 AM',  subject: 'Data Structures',     teacher: 'Dr. Sharma',     room: 'Room 301' },
+    { time: '11:00 AM', subject: 'Maths III',            teacher: 'Prof. Gupta',    room: 'Room 204' },
+    { time: '2:00 PM',  subject: 'Lab: DS',              teacher: 'Dr. Sharma',     room: 'CS Lab 1' },
+  ]},
+  { day: 'Tuesday',   slots: [
+    { time: '10:00 AM', subject: 'Operating Systems',    teacher: 'Dr. Mehta',      room: 'Room 105' },
+    { time: '12:00 PM', subject: 'Computer Networks',    teacher: 'Prof. Rao',      room: 'Room 302' },
+    { time: '3:00 PM',  subject: 'DBMS',                 teacher: 'Dr. Iyer',       room: 'Room 201' },
+  ]},
+  { day: 'Wednesday', slots: [
+    { time: '9:00 AM',  subject: 'Software Engineering', teacher: 'Prof. Desai',    room: 'Room 401' },
+    { time: '11:00 AM', subject: 'Data Structures',      teacher: 'Dr. Sharma',     room: 'Room 301' },
+    { time: '2:00 PM',  subject: 'Lab: CN',              teacher: 'Prof. Rao',      room: 'Network Lab' },
+  ]},
+  { day: 'Thursday',  slots: [
+    { time: '10:00 AM', subject: 'Maths III',            teacher: 'Prof. Gupta',    room: 'Room 204' },
+    { time: '12:00 PM', subject: 'Operating Systems',    teacher: 'Dr. Mehta',      room: 'Room 105' },
+    { time: '3:00 PM',  subject: 'Lab: DBMS',            teacher: 'Dr. Iyer',       room: 'DB Lab' },
+  ]},
+  { day: 'Friday',    slots: [
+    { time: '9:00 AM',  subject: 'Computer Networks',    teacher: 'Prof. Rao',      room: 'Room 302' },
+    { time: '11:00 AM', subject: 'Software Engineering', teacher: 'Prof. Desai',    room: 'Room 401' },
+    { time: '1:00 PM',  subject: 'Seminar',              teacher: 'Dr. Kapoor',     room: 'Seminar Hall' },
+  ]},
 ];
 
 // Static fallback notices shown when API returns nothing
@@ -149,19 +178,62 @@ function AttendanceTab() {
 }
 
 function AssignmentsTab() {
+  const [assignments, setAssignments] = useState(ASSIGNMENTS.map(a => ({ ...a, uploadedFile: null })));
+
+  const handleUpload = (index, file) => {
+    if (!file) return;
+    const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!validTypes.includes(file.type)) {
+      alert('Please upload PDF, DOC, or DOCX files only.');
+      return;
+    }
+    setAssignments(prev => prev.map((a, i) =>
+      i === index ? { ...a, status: 'Submitted', uploadedFile: file.name } : a
+    ));
+  };
+
   return (
     <Card>
       <SectionTitle>My Assignments</SectionTitle>
       <div className="space-y-3">
-        {ASSIGNMENTS.map((a, i) => (
-          <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-            <div className="flex-1 min-w-0 mr-4">
-              <p className="text-sm font-semibold text-gray-800 truncate">{a.title}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{a.subject} · Due {a.due}</p>
+        {assignments.map((a, i) => (
+          <div key={i} className="p-4 rounded-xl" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: a.uploadedFile ? 8 : 0 }}>
+              <div style={{ flex: 1, minWidth: 0, marginRight: 16 }}>
+                <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{a.title}</p>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{a.subject} · Due {a.due}</p>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+                <span className={`text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap ${STATUS_STYLE[a.status]}`}>
+                  {a.status}
+                </span>
+                {a.status !== 'Submitted' && (
+                  <label style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                    background: 'var(--primary)', color: '#1C1917',
+                    borderRadius: 10, padding: '6px 14px', fontSize: 12, fontWeight: 700,
+                    cursor: 'pointer', transition: 'all 0.2s',
+                    boxShadow: '0 2px 8px rgba(201,162,39,0.25)',
+                  }}>
+                    <CloudUploadIcon sx={{ fontSize: 14 }} />
+                    Upload
+                    <input type="file" accept=".pdf,.doc,.docx" hidden
+                      onChange={(e) => handleUpload(i, e.target.files[0])} />
+                  </label>
+                )}
+              </div>
             </div>
-            <span className={`text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap ${STATUS_STYLE[a.status]}`}>
-              {a.status}
-            </span>
+            {a.uploadedFile && (
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '6px 12px', borderRadius: 8,
+                background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)',
+                marginTop: 8,
+              }}>
+                <CheckCircleIcon sx={{ fontSize: 14, color: '#059669' }} />
+                <span style={{ fontSize: 12, color: '#059669', fontWeight: 600 }}>{a.uploadedFile}</span>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -171,18 +243,62 @@ function AssignmentsTab() {
 
 function ResultsTab() {
   const avg = Math.round(RESULTS.reduce((s, r) => s + r.marks, 0) / RESULTS.length);
+
+  const downloadPDF = () => {
+    // Generate a simple text-based result document
+    const lines = [
+      'CAMPUSHUB — SEMESTER RESULT REPORT',
+      '═'.repeat(50),
+      '',
+      `Student Name: ${document.querySelector('[data-student-name]')?.textContent || 'Student'}`,
+      `Generated: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`,
+      '',
+      '─'.repeat(50),
+      'SUBJECT-WISE RESULTS',
+      '─'.repeat(50),
+      '',
+      ...RESULTS.map(r => `  ${r.subject.padEnd(25)} ${r.marks}/${r.total}  Grade: ${r.grade}`),
+      '',
+      '─'.repeat(50),
+      `  SEMESTER AVERAGE: ${avg}/100`,
+      '─'.repeat(50),
+      '',
+      '© 2025 CampusHub. All rights reserved.',
+    ];
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'CampusHub_Semester_Result.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6">
+      {/* Download button */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <button onClick={downloadPDF} style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          background: 'var(--primary)', color: '#1C1917',
+          border: 'none', borderRadius: 12, padding: '10px 22px',
+          fontSize: 13, fontWeight: 700, cursor: 'pointer',
+          boxShadow: '0 2px 10px rgba(201,162,39,0.3)', transition: 'all 0.2s',
+        }}>
+          <DownloadIcon sx={{ fontSize: 16 }} /> Download Result
+        </button>
+      </div>
+
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {RESULTS.map((r) => (
           <Card key={r.subject} className="!p-5">
             <div className="flex items-start justify-between mb-3">
-              <p className="text-sm font-semibold text-gray-700 leading-snug">{r.subject}</p>
+              <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{r.subject}</p>
               <span className="text-lg font-extrabold ml-2" style={{ color: GRADE_COLOR[r.grade] || '#374151' }}>
                 {r.grade}
               </span>
             </div>
-            <p className="text-2xl font-extrabold text-gray-900">{r.marks}<span className="text-sm font-normal text-gray-400">/{r.total}</span></p>
+            <p className="text-2xl font-extrabold" style={{ color: 'var(--text-primary)' }}>{r.marks}<span className="text-sm font-normal" style={{ color: 'var(--text-muted)' }}>/{r.total}</span></p>
             <LinearProgress variant="determinate" value={(r.marks / r.total) * 100}
               sx={{ mt: 1.5, height: 6, borderRadius: 6, bgcolor: '#f1f5f9',
                 '& .MuiLinearProgress-bar': { bgcolor: GRADE_COLOR[r.grade] || '#4F46E5', borderRadius: 6 } }} />
@@ -190,12 +306,12 @@ function ResultsTab() {
         ))}
       </div>
       <Card className="!p-5 flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
-          <BarChartIcon sx={{ color: '#4F46E5', fontSize: 28 }} />
+        <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(201,162,39,0.15)' }}>
+          <BarChartIcon sx={{ color: 'var(--primary)', fontSize: 28 }} />
         </div>
         <div>
-          <p className="text-xs text-gray-400 font-medium">Semester Average</p>
-          <p className="text-3xl font-extrabold text-gray-900">{avg}<span className="text-base font-normal text-gray-400">/100</span></p>
+          <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Semester Average</p>
+          <p className="text-3xl font-extrabold" style={{ color: 'var(--text-primary)' }}>{avg}<span className="text-base font-normal" style={{ color: 'var(--text-muted)' }}>/100</span></p>
         </div>
       </Card>
     </div>
@@ -207,10 +323,25 @@ function TimetableTab() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       {TIMETABLE.map((d) => (
         <Card key={d.day} className="!p-4">
-          <p className="text-xs font-bold text-indigo-600 uppercase tracking-wide mb-3">{d.day}</p>
-          <div className="space-y-2">
+          <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: 'var(--primary)' }}>{d.day}</p>
+          <div className="space-y-3">
             {d.slots.map((s, i) => (
-              <div key={i} className="text-xs bg-indigo-50 text-indigo-700 font-medium px-3 py-2 rounded-lg">{s}</div>
+              <div key={i} style={{
+                padding: '10px 12px', borderRadius: 12,
+                background: 'var(--bg-secondary)', border: '1px solid var(--border)',
+                transition: 'all 0.2s',
+              }}>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4 }}>{s.subject}</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--text-muted)', marginBottom: 2 }}>
+                  <AccessTimeIcon sx={{ fontSize: 12 }} /> {s.time}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--text-muted)', marginBottom: 2 }}>
+                  <PersonIcon sx={{ fontSize: 12 }} /> {s.teacher}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--text-muted)' }}>
+                  <RoomIcon sx={{ fontSize: 12 }} /> {s.room}
+                </div>
+              </div>
             ))}
           </div>
         </Card>
@@ -243,11 +374,78 @@ function NotificationList({ items }) {
 }
 
 function CommunicationTab({ notifications }) {
+  const [question, setQuestion] = useState('');
+  const [questions, setQuestions] = useState([
+    { text: 'When will the mid-semester exam results be published?', time: new Date(Date.now() - 3600000) },
+    { text: 'Can I change my elective subject after registration?', time: new Date(Date.now() - 86400000) },
+  ]);
+
+  const handleSubmitQuestion = () => {
+    const trimmed = question.trim();
+    if (!trimmed) return;
+    setQuestions(prev => [{ text: trimmed, time: new Date() }, ...prev]);
+    setQuestion('');
+  };
+
   return (
-    <Card>
-      <SectionTitle>Notifications & Updates</SectionTitle>
-      <NotificationList items={notifications} />
-    </Card>
+    <div className="space-y-6">
+      {/* Ask a Question */}
+      <Card>
+        <SectionTitle>💬 Ask a Question</SectionTitle>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <input
+            type="text"
+            placeholder="Type your question here..."
+            value={question}
+            onChange={e => setQuestion(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleSubmitQuestion()}
+            style={{
+              flex: 1, padding: '12px 16px', borderRadius: 12,
+              border: '1px solid var(--border)', background: 'var(--input-bg)',
+              color: 'var(--text-primary)', fontSize: 14,
+              outline: 'none', transition: 'border-color 0.2s',
+            }}
+          />
+          <button onClick={handleSubmitQuestion} style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: 'var(--primary)', color: '#1C1917',
+            border: 'none', borderRadius: 12, padding: '12px 22px',
+            fontSize: 13, fontWeight: 700, cursor: 'pointer',
+            boxShadow: '0 2px 10px rgba(201,162,39,0.3)', transition: 'all 0.2s',
+          }}>
+            <SendIcon sx={{ fontSize: 16 }} /> Send
+          </button>
+        </div>
+
+        {/* Questions List */}
+        {questions.length > 0 && (
+          <div style={{ marginTop: 20 }}>
+            <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.5 }}>Your Questions</p>
+            <div className="space-y-2">
+              {questions.map((q, i) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  padding: '10px 14px', borderRadius: 10,
+                  background: 'var(--bg-secondary)', border: '1px solid var(--border)',
+                }}>
+                  <QuestionAnswerIcon sx={{ fontSize: 16, color: 'var(--primary)', flexShrink: 0 }} />
+                  <span style={{ flex: 1, fontSize: 13, color: 'var(--text-primary)' }}>{q.text}</span>
+                  <span style={{ fontSize: 11, color: 'var(--text-muted)', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                    {q.time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </Card>
+
+      {/* Notifications */}
+      <Card>
+        <SectionTitle>Notifications & Updates</SectionTitle>
+        <NotificationList items={notifications} />
+      </Card>
+    </div>
   );
 }
 
@@ -362,7 +560,7 @@ export default function StudentDashboard() {
                 <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--brown)' }}>
                   <EventIcon sx={{ color: 'var(--gold)', fontSize: 18 }} /> My Upcoming Events
                 </h2>
-                <button onClick={() => navigate('/student/my-activities')}
+                <button onClick={() => navigate('/student/events')}
                   className="text-xs font-semibold flex items-center gap-0.5 hover:underline" style={{ color: 'var(--gold)' }}>
                   View all <ArrowForwardIcon sx={{ fontSize: 13 }} />
                 </button>
@@ -507,6 +705,141 @@ export default function StudentDashboard() {
 
         </div>
       )}
+
+      {/* ━━ AI CHATBOT PLACEHOLDER ━━━━━━━━━━━━━━━━━━━━ */}
+      <ChatbotPanel />
     </div>
+  );
+}
+
+// ── AI Chatbot Placeholder Component ──
+function ChatbotPanel() {
+  const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { from: 'bot', text: 'Hi! 👋 I\'m CampusBot, your AI assistant. How can I help you today?' },
+  ]);
+  const [input, setInput] = useState('');
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = () => {
+    const trimmed = input.trim();
+    if (!trimmed) return;
+    setMessages(prev => [...prev, { from: 'user', text: trimmed }]);
+    setInput('');
+    // Simulate bot response
+    setTimeout(() => {
+      setMessages(prev => [...prev, { from: 'bot', text: 'Thanks for your question! AI integration is coming soon. Stay tuned! 🚀' }]);
+    }, 800);
+  };
+
+  return (
+    <>
+      {/* Floating button */}
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          style={{
+            position: 'fixed', bottom: 28, right: 28, zIndex: 1000,
+            width: 56, height: 56, borderRadius: '50%',
+            background: 'linear-gradient(135deg, var(--primary), var(--accent, #A67C00))',
+            border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 6px 28px rgba(201,162,39,0.4)',
+            transition: 'all 0.3s',
+            animation: 'pulseGlow 3s ease-in-out infinite',
+          }}
+        >
+          <SmartToyIcon sx={{ fontSize: 26, color: '#1C1917' }} />
+        </button>
+      )}
+
+      {/* Chat Panel */}
+      {open && (
+        <div style={{
+          position: 'fixed', bottom: 28, right: 28, zIndex: 1000,
+          width: 370, height: 500, borderRadius: 20,
+          background: 'var(--card-bg, #FFF)', border: '1px solid var(--border)',
+          boxShadow: '0 16px 60px rgba(0,0,0,0.2)',
+          display: 'flex', flexDirection: 'column', overflow: 'hidden',
+        }}>
+          {/* Header */}
+          <div style={{
+            padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            background: 'linear-gradient(135deg, var(--primary), var(--accent, #A67C00))',
+            color: '#1C1917',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <SmartToyIcon sx={{ fontSize: 22 }} />
+              <div>
+                <p style={{ fontWeight: 700, fontSize: 14, margin: 0 }}>CampusBot</p>
+                <p style={{ fontSize: 11, margin: 0, opacity: 0.7 }}>AI Assistant · Coming Soon</p>
+              </div>
+            </div>
+            <button onClick={() => setOpen(false)} style={{
+              background: 'rgba(0,0,0,0.1)', border: 'none', borderRadius: '50%',
+              width: 30, height: 30, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <CloseIcon sx={{ fontSize: 16, color: '#1C1917' }} />
+            </button>
+          </div>
+
+          {/* Messages */}
+          <div style={{ flex: 1, overflowY: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {messages.map((m, i) => (
+              <div key={i} style={{
+                alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start',
+                maxWidth: '80%', padding: '10px 14px', borderRadius: 14,
+                fontSize: 13, lineHeight: 1.5,
+                ...(m.from === 'user'
+                  ? { background: 'var(--primary)', color: '#1C1917', borderBottomRightRadius: 4 }
+                  : { background: 'var(--bg-secondary, #f5f5f5)', color: 'var(--text-primary)', borderBottomLeftRadius: 4 }),
+              }}>
+                {m.text}
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Input */}
+          <div style={{
+            padding: '12px 14px', borderTop: '1px solid var(--border)',
+            display: 'flex', gap: 8, background: 'var(--card-bg, #FFF)',
+          }}>
+            <input
+              type="text"
+              placeholder="Type a message..."
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSend()}
+              style={{
+                flex: 1, padding: '10px 14px', borderRadius: 10,
+                border: '1px solid var(--border)', background: 'var(--input-bg, #f9f9f9)',
+                color: 'var(--text-primary)', fontSize: 13, outline: 'none',
+              }}
+            />
+            <button onClick={handleSend} style={{
+              width: 40, height: 40, borderRadius: 10, border: 'none', cursor: 'pointer',
+              background: 'var(--primary)', color: '#1C1917',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'all 0.2s',
+            }}>
+              <SendIcon sx={{ fontSize: 18 }} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes pulseGlow {
+          0%, 100% { box-shadow: 0 6px 28px rgba(201,162,39,0.4); }
+          50% { box-shadow: 0 6px 28px rgba(201,162,39,0.4), 0 0 0 12px rgba(201,162,39,0); }
+        }
+      `}</style>
+    </>
   );
 }
