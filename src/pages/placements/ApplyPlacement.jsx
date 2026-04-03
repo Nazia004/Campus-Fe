@@ -31,25 +31,23 @@ export default function ApplyPlacement() {
     }
 
     setSubmitting(true);
-    setUploadStatus('Uploading resume to Cloud...');
+    setUploadStatus('Uploading resume...');
     try {
-      // Direct Cloudinary Upload from Frontend
+      // Upload PDF via backend → Cloudinary
       const formData = new FormData();
-      formData.append('file', resumeFile);
-      // Fallback variables so UI doesn't crash if environment is missing
-      const preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'unsigned_preset';
-      const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'demo';
-      formData.append('upload_preset', preset);
+      formData.append('resume', resumeFile);
 
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`, {
+      const token = localStorage.getItem('token');
+      const res = await fetch('https://campus-be-akqn.onrender.com/api/upload/resume', {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
         body: formData,
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error?.message || 'Failed to upload resume to Cloudinary');
+      if (!res.ok) throw new Error(data.message || 'Failed to upload resume');
 
       setUploadStatus('Submitting application...');
-      await applyPlacement(id, { resumeUrl: data.secure_url });
+      await applyPlacement(id, { resumeUrl: data.url });
       toast.success('Application submitted successfully! 🎉');
       navigate(user?.role === 'student' ? '/student/jobs' : '/placements');
     } catch (err) {

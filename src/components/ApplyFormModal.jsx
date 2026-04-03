@@ -84,22 +84,21 @@ export default function ApplyFormModal({ open, onClose, item, onSubmit }) {
     
     setIsSubmitting(true);
     try {
-      // 1. Upload resume PDF directly to Cloudinary
+      // 1. Upload resume PDF to backend → Cloudinary
       const uploadData = new FormData();
-      uploadData.append('file', resume);
-      const preset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'unsigned_preset';
-      const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'demo';
-      uploadData.append('upload_preset', preset);
+      uploadData.append('resume', resume);
 
-      const cloudRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`, {
+      const token = localStorage.getItem('token');
+      const cloudRes = await fetch('https://campus-be-akqn.onrender.com/api/upload/resume', {
         method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
         body: uploadData,
       });
       const cloudData = await cloudRes.json();
-      if (!cloudRes.ok) throw new Error(cloudData.error?.message || 'Resume upload failed');
+      if (!cloudRes.ok) throw new Error(cloudData.message || 'Resume upload failed');
 
       // 2. Submit application with all form data + Cloudinary URL
-      await onSubmit(item, { ...formData, resumeUrl: cloudData.secure_url });
+      await onSubmit(item, { ...formData, resumeUrl: cloudData.url });
     } catch (err) {
       alert(err.message || 'Application failed. Please try again.');
     } finally {
