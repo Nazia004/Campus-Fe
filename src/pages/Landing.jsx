@@ -1,310 +1,401 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 import SchoolIcon from '@mui/icons-material/School';
 import GroupsIcon from '@mui/icons-material/Groups';
 import WorkIcon from '@mui/icons-material/Work';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import InsightsIcon from '@mui/icons-material/Insights';
-import SecurityIcon from '@mui/icons-material/Security';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import LinkOffIcon from '@mui/icons-material/LinkOff';
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff';
+import ForumIcon from '@mui/icons-material/Forum';
+import HubIcon from '@mui/icons-material/Hub';
+import SpeedIcon from '@mui/icons-material/Speed';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import LoginIcon from '@mui/icons-material/Login';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import EventIcon from '@mui/icons-material/Event';
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import ScaleIcon from '@mui/icons-material/Scale';
+import SecurityIcon from '@mui/icons-material/Security';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import './Landing.css';
 
-// ── Theme tokens ──────────────────────────────────────────────────────────────
-const T = {
-  bg:          '#FAF3E0',
-  bgAlt:       '#F5EDD4',
-  bgCard:      '#FFFFFF',
-  sidebar:     '#EDE0C4',
-  primary:     '#C9A227',
-  primaryDark: '#3E2723',
-  accent:      '#A67C00',
-  textMain:    '#2D2D2D',
-  textLight:   '#6D6D6D',
-  border:      '#E8DCCB',
-  gold10:      'rgba(201,162,39,0.10)',
-  gold20:      'rgba(201,162,39,0.20)',
-  gold40:      'rgba(201,162,39,0.40)',
-};
+// ── Intersection Observer hook for scroll-triggered animations ──
+function useScrollReveal() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    );
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(40px)';
+    el.style.transition = 'opacity 0.7s ease-out, transform 0.7s ease-out';
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
+
+// ── Data ─────────────────────────────────────────────────────────
+const STATS = [
+  { value: '5,000+', label: 'Active Students' },
+  { value: '120+',   label: 'Clubs Managed' },
+  { value: '92%',    label: 'Placement Success Rate' },
+  { value: '10K+',   label: 'Monthly Interactions' },
+];
+
+const PROBLEMS = [
+  { icon: <LinkOffIcon />,             title: 'Disconnected Systems',   desc: 'Academics, clubs, and placements live in separate tools — nothing talks to each other.' },
+  { icon: <NotificationsOffIcon />,    title: 'Missed Updates',         desc: 'Important deadlines and announcements slip through cracks across scattered channels.' },
+  { icon: <ForumIcon />,               title: 'Poor Communication',     desc: 'No central place for students, faculty, and admin to coordinate effectively.' },
+];
+
+const SOLUTIONS = [
+  { icon: <HubIcon />,                 title: 'Unified Platform',       desc: 'One system for academics, clubs, placements, and campus events — fully integrated.' },
+  { icon: <SpeedIcon />,               title: 'Real-Time Notifications', desc: 'Never miss a deadline, event, or placement opportunity with instant push alerts.' },
+  { icon: <DashboardIcon />,           title: 'Role-Based Dashboards',  desc: 'Students, club leads, placement cells, and admins each get a tailored experience.' },
+];
 
 const FEATURES = [
-  { icon: <SchoolIcon sx={{ fontSize: 32 }} />,             title: 'Student Portal',  desc: 'Access academic records, attendance, timetables and announcements all in one place.' },
-  { icon: <GroupsIcon sx={{ fontSize: 32 }} />,             title: 'Club Management', desc: 'Discover, join and manage college clubs. Post events and connect with members.' },
-  { icon: <WorkIcon sx={{ fontSize: 32 }} />,               title: 'Placement Cell',  desc: 'Browse job listings, apply for internships and track your placement journey.' },
-  { icon: <AdminPanelSettingsIcon sx={{ fontSize: 32 }} />, title: 'Admin Control',   desc: 'Manage users, monitor activity and configure the entire campus platform.' },
+  { icon: <SchoolIcon sx={{ fontSize: 30 }} />,               title: 'Academic Control',       desc: 'Track attendance, grades, timetables, and assignments in one unified view.' },
+  { icon: <WorkIcon sx={{ fontSize: 30 }} />,                 title: 'Placement Engine',       desc: 'Browse internships, jobs, and campus drives. Apply and track status instantly.' },
+  { icon: <GroupsIcon sx={{ fontSize: 30 }} />,               title: 'Club Ecosystem',         desc: 'Discover clubs, manage members, organize events, and grow your community.' },
+  { icon: <NotificationsActiveIcon sx={{ fontSize: 30 }} />,  title: 'Smart Notifications',    desc: 'Context-aware alerts for events, deadlines, and placement updates.' },
 ];
 
-const STATS = [
-  { value: '5,000+', label: 'Students Enrolled' },
-  { value: '120+',   label: 'Active Clubs' },
-  { value: '300+',   label: 'Placements This Year' },
-  { value: '98%',    label: 'Satisfaction Rate' },
+const FLOW_STEPS = [
+  { icon: <LoginIcon sx={{ fontSize: 28 }} />,          label: 'Login',             desc: 'Secure role-based login for every user' },
+  { icon: <AssignmentIcon sx={{ fontSize: 28 }} />,     label: 'Check Assignments',  desc: 'View your pending work at a glance' },
+  { icon: <EventIcon sx={{ fontSize: 28 }} />,          label: 'Join Event',         desc: 'Discover and register for campus events' },
+  { icon: <BusinessCenterIcon sx={{ fontSize: 28 }} />, label: 'Apply Internship',   desc: 'Find and apply to opportunities' },
 ];
 
-const HIGHLIGHTS = [
-  'Real-time notifications & announcements',
-  'Secure role-based access control',
-  'Placement tracking & analytics',
-  'Club event management',
-  'Academic performance insights',
-  'Mobile-friendly responsive design',
+const WHY_ITEMS = [
+  { icon: <IntegrationInstructionsIcon />, title: 'All-in-One System',      desc: 'No more juggling five different platforms. Everything lives here.' },
+  { icon: <CampaignIcon />,               title: 'Built for Real Colleges', desc: 'Designed with actual college workflows, not generic templates.' },
+  { icon: <ScaleIcon />,                  title: 'Scales With You',         desc: 'From 500 to 50,000 students — the architecture handles it all.' },
 ];
 
-const LOGIN_CARDS = [
-  { role: 'student',   label: 'Student',   icon: <SchoolIcon />,             desc: 'Access your academic portal' },
-  { role: 'club',      label: 'Club',       icon: <GroupsIcon />,             desc: 'Manage your club activities' },
-  { role: 'placement', label: 'Placement',  icon: <WorkIcon />,               desc: 'Placement cell dashboard' },
-  { role: 'admin',     label: 'Admin',      icon: <AdminPanelSettingsIcon />, desc: 'Full platform control' },
+const WHY_METRICS = [
+  { label: 'User Satisfaction', value: '98%', width: '98%' },
+  { label: 'Response Time',    value: '<1s',  width: '95%' },
+  { label: 'Uptime',           value: '99.9%',width: '99%' },
+  { label: 'Feature Coverage',  value: '100%', width: '100%' },
 ];
 
-const card = {
-  background: T.bgCard,
-  border: `1px solid ${T.border}`,
-  borderRadius: 16,
-  boxShadow: '0 2px 12px rgba(62,39,35,0.08)',
-};
-
+// ── Component ────────────────────────────────────────────────────
 export default function Landing() {
   const navigate = useNavigate();
+  const statsRef    = useScrollReveal();
+  const problemRef  = useScrollReveal();
+  const featuresRef = useScrollReveal();
+  const flowRef     = useScrollReveal();
+  const whyRef      = useScrollReveal();
+  const ctaRef      = useScrollReveal();
 
   return (
-    <div style={{ minHeight: '100vh', background: T.bg, fontFamily: 'Inter, sans-serif' }}>
+    <div className="landing-root">
 
-      {/* ── Navbar ── */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: 'rgba(250,243,224,0.92)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${T.border}`, padding: '0 32px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 2px 12px rgba(62,39,35,0.07)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 34, height: 34, borderRadius: 10, background: T.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 2px 8px ${T.gold40}` }}>
-            <SchoolIcon sx={{ fontSize: 18, color: T.primaryDark }} />
+      {/* ━━ Navbar ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <nav className="landing-nav" id="landing-navbar">
+        <div className="landing-nav__logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ cursor: 'pointer' }}>
+          <div className="landing-nav__logo-icon">
+            <SchoolIcon sx={{ fontSize: 18, color: '#3E2723' }} />
           </div>
-          <span style={{ fontSize: 17, fontWeight: 700, color: T.primaryDark }}>CampusHub</span>
+          <span className="landing-nav__logo-text">CampusHub</span>
+        </div>
+        <div className="landing-nav__links">
+          <a href="#features" className="landing-nav__link">Features</a>
+          <a href="#how-it-works" className="landing-nav__link">How It Works</a>
+          <a href="#why" className="landing-nav__link">Why Us</a>
         </div>
         <button
+          className="landing-nav__cta"
           onClick={() => navigate('/login')}
-          style={{ background: T.primary, color: T.primaryDark, border: 'none', borderRadius: 10, padding: '8px 22px', fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: `0 2px 10px ${T.gold40}`, transition: 'all 0.2s' }}
-          onMouseOver={e => { e.currentTarget.style.background = T.accent; e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-          onMouseOut={e => { e.currentTarget.style.background = T.primary; e.currentTarget.style.color = T.primaryDark; e.currentTarget.style.transform = 'none'; }}
+          id="nav-sign-in"
         >
           Sign In
         </button>
       </nav>
 
-      {/* ── Hero ── */}
-      <section style={{ paddingTop: 120, paddingBottom: 80, paddingLeft: 24, paddingRight: 24, background: `linear-gradient(135deg, ${T.bg} 0%, ${T.bgAlt} 100%)`, position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: 60, right: -40, width: 360, height: 360, background: T.gold10, borderRadius: '50%', filter: 'blur(60px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: -40, left: 20, width: 280, height: 280, background: T.gold10, borderRadius: '50%', filter: 'blur(60px)', pointerEvents: 'none' }} />
+      {/* ━━ Hero ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="hero" id="hero-section">
+        <div className="hero__orb hero__orb--1" />
+        <div className="hero__orb hero__orb--2" />
+        <div className="hero__orb hero__orb--3" />
 
-        <div style={{ maxWidth: 780, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <span style={{ display: 'inline-block', background: T.gold20, border: `1px solid ${T.gold40}`, color: T.accent, fontSize: 12, fontWeight: 600, padding: '4px 14px', borderRadius: 20, marginBottom: 24 }}>
-            🎓 All-in-one Campus Platform
-          </span>
-          <h1 style={{ fontSize: 'clamp(2.2rem,5.5vw,3.6rem)', fontWeight: 800, color: T.primaryDark, lineHeight: 1.15, marginBottom: 20 }}>
-            Your Campus,{' '}
-            <span style={{ color: T.primary }}>Reimagined</span>
+        <div className="hero__content">
+          <div className="hero__badge">
+            <span className="hero__badge-dot" />
+            All-in-one Campus Platform
+          </div>
+
+          <h1 className="hero__title">
+            One Platform to Run Your{' '}
+            <span className="hero__title-highlight">Entire Campus</span>
           </h1>
-          <p style={{ fontSize: 17, color: T.textLight, maxWidth: 580, margin: '0 auto 36px', lineHeight: 1.7 }}>
-            CampusHub brings students, clubs, placement cell and administration together on a single unified platform — streamlining every aspect of college life.
+
+          <p className="hero__subtitle">
+            CampusHub integrates academics, clubs, placements, and campus events
+            into a single intelligent platform — so nothing falls through the cracks.
           </p>
-          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+
+          <div className="hero__actions">
             <button
+              className="hero__btn-primary"
               onClick={() => navigate('/login')}
-              style={{ background: T.primary, color: T.primaryDark, border: 'none', borderRadius: 12, padding: '13px 30px', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: `0 4px 18px ${T.gold40}`, display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.2s' }}
-              onMouseOver={e => { e.currentTarget.style.background = T.accent; e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-              onMouseOut={e => { e.currentTarget.style.background = T.primary; e.currentTarget.style.color = T.primaryDark; e.currentTarget.style.transform = 'none'; }}
+              id="hero-get-started"
             >
-              Get Started Free <ArrowForwardIcon sx={{ fontSize: 18 }} />
+              Get Started <ArrowForwardIcon sx={{ fontSize: 18 }} />
             </button>
             <button
+              className="hero__btn-secondary"
               onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}
-              style={{ background: 'transparent', color: T.textMain, border: `1px solid ${T.border}`, borderRadius: 12, padding: '13px 30px', fontSize: 15, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
-              onMouseOver={e => { e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.color = T.primary; }}
-              onMouseOut={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.color = T.textMain; }}
+              id="hero-explore"
             >
               Explore Features
             </button>
           </div>
-        </div>
 
-        {/* Hero visual */}
-        <div style={{ maxWidth: 880, margin: '56px auto 0', position: 'relative', zIndex: 1 }}>
-          <div style={{ ...card, overflow: 'hidden', boxShadow: '0 8px 40px rgba(62,39,35,0.12)' }}>
-            <div style={{ background: T.bgAlt, padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: `1px solid ${T.border}` }}>
-              <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#EF4444' }} />
-              <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#F59E0B' }} />
-              <div style={{ width: 11, height: 11, borderRadius: '50%', background: '#10B981' }} />
-              <div style={{ flex: 1, marginLeft: 12, background: T.bgCard, borderRadius: 6, padding: '3px 12px', fontSize: 11, color: T.textLight, border: `1px solid ${T.border}` }}>campushub.edu.in/dashboard</div>
+          <div className="hero__proof">
+            <div className="hero__proof-item">
+              <div className="hero__proof-value">5,000+</div>
+              <div className="hero__proof-label">Students</div>
             </div>
-            <div style={{ padding: 20, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14 }}>
-              {[
-                { label: 'Total Students', value: '5,248', icon: <SchoolIcon sx={{ fontSize: 18 }} /> },
-                { label: 'Active Clubs',   value: '124',   icon: <GroupsIcon sx={{ fontSize: 18 }} /> },
-                { label: 'Job Listings',   value: '89',    icon: <WorkIcon sx={{ fontSize: 18 }} /> },
-                { label: 'Notifications',  value: '12 New',icon: <NotificationsActiveIcon sx={{ fontSize: 18 }} /> },
-              ].map((c) => (
-                <div key={c.label} style={{ background: T.gold10, border: `1px solid ${T.border}`, borderRadius: 12, padding: 14 }}>
-                  <div style={{ color: T.primary, marginBottom: 6 }}>{c.icon}</div>
-                  <div style={{ fontSize: 20, fontWeight: 700, color: T.primaryDark }}>{c.value}</div>
-                  <div style={{ fontSize: 11, color: T.textLight, marginTop: 3 }}>{c.label}</div>
-                </div>
-              ))}
+            <div className="hero__proof-item">
+              <div className="hero__proof-value">100+</div>
+              <div className="hero__proof-label">Clubs</div>
             </div>
-            <div style={{ padding: '0 20px 20px', display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 14 }}>
-              {[
-                { title: 'Upcoming: Tech Fest 2025',      tag: 'Event' },
-                { title: 'TCS Campus Drive — Apply Now',  tag: 'Placement' },
-                { title: 'Semester Results Published',    tag: 'Academic' },
-              ].map((item) => (
-                <div key={item.title} style={{ background: T.bgAlt, border: `1px solid ${T.border}`, borderRadius: 12, padding: 14 }}>
-                  <span style={{ fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 20, background: T.gold20, color: T.accent }}>{item.tag}</span>
-                  <p style={{ fontSize: 13, fontWeight: 500, color: T.textMain, marginTop: 8, marginBottom: 0 }}>{item.title}</p>
-                </div>
-              ))}
+            <div className="hero__proof-item">
+              <div className="hero__proof-value">Real-time</div>
+              <div className="hero__proof-label">Placement Tracking</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Stats ── */}
-      <section style={{ padding: '56px 24px', background: T.primary }}>
-        <div style={{ maxWidth: 880, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32, textAlign: 'center' }}>
+      {/* ━━ Stats ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="stats" ref={statsRef} id="stats-section">
+        <div className="stats__orb stats__orb--1" />
+        <div className="stats__orb stats__orb--2" />
+        <div className="stats__grid">
           {STATS.map((s) => (
-            <div key={s.label}>
-              <div style={{ fontSize: 34, fontWeight: 800, color: T.primaryDark, marginBottom: 4 }}>{s.value}</div>
-              <div style={{ fontSize: 13, color: T.primaryDark, fontWeight: 500, opacity: 0.75 }}>{s.label}</div>
+            <div className="stats__item" key={s.label}>
+              <div className="stats__value">{s.value}</div>
+              <div className="stats__label">{s.label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── Features ── */}
-      <section id="features" style={{ padding: '88px 24px', background: T.bg }}>
-        <div style={{ maxWidth: 1080, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <span style={{ display: 'inline-block', background: T.gold20, border: `1px solid ${T.gold40}`, color: T.accent, fontSize: 12, fontWeight: 600, padding: '4px 14px', borderRadius: 20, marginBottom: 14 }}>Features</span>
-            <h2 style={{ fontSize: 34, fontWeight: 800, color: T.primaryDark, marginBottom: 10 }}>Everything your campus needs</h2>
-            <p style={{ color: T.textLight, maxWidth: 480, margin: '0 auto' }}>Four powerful portals, one seamless experience for every stakeholder.</p>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 22 }}>
-            {FEATURES.map((f) => (
-              <div key={f.title} style={{ ...card, padding: 30, cursor: 'default', transition: 'all 0.25s' }}
-                onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 12px 36px rgba(201,162,39,0.18)`; e.currentTarget.style.borderColor = T.primary; }}
-                onMouseOut={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(62,39,35,0.08)'; e.currentTarget.style.borderColor = T.border; }}
-              >
-                <div style={{ width: 54, height: 54, borderRadius: 14, background: T.gold20, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18, color: T.primary }}>
-                  {f.icon}
-                </div>
-                <h3 style={{ fontSize: 18, fontWeight: 700, color: T.primaryDark, marginBottom: 8 }}>{f.title}</h3>
-                <p style={{ color: T.textLight, lineHeight: 1.65, margin: 0 }}>{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Highlights ── */}
-      <section style={{ padding: '88px 24px', background: T.bgAlt }}>
-        <div style={{ maxWidth: 1080, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }}>
-          <div>
-            <span style={{ display: 'inline-block', background: T.gold20, border: `1px solid ${T.gold40}`, color: T.accent, fontSize: 12, fontWeight: 600, padding: '4px 14px', borderRadius: 20, marginBottom: 14 }}>Why CampusHub</span>
-            <h2 style={{ fontSize: 32, fontWeight: 800, color: T.primaryDark, marginBottom: 14, lineHeight: 1.2 }}>Built for modern campus life</h2>
-            <p style={{ color: T.textLight, marginBottom: 28, lineHeight: 1.7 }}>
-              Designed from the ground up to handle the complexity of a modern educational institution — with security, speed and simplicity at its core.
+      {/* ━━ Problem → Solution ━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="problem-solution" ref={problemRef} id="problem-solution-section">
+        <div className="problem-solution__inner">
+          <div className="problem-solution__header">
+            <div className="problem-solution__badge">
+              <AutoAwesomeIcon sx={{ fontSize: 14 }} /> The Problem We Solve
+            </div>
+            <h2 className="problem-solution__title">From Chaos to Clarity</h2>
+            <p className="problem-solution__subtitle">
+              Most campuses run on disconnected tools. CampusHub changes that.
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {HIGHLIGHTS.map((h) => (
-                <div key={h} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <CheckCircleIcon sx={{ color: T.primary, fontSize: 20 }} />
-                  <span style={{ color: T.textMain, fontWeight: 500 }}>{h}</span>
+          </div>
+
+          <div className="problem-solution__grid">
+            {/* Problem Column */}
+            <div className="ps-column">
+              <div className="ps-column-label ps-column-label--problem">❌ The Problem</div>
+              {PROBLEMS.map((p) => (
+                <div className="ps-card ps-card--problem" key={p.title}>
+                  <div className="ps-card__icon ps-card__icon--problem">{p.icon}</div>
+                  <div className="ps-card__title">{p.title}</div>
+                  <p className="ps-card__desc">{p.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Divider */}
+            <div className="ps-divider">
+              <div className="ps-divider__line" />
+              <div className="ps-divider__arrow">→</div>
+              <div className="ps-divider__line" />
+            </div>
+
+            {/* Solution Column */}
+            <div className="ps-column">
+              <div className="ps-column-label ps-column-label--solution">✓ The Solution</div>
+              {SOLUTIONS.map((s) => (
+                <div className="ps-card ps-card--solution" key={s.title}>
+                  <div className="ps-card__icon ps-card__icon--solution">{s.icon}</div>
+                  <div className="ps-card__title">{s.title}</div>
+                  <p className="ps-card__desc">{s.desc}</p>
                 </div>
               ))}
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            {[
-              { icon: <InsightsIcon sx={{ fontSize: 26 }} />,             title: 'Analytics',    desc: 'Track performance metrics across all departments' },
-              { icon: <SecurityIcon sx={{ fontSize: 26 }} />,             title: 'Secure',       desc: 'Role-based access with JWT authentication' },
-              { icon: <NotificationsActiveIcon sx={{ fontSize: 26 }} />,  title: 'Real-time',    desc: 'Instant notifications for events and updates' },
-              { icon: <EmojiEventsIcon sx={{ fontSize: 26 }} />,          title: 'Achievements', desc: 'Celebrate student and club milestones' },
-            ].map((c) => (
-              <div key={c.title} style={{ ...card, padding: 22, transition: 'all 0.25s' }}
-                onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = T.primary; }}
-                onMouseOut={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.borderColor = T.border; }}
-              >
-                <div style={{ width: 46, height: 46, borderRadius: 12, background: T.gold20, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14, color: T.primary }}>
-                  {c.icon}
-                </div>
-                <h4 style={{ fontWeight: 700, color: T.primaryDark, marginBottom: 5, fontSize: 14 }}>{c.title}</h4>
-                <p style={{ fontSize: 12, color: T.textLight, lineHeight: 1.6, margin: 0 }}>{c.desc}</p>
+        </div>
+      </section>
+
+      {/* ━━ Features ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="features" ref={featuresRef} id="features">
+        <div className="features__inner">
+          <div className="features__header">
+            <div className="features__badge">
+              <RocketLaunchIcon sx={{ fontSize: 14 }} /> Core Features
+            </div>
+            <h2 className="features__title">Everything Your Campus Needs</h2>
+            <p className="features__subtitle">
+              Four powerful modules, one seamless experience — built for students, clubs, placement cells, and admins.
+            </p>
+          </div>
+
+          <div className="features__grid">
+            {FEATURES.map((f) => (
+              <div className="feature-card" key={f.title}>
+                <div className="feature-card__icon">{f.icon}</div>
+                <div className="feature-card__title">{f.title}</div>
+                <p className="feature-card__desc">{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Login Cards ── */}
-      <section style={{ padding: '88px 24px', background: T.bg }}>
-        <div style={{ maxWidth: 880, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 44 }}>
-            <span style={{ display: 'inline-block', background: T.gold20, border: `1px solid ${T.gold40}`, color: T.accent, fontSize: 12, fontWeight: 600, padding: '4px 14px', borderRadius: 20, marginBottom: 14 }}>Get Started</span>
-            <h2 style={{ fontSize: 32, fontWeight: 800, color: T.primaryDark, marginBottom: 10 }}>Choose your portal</h2>
-            <p style={{ color: T.textLight }}>Select your role to access your personalized dashboard.</p>
+      {/* ━━ Use Case Flow ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="flow" ref={flowRef} id="how-it-works">
+        <div className="flow__inner">
+          <div className="flow__header">
+            <div className="flow__badge">
+              <TrendingUpIcon sx={{ fontSize: 14 }} /> Student Journey
+            </div>
+            <h2 className="flow__title">How It Works</h2>
+            <p className="flow__subtitle">
+              From login to application — everything a student needs, in four simple steps.
+            </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 18 }}>
-            {LOGIN_CARDS.map((c) => (
-              <button
-                key={c.role}
-                onClick={() => navigate('/login', { state: { role: c.role } })}
-                style={{ background: T.bgCard, border: `1px solid ${T.border}`, borderRadius: 16, padding: 22, textAlign: 'left', cursor: 'pointer', transition: 'all 0.25s', boxShadow: '0 2px 10px rgba(62,39,35,0.07)' }}
-                onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = T.primary; e.currentTarget.style.boxShadow = `0 10px 30px ${T.gold20}`; }}
-                onMouseOut={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = '0 2px 10px rgba(62,39,35,0.07)'; }}
-              >
-                <div style={{ width: 46, height: 46, background: T.gold20, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14, color: T.primary }}>
-                  {c.icon}
+
+          <div className="flow__steps">
+            {FLOW_STEPS.map((step, i) => (
+              <div className="flow__step" key={step.label}>
+                <div className="flow__step-number">
+                  {step.icon}
                 </div>
-                <div style={{ fontWeight: 700, fontSize: 15, color: T.primaryDark, marginBottom: 4 }}>{c.label}</div>
-                <div style={{ fontSize: 12, color: T.textLight, marginBottom: 14 }}>{c.desc}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 600, color: T.primary }}>
-                  Login <ArrowForwardIcon sx={{ fontSize: 14 }} />
-                </div>
-              </button>
+                <div className="flow__step-label">{step.label}</div>
+                <div className="flow__step-desc">{step.desc}</div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section style={{ padding: '88px 24px', background: T.primaryDark, position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: 30, left: 60, width: 240, height: 240, background: 'rgba(201,162,39,0.1)', borderRadius: '50%', filter: 'blur(60px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: 30, right: 60, width: 280, height: 280, background: 'rgba(201,162,39,0.08)', borderRadius: '50%', filter: 'blur(60px)', pointerEvents: 'none' }} />
-        <div style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-          <h2 style={{ fontSize: 34, fontWeight: 800, color: T.primary, marginBottom: 14 }}>Ready to transform your campus?</h2>
-          <p style={{ color: 'rgba(250,243,224,0.7)', fontSize: 16, marginBottom: 36 }}>Join thousands of students and faculty already using CampusHub.</p>
-          <button
-            onClick={() => navigate('/login')}
-            style={{ background: T.primary, color: T.primaryDark, border: 'none', borderRadius: 12, padding: '14px 38px', fontSize: 15, fontWeight: 700, cursor: 'pointer', boxShadow: `0 6px 24px ${T.gold40}`, display: 'inline-flex', alignItems: 'center', gap: 8, transition: 'all 0.2s' }}
-            onMouseOver={e => { e.currentTarget.style.background = T.accent; e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-            onMouseOut={e => { e.currentTarget.style.background = T.primary; e.currentTarget.style.color = T.primaryDark; e.currentTarget.style.transform = 'none'; }}
-          >
-            Get Started Now <ArrowForwardIcon sx={{ fontSize: 19 }} />
-          </button>
+      {/* ━━ Why CampusHub ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="why" ref={whyRef} id="why">
+        <div className="why__inner">
+          <div className="why__content">
+            <div className="why__badge">
+              <VerifiedIcon sx={{ fontSize: 14 }} /> Why CampusHub
+            </div>
+            <h2 className="why__title">
+              Built Different. Built Better.
+            </h2>
+            <p className="why__desc">
+              CampusHub isn't another generic portal. It's purpose-built for
+              real campus workflows — designed to scale, integrate, and delight.
+            </p>
+            <div className="why__list">
+              {WHY_ITEMS.map((item) => (
+                <div className="why__list-item" key={item.title}>
+                  <div className="why__list-icon">{item.icon}</div>
+                  <div className="why__list-text">
+                    <h4>{item.title}</h4>
+                    <p>{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="why__visual">
+            <div className="why__visual-card">
+              {WHY_METRICS.map((m) => (
+                <div className="why__visual-metric" key={m.label}>
+                  <span className="why__visual-metric-label">{m.label}</span>
+                  <div className="why__visual-metric-bar">
+                    <div className="why__visual-metric-fill" style={{ width: m.width }} />
+                  </div>
+                  <span className="why__visual-metric-value">{m.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── Footer ── */}
-      <footer style={{ background: T.bgAlt, borderTop: `1px solid ${T.border}`, padding: '36px 24px' }}>
-        <div style={{ maxWidth: 1080, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 28, height: 28, borderRadius: 8, background: T.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <SchoolIcon sx={{ fontSize: 14, color: T.primaryDark }} />
+      {/* ━━ Final CTA ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <section className="final-cta" ref={ctaRef} id="final-cta-section">
+        <div className="final-cta__orb final-cta__orb--1" />
+        <div className="final-cta__orb final-cta__orb--2" />
+        <div className="final-cta__content">
+          <h2 className="final-cta__title">
+            Bring Your Entire Campus Online — Today
+          </h2>
+          <p className="final-cta__subtitle">
+            Join thousands of students, faculty, and administrators already
+            using CampusHub to streamline campus life.
+          </p>
+          <button
+            className="final-cta__btn"
+            onClick={() => navigate('/login')}
+            id="final-cta-button"
+          >
+            Get Started Now <ArrowForwardIcon sx={{ fontSize: 20 }} />
+          </button>
+          <div className="final-cta__trust">
+            <div className="final-cta__trust-item">
+              <SecurityIcon sx={{ fontSize: 18 }} className="final-cta__trust-icon" />
+              <span>End-to-end Secure</span>
             </div>
-            <span style={{ fontWeight: 700, color: T.primaryDark }}>CampusHub</span>
+            <div className="final-cta__trust-item">
+              <SupportAgentIcon sx={{ fontSize: 18 }} className="final-cta__trust-icon" />
+              <span>Always-on Support</span>
+            </div>
+            <div className="final-cta__trust-item">
+              <VerifiedIcon sx={{ fontSize: 18 }} className="final-cta__trust-icon" />
+              <span>Trusted by 50+ Colleges</span>
+            </div>
           </div>
-          <p style={{ fontSize: 13, color: T.textLight, margin: 0 }}>© 2025 CampusHub. All rights reserved.</p>
-          <div style={{ display: 'flex', gap: 24 }}>
-            {['Privacy', 'Terms', 'Contact'].map(l => (
-              <a key={l} href="#" style={{ fontSize: 13, color: T.textLight, textDecoration: 'none', transition: 'color 0.2s' }}
-                onMouseOver={e => e.currentTarget.style.color = T.primary}
-                onMouseOut={e => e.currentTarget.style.color = T.textLight}
-              >{l}</a>
+        </div>
+      </section>
+
+      {/* ━━ Footer ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <footer className="landing-footer" id="landing-footer">
+        <div className="landing-footer__inner">
+          <div className="landing-footer__brand">
+            <div className="landing-footer__icon">
+              <SchoolIcon sx={{ fontSize: 15, color: '#3E2723' }} />
+            </div>
+            <span className="landing-footer__name">CampusHub</span>
+          </div>
+          <p className="landing-footer__copy">© 2025 CampusHub. All rights reserved.</p>
+          <div className="landing-footer__links">
+            {['Privacy', 'Terms', 'Contact'].map((l) => (
+              <a key={l} href="#" className="landing-footer__link">{l}</a>
             ))}
           </div>
         </div>
