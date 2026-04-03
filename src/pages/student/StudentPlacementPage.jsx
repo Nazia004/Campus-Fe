@@ -12,6 +12,7 @@ import ShowChartIcon from '@mui/icons-material/ShowChart';
 import CustomTypography from '@mui/material/Typography';
 import api from '../../api';
 import PlacementDetailsModal from '../../components/PlacementDetailsModal';
+import ApplyFormModal from '../../components/ApplyFormModal';
 
 // ── Shared styles matching Beige+Gold theme ──
 const T = {
@@ -50,6 +51,7 @@ export default function StudentPlacementPage({ type }) {
   const [fetching, setFetching] = useState(true);
   const [loadingId, setLoadingId] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [applyingItem, setApplyingItem] = useState(null);
 
   // Stats (derived and mocked for a real feel)
   const [stats, setStats] = useState({ applied: 0, shortlisted: 0, interviews: 0, offers: 0 });
@@ -305,7 +307,7 @@ export default function StudentPlacementPage({ type }) {
                   <Button
                     variant={item.hasApplied ? 'outlined' : 'contained'}
                     disabled={loadingId === item._id || !active}
-                    onClick={() => handleApply(item)}
+                    onClick={() => item.hasApplied ? handleApply(item) : setApplyingItem(item)}
                     style={{
                       flex: 1, padding: '10px 0', borderRadius: 10, fontSize: 13, fontWeight: 700, textTransform: 'none',
                       ...(item.hasApplied
@@ -345,6 +347,18 @@ export default function StudentPlacementPage({ type }) {
         item={selectedItem}
         loadingId={loadingId}
         onApply={handleApply}
+        onOpenApply={(item) => {
+          setSelectedItem(null); // Close details modal first
+          setApplyingItem(item);
+        }}
+      />
+
+      {/* ━━ 5. APPLY FORM MODAL ━━━━━━━━━━━━━━━━━━━━━━ */}
+      <ApplyFormModal 
+        open={!!applyingItem}
+        onClose={() => setApplyingItem(null)}
+        item={applyingItem}
+        onSubmit={handleApply}
       />
     </div>
   );

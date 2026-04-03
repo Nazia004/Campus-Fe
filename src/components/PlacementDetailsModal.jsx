@@ -22,7 +22,8 @@ export default function PlacementDetailsModal({
   onClose,
   item,
   loadingId,
-  onApply
+  onApply,
+  onOpenApply
 }) {
   if (!item) return null;
 
@@ -154,7 +155,7 @@ export default function PlacementDetailsModal({
         <Button
           variant={item.hasApplied ? 'outlined' : 'contained'}
           disabled={loadingId === item._id || !isActive}
-          onClick={() => onApply(item)}
+          onClick={() => item.hasApplied ? onApply(item) : onOpenApply(item)}
           style={{
             padding: '8px 32px', borderRadius: 8, fontSize: 14, fontWeight: 700, textTransform: 'none',
             ...(item.hasApplied
