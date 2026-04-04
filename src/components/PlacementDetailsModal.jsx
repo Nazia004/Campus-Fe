@@ -94,7 +94,9 @@ export default function PlacementDetailsModal({
           )}
           {(item.stipend || item.salary) && (
             <div>
-              <p style={{ fontSize: 12, fontWeight: 600, color: T.textSecondary, marginBottom: 4 }}>COMPENSATION</p>
+              <p style={{ fontSize: 12, fontWeight: 600, color: T.textSecondary, marginBottom: 4 }}>
+                {item.type === 'internship' ? 'STIPEND' : 'SALARY'}
+              </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, color: T.textMain, fontWeight: 500 }}>
                 <BusinessIcon style={{ fontSize: 18, color: T.primaryDark }} /> {item.stipend || item.salary}
               </div>
@@ -154,12 +156,12 @@ export default function PlacementDetailsModal({
 
         <Button
           variant={item.hasApplied ? 'outlined' : 'contained'}
-          disabled={loadingId === item._id || !isActive}
-          onClick={() => item.hasApplied ? onApply(item) : onOpenApply(item)}
+          disabled={loadingId === item._id || !isActive || item.hasApplied}
+          onClick={() => onOpenApply(item)}
           style={{
             padding: '8px 32px', borderRadius: 8, fontSize: 14, fontWeight: 700, textTransform: 'none',
             ...(item.hasApplied
-              ? { borderColor: '#DC2626', color: '#DC2626' }
+              ? { borderColor: '#d1fae5', color: '#059669', background: '#f0fdf4' }
               : isActive 
                 ? { background: T.primary, color: '#1C1917', boxShadow: 'none' }
                 : { background: '#E5E7EB', color: '#9CA3AF' })
@@ -168,7 +170,7 @@ export default function PlacementDetailsModal({
           {loadingId === item._id
             ? <CircularProgress size={20} color="inherit" />
             : !isActive ? 'Closed'
-            : item.hasApplied ? 'Withdraw Application' : 'Apply Now'}
+            : item.hasApplied ? 'Applied' : 'Apply Now'}
         </Button>
       </DialogActions>
     </Dialog>

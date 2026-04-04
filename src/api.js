@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://campus-be-akqn.onrender.com/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://campus-be-akqn.onrender.com/api',
 });
 
 api.interceptors.request.use((config) => {

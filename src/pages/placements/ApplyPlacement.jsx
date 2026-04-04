@@ -34,11 +34,9 @@ export default function ApplyPlacement() {
     setUploadStatus('Uploading resume...');
     try {
       // Upload PDF via backend → Cloudinary
-      const formData = new FormData();
-      formData.append('resume', resumeFile);
-
       const token = localStorage.getItem('token');
-      const res = await fetch('https://campus-be-akqn.onrender.com/api/upload/resume', {
+      const apiURL = import.meta.env.VITE_API_URL || 'https://campus-be-akqn.onrender.com/api';
+      const res = await fetch(`${apiURL}/upload/resume`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData,

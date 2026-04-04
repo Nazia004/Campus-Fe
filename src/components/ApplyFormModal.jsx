@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogActions, Button, IconButton, CircularProgress } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useAuth } from '../context/AuthContext';
 
 const T = {
   primary: '#C9A227',    // Gold
@@ -38,6 +39,7 @@ const labelStyle = {
 };
 
 export default function ApplyFormModal({ open, onClose, item, onSubmit }) {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -48,6 +50,19 @@ export default function ApplyFormModal({ open, onClose, item, onSubmit }) {
     skills: '',
     coverLetter: ''
   });
+
+  useEffect(() => {
+    if (open && user) {
+      setFormData(prev => ({
+        ...prev,
+        fullName: user.name || '',
+        email: user.email || '',
+        branch: user.department || '',
+        year: user.year ? String(user.year) : '',
+      }));
+    }
+  }, [open, user]);
+
   const [resume, setResume] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -89,7 +104,8 @@ export default function ApplyFormModal({ open, onClose, item, onSubmit }) {
       uploadData.append('resume', resume);
 
       const token = localStorage.getItem('token');
-      const cloudRes = await fetch('https://campus-be-akqn.onrender.com/api/upload/resume', {
+      const apiURL = import.meta.env.VITE_API_URL || 'https://campus-be-akqn.onrender.com/api';
+      const cloudRes = await fetch(`${apiURL}/upload/resume`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: uploadData,

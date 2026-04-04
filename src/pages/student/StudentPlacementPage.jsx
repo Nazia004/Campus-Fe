@@ -306,12 +306,12 @@ export default function StudentPlacementPage({ type }) {
                 <div style={{ display: 'flex', gap: 12 }}>
                   <Button
                     variant={item.hasApplied ? 'outlined' : 'contained'}
-                    disabled={loadingId === item._id || !active}
-                    onClick={() => item.hasApplied ? handleApply(item) : setApplyingItem(item)}
+                    disabled={loadingId === item._id || !active || item.hasApplied}
+                    onClick={() => setApplyingItem(item)}
                     style={{
                       flex: 1, padding: '10px 0', borderRadius: 10, fontSize: 13, fontWeight: 700, textTransform: 'none',
                       ...(item.hasApplied
-                        ? { borderColor: '#DC2626', color: '#DC2626' }
+                        ? { borderColor: '#d1fae5', color: '#059669', background: '#f0fdf4' }
                         : active 
                           ? { background: T.primary, color: '#1C1917', boxShadow: 'none' }
                           : { background: '#E5E7EB', color: '#9CA3AF' })
@@ -320,7 +320,7 @@ export default function StudentPlacementPage({ type }) {
                     {loadingId === item._id
                       ? <CircularProgress size={16} color="inherit" />
                       : !active ? 'Closed'
-                      : item.hasApplied ? 'Withdraw' : 'Apply Now'}
+                      : item.hasApplied ? 'Applied' : 'Apply Now'}
                   </Button>
                   
                   <Button
