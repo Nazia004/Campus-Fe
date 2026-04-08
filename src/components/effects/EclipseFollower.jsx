@@ -31,8 +31,8 @@ export default function EclipseFollower() {
 
   // Use a more vivid/darker gold for light mode to ensure contrast
   const glowColor = isLightMode 
-    ? 'rgba(166, 124, 0, 0.65)'  // Vivid Deep Gold for light theme
-    : 'rgba(201, 162, 39, 0.4)'; // Luminous Gold for dark theme
+    ? 'rgba(166, 124, 0, 0.55)'  // Reduced from 0.65
+    : 'rgba(201, 162, 39, 0.3)'; // Reduced from 0.4
 
   return (
     <div
