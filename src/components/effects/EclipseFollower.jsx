@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
 export default function EclipseFollower() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [opacity, setOpacity] = useState(0);
+  const [position, setPosition] = useState({ x: -1000, y: -1000 });
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      // Small delay/smoothing can be added here if needed, 
-      // but standard state update is usually fine for these backdrop glows.
       setPosition({ x: e.clientX, y: e.clientY });
-      if (opacity === 0) setOpacity(0.18); // Moderate opacity
+      if (!isActive) setIsActive(true);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [opacity]);
+  }, [isActive]);
 
   return (
     <div
@@ -25,22 +23,26 @@ export default function EclipseFollower() {
         width: '100vw',
         height: '100vh',
         pointerEvents: 'none',
-        zIndex: 5, // Higher than basics but below interactive content
+        zIndex: 9999, // Above everything
         overflow: 'hidden',
+        opacity: isActive ? 1 : 0,
+        transition: 'opacity 1s ease',
       }}
     >
       <div
         style={{
           position: 'absolute',
-          top: `${position.y}px`,
-          left: `${position.x}px`,
-          width: '800px',
-          height: '800px',
-          background: 'radial-gradient(circle, rgba(201,162,39,0.3) 0%, rgba(201,162,39,0) 70%)',
-          transform: 'translate(-50%, -50%)',
-          opacity: opacity,
-          transition: 'opacity 1s ease',
-          mixBlendMode: 'multiply', // Guarantees visibility on light backgrounds
+          top: 0,
+          left: 0,
+          width: '500px',
+          height: '500px',
+          // Using a subtle gold radial gradient
+          background: 'radial-gradient(circle, rgba(201,162,39,0.12) 0%, rgba(201,162,39,0) 70%)',
+          borderRadius: '50%',
+          transform: `translate(calc(${position.x}px - 50%), calc(${position.y}px - 50%))`,
+          // This makes the movement smooth and premium
+          transition: 'transform 0.15s ease-out',
+          mixBlendMode: 'normal',
         }}
       />
     </div>
