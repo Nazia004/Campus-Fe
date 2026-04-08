@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
-import EclipseFollower from '../components/effects/EclipseFollower';
 import SchoolIcon from '@mui/icons-material/School';
 import GroupsIcon from '@mui/icons-material/Groups';
 import WorkIcon from '@mui/icons-material/Work';
@@ -230,7 +229,6 @@ export default function Landing() {
 
   return (
     <div style={{ minHeight: '100vh', background: T.bg, fontFamily: "'Inter', sans-serif", overflowX: 'hidden' }}>
-      <EclipseFollower />
       {/* Inject keyframes */}
       <style>{KEYFRAMES}</style>
 

@@ -6,7 +6,6 @@ export default function EclipseFollower() {
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      // Direct update for absolute precision
       setPosition({ x: e.clientX, y: e.clientY });
       if (!isActive) setIsActive(true);
     };
@@ -24,10 +23,10 @@ export default function EclipseFollower() {
         width: '100vw',
         height: '100vh',
         pointerEvents: 'none',
-        zIndex: 10000, // Guaranteed above all sections/footers
+        zIndex: 10000,
         overflow: 'hidden',
         opacity: isActive ? 1 : 0,
-        transition: 'opacity 0.5s ease',
+        transition: 'opacity 0.6s ease',
       }}
     >
       <div
@@ -35,14 +34,12 @@ export default function EclipseFollower() {
           position: 'absolute',
           top: 0,
           left: 0,
-          width: '400px',
-          height: '400px',
-          // Using a more luminous gold for better visibility on dark & light
-          background: 'radial-gradient(circle, rgba(201,162,39,0.2) 0%, rgba(201,162,39,0) 70%)',
+          width: '600px', // Wider glow
+          height: '600px',
+          background: 'radial-gradient(circle, rgba(201,162,39,0.18) 0%, rgba(201,162,39,0) 70%)',
           borderRadius: '50%',
-          // Movement smoothing
           transform: `translate(calc(${position.x}px - 50%), calc(${position.y}px - 50%))`,
-          transition: 'transform 0.1s ease-out',
+          transition: 'transform 0.12s ease-out',
           mixBlendMode: 'normal',
         }}
       />
