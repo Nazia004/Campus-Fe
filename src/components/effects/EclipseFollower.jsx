@@ -4,15 +4,35 @@ export default function EclipseFollower() {
   const [position, setPosition] = useState({ x: -1000, y: -1000 });
   const [isActive, setIsActive] = useState(false);
 
+  const [isLightMode, setIsLightMode] = useState(false);
+
   useEffect(() => {
+    // Check initial theme
+    setIsLightMode(document.body.classList.contains('light'));
+
+    // Observe theme changes
+    const observer = new MutationObserver(() => {
+      setIsLightMode(document.body.classList.contains('light'));
+    });
+
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
     const handleMouseMove = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
       if (!isActive) setIsActive(true);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      observer.disconnect();
+    };
   }, [isActive]);
+
+  // Use a more vivid/darker gold for light mode to ensure contrast
+  const glowColor = isLightMode 
+    ? 'rgba(166, 124, 0, 0.65)'  // Vivid Deep Gold for light theme
+    : 'rgba(201, 162, 39, 0.4)'; // Luminous Gold for dark theme
 
   return (
     <div
@@ -34,10 +54,9 @@ export default function EclipseFollower() {
           position: 'absolute',
           top: 0,
           left: 0,
-          width: '350px', // More focused area
+          width: '350px',
           height: '350px',
-          // Increased intensity (0.4 opacity)
-          background: 'radial-gradient(circle, rgba(201,162,39,0.4) 0%, rgba(201,162,39,0) 70%)',
+          background: `radial-gradient(circle, ${glowColor} 0%, rgba(201,162,39,0) 70%)`,
           borderRadius: '50%',
           transform: `translate(calc(${position.x}px - 50%), calc(${position.y}px - 50%))`,
           transition: 'transform 0.1s ease-out',
