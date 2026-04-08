@@ -34,12 +34,13 @@ export default function EclipseFollower() {
           position: 'absolute',
           top: 0,
           left: 0,
-          width: '600px', // Wider glow
-          height: '600px',
-          background: 'radial-gradient(circle, rgba(201,162,39,0.18) 0%, rgba(201,162,39,0) 70%)',
+          width: '350px', // More focused area
+          height: '350px',
+          // Increased intensity (0.4 opacity)
+          background: 'radial-gradient(circle, rgba(201,162,39,0.4) 0%, rgba(201,162,39,0) 70%)',
           borderRadius: '50%',
           transform: `translate(calc(${position.x}px - 50%), calc(${position.y}px - 50%))`,
-          transition: 'transform 0.12s ease-out',
+          transition: 'transform 0.1s ease-out',
           mixBlendMode: 'normal',
         }}
       />
