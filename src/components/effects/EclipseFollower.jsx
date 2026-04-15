@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function EclipseFollower() {
-  const [position, setPosition] = useState({ x: -1000, y: -1000 });
+  const followerRef = useRef(null);
   const [isActive, setIsActive] = useState(false);
-
   const [isLightMode, setIsLightMode] = useState(false);
 
   useEffect(() => {
@@ -18,7 +17,9 @@ export default function EclipseFollower() {
     observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
     const handleMouseMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+      if (followerRef.current) {
+        followerRef.current.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+      }
       if (!isActive) setIsActive(true);
     };
 
@@ -29,10 +30,9 @@ export default function EclipseFollower() {
     };
   }, [isActive]);
 
-  // Use a more vivid/darker gold for light mode to ensure contrast
   const glowColor = isLightMode 
-    ? 'rgba(166, 124, 0, 0.55)'  // Reduced from 0.65
-    : 'rgba(201, 162, 39, 0.3)'; // Reduced from 0.4
+    ? 'rgba(166, 124, 0, 0.45)'
+    : 'rgba(201, 162, 39, 0.25)';
 
   return (
     <div
@@ -50,6 +50,7 @@ export default function EclipseFollower() {
       }}
     >
       <div
+        ref={followerRef}
         style={{
           position: 'absolute',
           top: 0,
@@ -58,9 +59,9 @@ export default function EclipseFollower() {
           height: '150px',
           background: `radial-gradient(circle, ${glowColor} 0%, rgba(201,162,39,0) 70%)`,
           borderRadius: '50%',
-          transform: `translate(calc(${position.x}px - 50%), calc(${position.y}px - 50%))`,
-          transition: 'transform 0.1s ease-out',
-          mixBlendMode: 'normal',
+          transform: 'translate(-1000px, -1000px)',
+          transition: 'transform 0.15s ease-out',
+          willChange: 'transform',
         }}
       />
     </div>

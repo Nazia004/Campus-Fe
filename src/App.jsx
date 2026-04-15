@@ -3,13 +3,13 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 
-// Layouts & Core
-import Landing from './pages/Landing';
-import Login from './pages/Login';
-import AdminLayout from './layouts/AdminLayout';
-import ClubLayout from './layouts/ClubLayout';
-import StudentLayout from './layouts/StudentLayout';
-import PlacementLayout from './layouts/PlacementLayout';
+// Layouts & Page components lazy loaded to reduce initial bundle
+const Landing = lazy(() => import('./pages/Landing'));
+const Login = lazy(() => import('./pages/Login'));
+const AdminLayout = lazy(() => import('./layouts/AdminLayout'));
+const ClubLayout = lazy(() => import('./layouts/ClubLayout'));
+const StudentLayout = lazy(() => import('./layouts/StudentLayout'));
+const PlacementLayout = lazy(() => import('./layouts/PlacementLayout'));
 
 // Lazy loading pages to drastically reduce lag and bundle size
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
