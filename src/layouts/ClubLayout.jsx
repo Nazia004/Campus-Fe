@@ -16,7 +16,7 @@ const NAV = [
 export default function ClubLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  if (!user || user.role !== 'club') return <Navigate to="/login" replace />;
+  if (!user || user.role !== 'club') return <Navigate to="/" replace />;
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
