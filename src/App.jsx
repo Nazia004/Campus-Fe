@@ -36,6 +36,7 @@ const StudentJobs = lazy(() => import('./pages/student/StudentJobs'));
 const StudentCampusDrives = lazy(() => import('./pages/student/StudentCampusDrives'));
 const StudentWorkshops = lazy(() => import('./pages/student/StudentWorkshops'));
 const StudentConferences = lazy(() => import('./pages/student/StudentConferences'));
+const FeeStructure = lazy(() => import('./pages/student/FeeStructure'));
 
 const PlacementDashboard = lazy(() => import('./pages/placement/PlacementDashboard'));
 const Internships = lazy(() => import('./pages/placement/Internships'));
@@ -82,6 +83,7 @@ export default function App() {
           {/* Student */}
           <Route path="/student" element={<StudentLayout />}>
             <Route path="dashboard" element={<StudentDashboard />} />
+            <Route path="fee-structure" element={<FeeStructure />} />
             <Route path="clubs" element={<StudentClubs />} />
             <Route path="clubs/:id" element={<StudentClubDetails />} />
             <Route path="events" element={<StudentEvents />} />
