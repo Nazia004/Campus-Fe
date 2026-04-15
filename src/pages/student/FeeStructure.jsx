@@ -7,46 +7,29 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useAuth } from '../../context/AuthContext';
 
 // ── Course → semester count mapping ──────────────────────────────────────────
 const COURSE_SEMESTERS = {
-  'B.Tech': 8,
-  'B.E.': 8,
-  'B.Sc': 6,
-  'BSc': 6,
-  'B.A.': 6,
-  'BA': 6,
-  'B.Com': 6,
-  'BCom': 6,
-  'BBA': 6,
-  'BCA': 6,
-  'M.Tech': 4,
-  'M.Sc': 4,
-  'MSc': 4,
-  'MBA': 4,
-  'MCA': 4,
-  'M.A.': 4,
-  'Ph.D': 6,
-  'Diploma': 6,
+  'B.Tech': 8, 'B.E.': 8, 'B.Sc': 6, 'BSc': 6, 'B.A.': 6, 'BA': 6,
+  'B.Com': 6, 'BCom': 6, 'BBA': 6, 'BCA': 6, 'M.Tech': 4, 'M.Sc': 4,
+  'MSc': 4, 'MBA': 4, 'MCA': 4, 'M.A.': 4, 'Ph.D': 6, 'Diploma': 6,
 };
 
-// Detect course from department string
 function detectCourse(department) {
   if (!department) return 'B.Tech';
   const dept = department.toLowerCase();
-  // Check for explicit course prefixes
   for (const [course] of Object.entries(COURSE_SEMESTERS)) {
     if (dept.includes(course.toLowerCase())) return course;
   }
-  // Default: if dept contains engineering-related keywords → B.Tech
   if (['cse', 'ece', 'eee', 'mech', 'civil', 'it', 'computer', 'electrical', 'electronics', 'engineering'].some(k => dept.includes(k))) {
     return 'B.Tech';
   }
-  return 'B.Tech'; // fallback
+  return 'B.Tech';
 }
 
-// ── Generate semester fee data based on course ───────────────────────────────
+// ── Generate semester fee data ───────────────────────────────────────────────
 function generateFeeData(totalSemesters) {
   const semesters = [];
   const startYear = 2023;
@@ -59,32 +42,26 @@ function generateFeeData(totalSemesters) {
     const dueMonth = isOdd ? '08' : '01';
     const dueYear = isOdd ? startYear + yearOffset : startYear + yearOffset + 1;
 
-    // Fee amounts increase slightly each year
     const tuitionFee = 45000 + yearOffset * 3000;
     const hostelFee = 30000 + yearOffset * 2000;
     const examFee = 3000 + yearOffset * 500;
     const totalFee = tuitionFee + hostelFee + examFee;
 
-    // Determine payment status based on semester position
     let status, paidAmount, paidOn, transactionId, lateFine;
     if (i <= totalSemesters - 2) {
-      // Fully paid for earlier semesters
       status = 'paid';
       paidAmount = totalFee;
       const payDay = Math.floor(Math.random() * 10) + 5;
       paidOn = `${dueYear}-${dueMonth}-${String(payDay).padStart(2, '0')}`;
       transactionId = `TXN${dueYear}${dueMonth}${String(payDay).padStart(2, '0')}${String.fromCharCode(65 + i)}${i}`;
-      // Some paid semesters may have late fine
       if (i === 3) {
         lateFine = 250;
         paidOn = `${dueYear}-${dueMonth}-20`;
       }
     } else if (i === totalSemesters - 1) {
-      // Partially paid for second-to-last semester
       status = 'partial';
       paidAmount = Math.round(totalFee * 0.5);
     } else {
-      // Unpaid for current semester
       status = 'unpaid';
       paidAmount = 0;
     }
@@ -106,38 +83,27 @@ function generateFeeData(totalSemesters) {
       ...(lateFine && { lateFine }),
     });
   }
-
   return semesters;
 }
 
-function formatCurrency(amount) {
-  return '₹' + amount.toLocaleString('en-IN');
-}
+function fmt(amount) { return '₹' + amount.toLocaleString('en-IN'); }
 
-function formatDate(dateStr) {
-  return new Date(dateStr).toLocaleDateString('en-IN', {
-    day: 'numeric', month: 'short', year: 'numeric',
-  });
+function fmtDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function getDaysOverdue(dueDateStr) {
-  const due = new Date(dueDateStr);
-  const today = new Date();
-  const diff = Math.floor((today - due) / (1000 * 60 * 60 * 24));
+  const diff = Math.floor((new Date() - new Date(dueDateStr)) / 86400000);
   return diff > 0 ? diff : 0;
 }
 
 function getStatusConfig(status) {
-  switch (status) {
-    case 'paid':
-      return { label: 'Paid', color: '#059669', bg: 'rgba(5,150,105,0.1)', border: 'rgba(5,150,105,0.2)', icon: <CheckCircleIcon sx={{ fontSize: 14 }} /> };
-    case 'partial':
-      return { label: 'Partially Paid', color: '#d97706', bg: 'rgba(217,119,6,0.1)', border: 'rgba(217,119,6,0.2)', icon: <WarningAmberIcon sx={{ fontSize: 14 }} /> };
-    case 'unpaid':
-      return { label: 'Unpaid', color: '#dc2626', bg: 'rgba(220,38,38,0.1)', border: 'rgba(220,38,38,0.2)', icon: <ErrorOutlineIcon sx={{ fontSize: 14 }} /> };
-    default:
-      return { label: status, color: '#6b7280', bg: '#f3f4f6', border: '#e5e7eb', icon: null };
-  }
+  const map = {
+    paid: { label: 'Paid', color: '#059669', bg: 'rgba(5,150,105,0.1)', border: 'rgba(5,150,105,0.2)', icon: <CheckCircleIcon sx={{ fontSize: 13 }} /> },
+    partial: { label: 'Partial', color: '#d97706', bg: 'rgba(217,119,6,0.1)', border: 'rgba(217,119,6,0.2)', icon: <WarningAmberIcon sx={{ fontSize: 13 }} /> },
+    unpaid: { label: 'Unpaid', color: '#dc2626', bg: 'rgba(220,38,38,0.1)', border: 'rgba(220,38,38,0.2)', icon: <ErrorOutlineIcon sx={{ fontSize: 13 }} /> },
+  };
+  return map[status] || { label: status, color: '#6b7280', bg: '#f3f4f6', border: '#e5e7eb', icon: null };
 }
 
 // ── Summary Cards ────────────────────────────────────────────────────────────
@@ -145,187 +111,207 @@ function SummaryCards({ data }) {
   const totalFees = data.reduce((s, d) => s + d.totalFee, 0);
   const totalPaid = data.reduce((s, d) => s + d.paidAmount, 0);
   const totalDue = totalFees - totalPaid;
-
-  const cards = [
-    { label: 'Total Fees', value: formatCurrency(totalFees), icon: <ReceiptLongIcon sx={{ fontSize: 22 }} />, gradient: 'linear-gradient(135deg, #C9A227, #A67C00)' },
-    { label: 'Total Paid', value: formatCurrency(totalPaid), icon: <CheckCircleIcon sx={{ fontSize: 22 }} />, gradient: 'linear-gradient(135deg, #059669, #047857)' },
-    { label: 'Outstanding Due', value: formatCurrency(totalDue), icon: <CurrencyRupeeIcon sx={{ fontSize: 22 }} />, gradient: 'linear-gradient(135deg, #dc2626, #b91c1c)' },
-  ];
+  const paidPct = Math.round((totalPaid / totalFees) * 100);
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 28 }}>
-      {cards.map((c) => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 28 }}>
+      {[
+        { label: 'Total Fees', value: fmt(totalFees), icon: <ReceiptLongIcon sx={{ fontSize: 20 }} />, color: '#C9A227' },
+        { label: 'Total Paid', value: fmt(totalPaid), sub: `${paidPct}% paid`, icon: <CheckCircleIcon sx={{ fontSize: 20 }} />, color: '#059669' },
+        { label: 'Outstanding Due', value: fmt(totalDue), sub: totalDue === 0 ? 'All clear ✓' : 'Payment pending', icon: <CurrencyRupeeIcon sx={{ fontSize: 20 }} />, color: totalDue > 0 ? '#dc2626' : '#059669' },
+      ].map((c) => (
         <div key={c.label} style={{
           background: 'var(--card-bg)', border: '1px solid var(--border)',
-          borderRadius: 16, padding: 20, boxShadow: 'var(--shadow)',
-          transition: 'transform 0.2s, box-shadow 0.2s',
+          borderRadius: 16, padding: '20px 22px',
+          boxShadow: 'var(--shadow)', transition: 'transform 0.2s',
+          position: 'relative', overflow: 'hidden',
         }}
-          onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)'; }}
-          onMouseOut={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'var(--shadow)'; }}
+          onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
+          onMouseOut={e => { e.currentTarget.style.transform = 'none'; }}
         >
-          <div style={{
-            width: 42, height: 42, borderRadius: 12,
-            background: c.gradient,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', marginBottom: 14,
-          }}>
-            {c.icon}
+          <div style={{ position: 'absolute', top: -8, right: -8, width: 60, height: 60, borderRadius: '50%', background: `${c.color}10`, }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <div style={{ color: c.color }}>{c.icon}</div>
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.03em' }}>{c.label}</span>
           </div>
-          <p style={{ fontSize: 24, fontWeight: 800, color: 'var(--text-primary)', margin: 0, lineHeight: 1.1 }}>{c.value}</p>
-          <p style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', margin: '4px 0 0' }}>{c.label}</p>
+          <p style={{ fontSize: 26, fontWeight: 800, color: 'var(--text-primary)', margin: 0, lineHeight: 1 }}>{c.value}</p>
+          {c.sub && <p style={{ fontSize: 12, color: c.color, fontWeight: 600, margin: '6px 0 0' }}>{c.sub}</p>}
         </div>
       ))}
     </div>
   );
 }
 
-// ── Semester Card (Accordion) ────────────────────────────────────────────────
-function SemesterCard({ fee }) {
+// ── Semester Row ─────────────────────────────────────────────────────────────
+function SemesterRow({ fee }) {
   const [expanded, setExpanded] = useState(fee.status !== 'paid');
-  const statusConfig = getStatusConfig(fee.status);
+  const sc = getStatusConfig(fee.status);
   const dueAmount = fee.totalFee - fee.paidAmount;
   const daysOverdue = getDaysOverdue(fee.dueDate);
   const currentFine = fee.status !== 'paid' && daysOverdue > 0
-    ? Math.min(daysOverdue * fee.finePerDay, fee.maxFine)
-    : 0;
+    ? Math.min(daysOverdue * fee.finePerDay, fee.maxFine) : 0;
+  const paidPct = Math.round((fee.paidAmount / fee.totalFee) * 100);
 
   return (
     <div style={{
       background: 'var(--card-bg)', border: '1px solid var(--border)',
-      borderRadius: 16, overflow: 'hidden',
-      boxShadow: 'var(--shadow)', transition: 'all 0.2s',
+      borderRadius: 14, overflow: 'hidden',
+      boxShadow: 'var(--shadow)',
+      borderLeft: `4px solid ${sc.color}`,
     }}>
-      {/* Header (clickable) */}
+      {/* Collapsed header */}
       <button
         onClick={() => setExpanded(!expanded)}
         style={{
-          width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '18px 22px', border: 'none', cursor: 'pointer',
-          background: 'transparent', transition: 'background 0.2s',
+          width: '100%', display: 'flex', alignItems: 'center',
+          padding: '16px 20px', border: 'none', cursor: 'pointer',
+          background: 'transparent', gap: 16,
         }}
-        onMouseOver={e => { e.currentTarget.style.background = 'var(--hover-bg, rgba(201,162,39,0.04))'; }}
+        onMouseOver={e => { e.currentTarget.style.background = 'var(--hover-bg, rgba(201,162,39,0.03))'; }}
         onMouseOut={e => { e.currentTarget.style.background = 'transparent'; }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: 12,
-            background: 'rgba(201,162,39,0.12)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--primary)',
-          }}>
-            <AccountBalanceIcon sx={{ fontSize: 20 }} />
-          </div>
-          <div style={{ textAlign: 'left' }}>
-            <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>{fee.semester}</p>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>{fee.session}</p>
+        {/* Left: Semester info */}
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 14, minWidth: 0 }}>
+          <div style={{ textAlign: 'left', minWidth: 0 }}>
+            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>{fee.semester}</p>
+            <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '2px 0 0' }}>{fee.session}</p>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+
+        {/* Center: Progress bar (compact) */}
+        <div style={{ width: 120, flexShrink: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 4 }}>
+            <span>{paidPct}% paid</span>
+          </div>
+          <div style={{ height: 5, borderRadius: 3, background: 'var(--border)', overflow: 'hidden' }}>
+            <div style={{ height: '100%', borderRadius: 3, width: `${paidPct}%`, background: sc.color, transition: 'width 0.4s ease' }} />
+          </div>
+        </div>
+
+        {/* Right: Status + Amount */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: 4,
-            padding: '5px 12px', borderRadius: 20,
-            fontSize: 12, fontWeight: 600,
-            color: statusConfig.color,
-            background: statusConfig.bg,
-            border: `1px solid ${statusConfig.border}`,
+            padding: '4px 10px', borderRadius: 8, fontSize: 11, fontWeight: 700,
+            color: sc.color, background: sc.bg, border: `1px solid ${sc.border}`,
           }}>
-            {statusConfig.icon} {statusConfig.label}
+            {sc.icon} {sc.label}
           </span>
-          <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', margin: 0, minWidth: 80, textAlign: 'right' }}>
-            {formatCurrency(fee.totalFee)}
-          </p>
-          <ExpandMoreIcon
-            sx={{
-              fontSize: 20, color: 'var(--text-muted)',
-              transition: 'transform 0.3s',
-              transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
-            }}
-          />
+          <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', minWidth: 72, textAlign: 'right' }}>
+            {fmt(fee.totalFee)}
+          </span>
+          <ExpandMoreIcon sx={{
+            fontSize: 18, color: 'var(--text-muted)',
+            transition: 'transform 0.3s',
+            transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+          }} />
         </div>
       </button>
 
-      {/* Expandable details */}
-      <div style={{
-        overflow: 'hidden',
-        maxHeight: expanded ? '600px' : '0',
-        transition: 'max-height 0.4s ease',
-      }}>
-        <div style={{ padding: '0 22px 22px', borderTop: '1px solid var(--border)' }}>
-          {/* Fee Breakdown */}
-          <div style={{ marginTop: 18 }}>
-            <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>Fee Breakdown</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
-              {[
-                { label: 'Tuition Fee', value: fee.tuitionFee },
-                { label: 'Hostel Fee', value: fee.hostelFee },
-                { label: 'Exam Fee', value: fee.examFee },
-              ].map(item => (
-                <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 8, background: 'var(--bg-secondary, rgba(0,0,0,0.02))' }}>
-                  <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{item.label}</span>
-                  <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{formatCurrency(item.value)}</span>
+      {/* Expanded details */}
+      <div style={{ overflow: 'hidden', maxHeight: expanded ? '500px' : '0', transition: 'max-height 0.35s ease' }}>
+        <div style={{ padding: '0 20px 20px' }}>
+          <div style={{ height: 1, background: 'var(--border)', marginBottom: 16 }} />
+
+          {/* Two-column layout */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+
+            {/* LEFT COLUMN: Fee Breakdown as clean rows */}
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 10px' }}>Breakdown</p>
+              <div style={{ background: 'var(--bg-secondary, rgba(0,0,0,0.02))', borderRadius: 10, overflow: 'hidden', border: '1px solid var(--border)' }}>
+                {[
+                  { label: 'Tuition Fee', value: fee.tuitionFee },
+                  { label: 'Hostel Fee', value: fee.hostelFee },
+                  { label: 'Exam Fee', value: fee.examFee },
+                ].map((item, i) => (
+                  <div key={item.label} style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    padding: '10px 14px',
+                    borderBottom: i < 2 ? '1px solid var(--border)' : 'none',
+                  }}>
+                    <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{item.label}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{fmt(item.value)}</span>
+                  </div>
+                ))}
+                {/* Total row */}
+                <div style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  padding: '10px 14px', background: 'rgba(201,162,39,0.06)', borderTop: '1px solid var(--border)',
+                }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--primary)' }}>Total</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--primary)' }}>{fmt(fee.totalFee)}</span>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Payment Summary */}
-          <div style={{ marginTop: 18, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-            <div style={{ padding: '14px 16px', borderRadius: 12, background: 'rgba(5,150,105,0.06)', border: '1px solid rgba(5,150,105,0.12)' }}>
-              <p style={{ fontSize: 11, fontWeight: 600, color: '#059669', margin: 0, textTransform: 'uppercase' }}>Paid</p>
-              <p style={{ fontSize: 18, fontWeight: 700, color: '#059669', margin: '4px 0 0' }}>{formatCurrency(fee.paidAmount)}</p>
-            </div>
-            <div style={{ padding: '14px 16px', borderRadius: 12, background: dueAmount > 0 ? 'rgba(220,38,38,0.06)' : 'rgba(5,150,105,0.06)', border: `1px solid ${dueAmount > 0 ? 'rgba(220,38,38,0.12)' : 'rgba(5,150,105,0.12)'}` }}>
-              <p style={{ fontSize: 11, fontWeight: 600, color: dueAmount > 0 ? '#dc2626' : '#059669', margin: 0, textTransform: 'uppercase' }}>Due</p>
-              <p style={{ fontSize: 18, fontWeight: 700, color: dueAmount > 0 ? '#dc2626' : '#059669', margin: '4px 0 0' }}>{formatCurrency(dueAmount)}</p>
-            </div>
-            <div style={{ padding: '14px 16px', borderRadius: 12, background: 'rgba(201,162,39,0.06)', border: '1px solid rgba(201,162,39,0.12)' }}>
-              <p style={{ fontSize: 11, fontWeight: 600, color: '#C9A227', margin: 0, textTransform: 'uppercase' }}>Total</p>
-              <p style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', margin: '4px 0 0' }}>{formatCurrency(fee.totalFee)}</p>
-            </div>
-          </div>
-
-          {/* Due Date & Fine Info */}
-          <div style={{ marginTop: 18, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <div style={{ flex: 1, minWidth: 200, padding: '14px 16px', borderRadius: 12, background: 'var(--bg-secondary, rgba(0,0,0,0.02))', border: '1px solid var(--border)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                <CalendarTodayIcon sx={{ fontSize: 14, color: 'var(--primary)' }} />
-                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Due Date</span>
               </div>
-              <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>{formatDate(fee.dueDate)}</p>
-              {fee.status !== 'paid' && daysOverdue > 0 && (
-                <p style={{ fontSize: 12, color: '#dc2626', fontWeight: 600, margin: '4px 0 0' }}>
-                  ⚠️ {daysOverdue} days overdue
-                </p>
-              )}
             </div>
-            <div style={{ flex: 1, minWidth: 200, padding: '14px 16px', borderRadius: 12, background: currentFine > 0 ? 'rgba(220,38,38,0.04)' : 'var(--bg-secondary, rgba(0,0,0,0.02))', border: `1px solid ${currentFine > 0 ? 'rgba(220,38,38,0.12)' : 'var(--border)'}` }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                <WarningAmberIcon sx={{ fontSize: 14, color: currentFine > 0 ? '#dc2626' : 'var(--text-muted)' }} />
-                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>Late Fine Policy</span>
+
+            {/* RIGHT COLUMN: Payment + Due info */}
+            <div>
+              <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 10px' }}>Payment Details</p>
+
+              {/* Paid / Due inline */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
+                <div style={{ padding: '10px 12px', borderRadius: 10, background: 'rgba(5,150,105,0.06)', border: '1px solid rgba(5,150,105,0.12)' }}>
+                  <p style={{ fontSize: 10, fontWeight: 700, color: '#059669', margin: 0, textTransform: 'uppercase' }}>Paid</p>
+                  <p style={{ fontSize: 16, fontWeight: 800, color: '#059669', margin: '2px 0 0' }}>{fmt(fee.paidAmount)}</p>
+                </div>
+                <div style={{ padding: '10px 12px', borderRadius: 10, background: dueAmount > 0 ? 'rgba(220,38,38,0.06)' : 'rgba(5,150,105,0.06)', border: `1px solid ${dueAmount > 0 ? 'rgba(220,38,38,0.12)' : 'rgba(5,150,105,0.12)'}` }}>
+                  <p style={{ fontSize: 10, fontWeight: 700, color: dueAmount > 0 ? '#dc2626' : '#059669', margin: 0, textTransform: 'uppercase' }}>Due</p>
+                  <p style={{ fontSize: 16, fontWeight: 800, color: dueAmount > 0 ? '#dc2626' : '#059669', margin: '2px 0 0' }}>{fmt(dueAmount)}</p>
+                </div>
               </div>
-              <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
-                {formatCurrency(fee.finePerDay)}/day · Max {formatCurrency(fee.maxFine)}
-              </p>
+
+              {/* Due date + Fine in compact rows */}
+              <div style={{ background: 'var(--bg-secondary, rgba(0,0,0,0.02))', borderRadius: 10, border: '1px solid var(--border)', overflow: 'hidden' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
+                  <CalendarTodayIcon sx={{ fontSize: 13, color: 'var(--primary)' }} />
+                  <span style={{ fontSize: 12, color: 'var(--text-secondary)', flex: 1 }}>Due Date</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>{fmtDate(fee.dueDate)}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
+                  <WarningAmberIcon sx={{ fontSize: 13, color: '#d97706' }} />
+                  <span style={{ fontSize: 12, color: 'var(--text-secondary)', flex: 1 }}>Late Fine</span>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{fmt(fee.finePerDay)}/day</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px' }}>
+                  <ErrorOutlineIcon sx={{ fontSize: 13, color: 'var(--text-muted)' }} />
+                  <span style={{ fontSize: 12, color: 'var(--text-secondary)', flex: 1 }}>Max Fine</span>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>{fmt(fee.maxFine)}</span>
+                </div>
+              </div>
+
+              {/* Active fine warning */}
               {currentFine > 0 && (
-                <p style={{ fontSize: 14, fontWeight: 700, color: '#dc2626', margin: '4px 0 0' }}>
-                  Current fine: {formatCurrency(currentFine)}
-                </p>
-              )}
-              {fee.lateFine > 0 && fee.status === 'paid' && (
-                <p style={{ fontSize: 12, color: '#d97706', fontWeight: 600, margin: '4px 0 0' }}>
-                  Late fine paid: {formatCurrency(fee.lateFine)}
-                </p>
+                <div style={{
+                  marginTop: 10, padding: '8px 12px', borderRadius: 8,
+                  background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.12)',
+                  display: 'flex', alignItems: 'center', gap: 6,
+                }}>
+                  <WarningAmberIcon sx={{ fontSize: 14, color: '#dc2626' }} />
+                  <span style={{ fontSize: 12, fontWeight: 700, color: '#dc2626' }}>
+                    Current fine: {fmt(currentFine)} ({daysOverdue} days overdue)
+                  </span>
+                </div>
               )}
             </div>
           </div>
 
-          {/* Transaction info (if paid) */}
+          {/* Transaction ID (if paid) — full width */}
           {fee.paidOn && (
-            <div style={{ marginTop: 14, padding: '10px 14px', borderRadius: 10, background: 'rgba(5,150,105,0.05)', border: '1px solid rgba(5,150,105,0.1)', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <CheckCircleIcon sx={{ fontSize: 16, color: '#059669' }} />
-              <span style={{ fontSize: 12, color: '#059669', fontWeight: 600 }}>
-                Paid on {formatDate(fee.paidOn)} · Transaction ID: {fee.transactionId}
+            <div style={{
+              marginTop: 12, padding: '8px 14px', borderRadius: 8,
+              background: 'rgba(5,150,105,0.05)', border: '1px solid rgba(5,150,105,0.1)',
+              display: 'flex', alignItems: 'center', gap: 6,
+            }}>
+              <CheckCircleIcon sx={{ fontSize: 14, color: '#059669' }} />
+              <span style={{ fontSize: 11, color: '#059669', fontWeight: 600 }}>
+                Paid on {fmtDate(fee.paidOn)} · TXN: {fee.transactionId}
               </span>
+              {fee.lateFine > 0 && (
+                <span style={{ fontSize: 11, color: '#d97706', fontWeight: 600, marginLeft: 'auto' }}>
+                  Late fine: {fmt(fee.lateFine)}
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -334,7 +320,7 @@ function SemesterCard({ fee }) {
   );
 }
 
-// ── Main Page Component ──────────────────────────────────────────────────────
+// ── Main Page ────────────────────────────────────────────────────────────────
 export default function FeeStructure() {
   const { user } = useAuth();
   const course = detectCourse(user?.department);
@@ -344,32 +330,29 @@ export default function FeeStructure() {
   return (
     <div style={{ background: 'var(--primary-bg)' }} className="min-h-full">
       {/* Header */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: 12,
-            background: 'linear-gradient(135deg, var(--primary), var(--accent, #A67C00))',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(201,162,39,0.3)',
-          }}>
-            <AccountBalanceIcon sx={{ fontSize: 22, color: '#fff' }} />
-          </div>
-          <div>
-            <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Fee Structure</h1>
-            <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
-              {course} · {totalSemesters} Semesters · {user?.name || 'Student'}
-            </p>
-          </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+        <div style={{
+          width: 42, height: 42, borderRadius: 12,
+          background: 'linear-gradient(135deg, var(--primary), var(--accent, #A67C00))',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 4px 16px rgba(201,162,39,0.3)',
+        }}>
+          <AccountBalanceIcon sx={{ fontSize: 22, color: '#fff' }} />
+        </div>
+        <div>
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Fee Structure</h1>
+          <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
+            {course} · {totalSemesters} Semesters · {user?.name || 'Student'}
+          </p>
         </div>
       </div>
 
-      {/* Summary Cards */}
       <SummaryCards data={feeData} />
 
-      {/* Semester-wise Accordion List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {/* Semester list */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {feeData.map((fee) => (
-          <SemesterCard key={fee.semester} fee={fee} />
+          <SemesterRow key={fee.semester} fee={fee} />
         ))}
       </div>
     </div>
