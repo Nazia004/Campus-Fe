@@ -1,4 +1,5 @@
-import { Outlet, Navigate, NavLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Outlet, Navigate, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import SchoolIcon from '@mui/icons-material/School';
@@ -9,27 +10,82 @@ import WorkIcon from '@mui/icons-material/Work';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import BuildIcon from '@mui/icons-material/Build';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from '../components/ThemeToggle';
 
-const NAV = [
-  { label: 'Dashboard',     to: '/student/dashboard',     icon: <DashboardIcon fontSize="small" /> },
-  { label: 'Clubs',         to: '/student/clubs',         icon: <GroupsIcon fontSize="small" /> },
-  { label: 'Events',        to: '/student/events',        icon: <EventIcon fontSize="small" /> },
-  { label: 'My Activities', to: '/student/my-activities', icon: <StarIcon fontSize="small" /> },
-  { divider: true, label: 'Placements' },
-  { label: 'Internships',   to: '/student/internships',   icon: <SchoolIcon fontSize="small" /> },
-  { label: 'Jobs',          to: '/student/jobs',          icon: <WorkIcon fontSize="small" /> },
-  { label: 'Campus Drives', to: '/student/campus-drives', icon: <DirectionsCarIcon fontSize="small" /> },
-  { label: 'Workshops',     to: '/student/workshops',     icon: <BuildIcon fontSize="small" /> },
-  { label: 'Conferences',   to: '/student/conferences',   icon: <EmojiEventsIcon fontSize="small" /> },
-];
+function SidebarDropdown({ label, icon, children, defaultOpen }) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  return (
+    <div>
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+          padding: '10px 12px', borderRadius: 12,
+          fontSize: 14, fontWeight: 500, textDecoration: 'none',
+          background: 'transparent',
+          color: 'var(--text-secondary)',
+          border: 'none', cursor: 'pointer',
+          transition: 'all 0.2s',
+        }}
+        onMouseOver={e => { e.currentTarget.style.background = 'var(--hover-bg, rgba(201,162,39,0.08))'; }}
+        onMouseOut={e => { e.currentTarget.style.background = 'transparent'; }}
+      >
+        {icon}
+        <span style={{ flex: 1, textAlign: 'left' }}>{label}</span>
+        <ExpandMoreIcon
+          fontSize="small"
+          style={{
+            transition: 'transform 0.3s ease',
+            transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+          }}
+        />
+      </button>
+      <div
+        style={{
+          overflow: 'hidden',
+          maxHeight: open ? '300px' : '0px',
+          transition: 'max-height 0.3s ease',
+        }}
+      >
+        <div style={{ paddingLeft: 16, display: 'flex', flexDirection: 'column', gap: 2, paddingTop: 2 }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SidebarLink({ to, icon, label }) {
+  return (
+    <NavLink
+      to={to}
+      style={({ isActive }) => ({
+        display: 'flex', alignItems: 'center', gap: 12,
+        padding: '10px 12px', borderRadius: 12,
+        fontSize: 14, fontWeight: 500, textDecoration: 'none', transition: 'all 0.2s',
+        background: isActive ? 'var(--primary)' : 'transparent',
+        color: isActive ? '#1C1917' : 'var(--text-secondary)',
+        boxShadow: isActive ? 'var(--nav-active-shadow)' : 'none',
+      })}
+    >
+      {icon}{label}
+    </NavLink>
+  );
+}
 
 export default function StudentLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   if (!user || user.role !== 'student') return <Navigate to="/login" replace />;
+
+  const isClubsActive = ['/student/clubs', '/student/events', '/student/my-activities'].some(p => location.pathname.startsWith(p));
+  const isPlacementActive = ['/student/internships', '/student/campus-drives', '/student/workshops', '/student/conferences'].some(p => location.pathname.startsWith(p));
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
@@ -47,25 +103,33 @@ export default function StudentLayout() {
         </div>
 
         <nav style={{ flex: 1, padding: '20px 12px', display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto' }}>
-          <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0 12px', marginBottom: 8 }}>Menu</p>
-          {NAV.map(({ label, to, icon, divider }) =>
-            divider ? (
-              <p key={label} style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '12px 12px 4px', margin: 0 }}>{label}</p>
-            ) : (
-              <NavLink key={to} to={to}
-                style={({ isActive }) => ({
-                  display: 'flex', alignItems: 'center', gap: 12,
-                  padding: '10px 12px', borderRadius: 12,
-                  fontSize: 14, fontWeight: 500, textDecoration: 'none', transition: 'all 0.2s',
-                  background: isActive ? 'var(--primary)' : 'transparent',
-                  color: isActive ? '#1C1917' : 'var(--text-secondary)',
-                  boxShadow: isActive ? 'var(--nav-active-shadow)' : 'none',
-                })}
-              >
-                {icon}{label}
-              </NavLink>
-            )
-          )}
+          {/* Dashboard */}
+          <SidebarLink to="/student/dashboard" icon={<DashboardIcon fontSize="small" />} label="Dashboard" />
+
+          {/* Fee Structure */}
+          <SidebarLink to="/student/fee-structure" icon={<AccountBalanceIcon fontSize="small" />} label="Fee Structure" />
+
+          {/* Clubs Dropdown */}
+          <SidebarDropdown
+            label="Clubs"
+            icon={<GroupsIcon fontSize="small" />}
+            defaultOpen={isClubsActive}
+          >
+            <SidebarLink to="/student/events" icon={<EventIcon fontSize="small" />} label="Events" />
+            <SidebarLink to="/student/my-activities" icon={<StarIcon fontSize="small" />} label="My Activities" />
+          </SidebarDropdown>
+
+          {/* Placement Dropdown */}
+          <SidebarDropdown
+            label="Placement"
+            icon={<WorkIcon fontSize="small" />}
+            defaultOpen={isPlacementActive}
+          >
+            <SidebarLink to="/student/internships" icon={<SchoolIcon fontSize="small" />} label="Internships" />
+            <SidebarLink to="/student/campus-drives" icon={<DirectionsCarIcon fontSize="small" />} label="Campus Drives" />
+            <SidebarLink to="/student/workshops" icon={<BuildIcon fontSize="small" />} label="Workshops" />
+            <SidebarLink to="/student/conferences" icon={<EmojiEventsIcon fontSize="small" />} label="Conferences" />
+          </SidebarDropdown>
         </nav>
 
         <div style={{ padding: '12px', borderTop: '1px solid var(--border)' }}>
