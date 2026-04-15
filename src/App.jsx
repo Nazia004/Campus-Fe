@@ -2,7 +2,6 @@ import { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
-import EclipseFollower from './components/effects/EclipseFollower';
 
 // Layouts & Core
 import Landing from './pages/Landing';
@@ -55,7 +54,6 @@ const Loader = () => (
 export default function App() {
   return (
     <AuthProvider>
-      <EclipseFollower />
       <Toaster position="top-right" toastOptions={{ style: { borderRadius: '12px', fontFamily: 'Inter, sans-serif', fontSize: '14px' } }} />
       <Suspense fallback={<Loader />}>
         <Routes>
