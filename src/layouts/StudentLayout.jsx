@@ -82,7 +82,7 @@ export default function StudentLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  if (!user || user.role !== 'student') return <Navigate to="/login" replace />;
+  if (!user || user.role !== 'student') return <Navigate to="/" replace />;
 
   const isClubsActive = ['/student/clubs', '/student/events', '/student/my-activities'].some(p => location.pathname.startsWith(p));
   const isPlacementActive = ['/student/internships', '/student/campus-drives', '/student/workshops', '/student/conferences'].some(p => location.pathname.startsWith(p));

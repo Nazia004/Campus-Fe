@@ -22,7 +22,7 @@ const NAV = [
 export default function PlacementLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  if (!user || user.role !== 'placement') return <Navigate to="/login" replace />;
+  if (!user || user.role !== 'placement') return <Navigate to="/" replace />;
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>

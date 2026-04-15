@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 export default function AdminLayout() {
   const { user } = useAuth();
-  if (!user || user.role !== 'admin') return <Navigate to="/login" replace />;
+  if (!user || user.role !== 'admin') return <Navigate to="/" replace />;
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
