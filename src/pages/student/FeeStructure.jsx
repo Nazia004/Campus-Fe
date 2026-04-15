@@ -9,86 +9,106 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { useAuth } from '../../context/AuthContext';
 
-// ── Static fee data (semester-wise) ──────────────────────────────────────────
-const FEE_DATA = [
-  {
-    semester: 'Semester 1',
-    session: '2023–24 (Odd)',
-    tuitionFee: 45000,
-    examFee: 3000,
-    labFee: 5000,
-    libraryFee: 2000,
-    totalFee: 55000,
-    paidAmount: 55000,
-    dueDate: '2023-08-15',
-    finePerDay: 50,
-    maxFine: 2500,
-    paidOn: '2023-08-10',
-    transactionId: 'TXN20230810A1',
-    status: 'paid',
-  },
-  {
-    semester: 'Semester 2',
-    session: '2023–24 (Even)',
-    tuitionFee: 45000,
-    examFee: 3000,
-    labFee: 5000,
-    libraryFee: 2000,
-    totalFee: 55000,
-    paidAmount: 55000,
-    dueDate: '2024-01-20',
-    finePerDay: 50,
-    maxFine: 2500,
-    paidOn: '2024-01-18',
-    transactionId: 'TXN20240118B2',
-    status: 'paid',
-  },
-  {
-    semester: 'Semester 3',
-    session: '2024–25 (Odd)',
-    tuitionFee: 48000,
-    examFee: 3500,
-    labFee: 5500,
-    libraryFee: 2000,
-    totalFee: 59000,
-    paidAmount: 59000,
-    dueDate: '2024-08-15',
-    finePerDay: 50,
-    maxFine: 3000,
-    paidOn: '2024-08-20',
-    lateFine: 250,
-    transactionId: 'TXN20240820C3',
-    status: 'paid',
-  },
-  {
-    semester: 'Semester 4',
-    session: '2024–25 (Even)',
-    tuitionFee: 48000,
-    examFee: 3500,
-    labFee: 5500,
-    libraryFee: 2000,
-    totalFee: 59000,
-    paidAmount: 30000,
-    dueDate: '2025-01-25',
-    finePerDay: 50,
-    maxFine: 3000,
-    status: 'partial',
-  },
-  {
-    semester: 'Semester 5',
-    session: '2025–26 (Odd)',
-    tuitionFee: 50000,
-    examFee: 4000,
-    labFee: 6000,
-    libraryFee: 2500,
-    totalFee: 62500,
-    paidAmount: 0,
-    dueDate: '2025-08-15',
-    finePerDay: 75,
-    maxFine: 3750,
-    status: 'unpaid',
-  },
-];
+// ── Course → semester count mapping ──────────────────────────────────────────
+const COURSE_SEMESTERS = {
+  'B.Tech': 8,
+  'B.E.': 8,
+  'B.Sc': 6,
+  'BSc': 6,
+  'B.A.': 6,
+  'BA': 6,
+  'B.Com': 6,
+  'BCom': 6,
+  'BBA': 6,
+  'BCA': 6,
+  'M.Tech': 4,
+  'M.Sc': 4,
+  'MSc': 4,
+  'MBA': 4,
+  'MCA': 4,
+  'M.A.': 4,
+  'Ph.D': 6,
+  'Diploma': 6,
+};
+
+// Detect course from department string
+function detectCourse(department) {
+  if (!department) return 'B.Tech';
+  const dept = department.toLowerCase();
+  // Check for explicit course prefixes
+  for (const [course] of Object.entries(COURSE_SEMESTERS)) {
+    if (dept.includes(course.toLowerCase())) return course;
+  }
+  // Default: if dept contains engineering-related keywords → B.Tech
+  if (['cse', 'ece', 'eee', 'mech', 'civil', 'it', 'computer', 'electrical', 'electronics', 'engineering'].some(k => dept.includes(k))) {
+    return 'B.Tech';
+  }
+  return 'B.Tech'; // fallback
+}
+
+// ── Generate semester fee data based on course ───────────────────────────────
+function generateFeeData(totalSemesters) {
+  const semesters = [];
+  const startYear = 2023;
+
+  for (let i = 1; i <= totalSemesters; i++) {
+    const yearOffset = Math.floor((i - 1) / 2);
+    const isOdd = i % 2 !== 0;
+    const academicYear = `${startYear + yearOffset}–${(startYear + yearOffset + 1).toString().slice(2)}`;
+    const session = `${academicYear} (${isOdd ? 'Odd' : 'Even'})`;
+    const dueMonth = isOdd ? '08' : '01';
+    const dueYear = isOdd ? startYear + yearOffset : startYear + yearOffset + 1;
+
+    // Fee amounts increase slightly each year
+    const tuitionFee = 45000 + yearOffset * 3000;
+    const hostelFee = 30000 + yearOffset * 2000;
+    const examFee = 3000 + yearOffset * 500;
+    const totalFee = tuitionFee + hostelFee + examFee;
+
+    // Determine payment status based on semester position
+    let status, paidAmount, paidOn, transactionId, lateFine;
+    if (i <= totalSemesters - 2) {
+      // Fully paid for earlier semesters
+      status = 'paid';
+      paidAmount = totalFee;
+      const payDay = Math.floor(Math.random() * 10) + 5;
+      paidOn = `${dueYear}-${dueMonth}-${String(payDay).padStart(2, '0')}`;
+      transactionId = `TXN${dueYear}${dueMonth}${String(payDay).padStart(2, '0')}${String.fromCharCode(65 + i)}${i}`;
+      // Some paid semesters may have late fine
+      if (i === 3) {
+        lateFine = 250;
+        paidOn = `${dueYear}-${dueMonth}-20`;
+      }
+    } else if (i === totalSemesters - 1) {
+      // Partially paid for second-to-last semester
+      status = 'partial';
+      paidAmount = Math.round(totalFee * 0.5);
+    } else {
+      // Unpaid for current semester
+      status = 'unpaid';
+      paidAmount = 0;
+    }
+
+    semesters.push({
+      semester: `Semester ${i}`,
+      session,
+      tuitionFee,
+      hostelFee,
+      examFee,
+      totalFee,
+      paidAmount,
+      dueDate: `${dueYear}-${dueMonth}-15`,
+      finePerDay: 50 + yearOffset * 25,
+      maxFine: 2500 + yearOffset * 500,
+      status,
+      ...(paidOn && { paidOn }),
+      ...(transactionId && { transactionId }),
+      ...(lateFine && { lateFine }),
+    });
+  }
+
+  return semesters;
+}
 
 function formatCurrency(amount) {
   return '₹' + amount.toLocaleString('en-IN');
@@ -125,22 +145,15 @@ function SummaryCards({ data }) {
   const totalFees = data.reduce((s, d) => s + d.totalFee, 0);
   const totalPaid = data.reduce((s, d) => s + d.paidAmount, 0);
   const totalDue = totalFees - totalPaid;
-  const totalFine = data.reduce((s, d) => {
-    if (d.status !== 'paid' && getDaysOverdue(d.dueDate) > 0) {
-      return s + Math.min(getDaysOverdue(d.dueDate) * d.finePerDay, d.maxFine);
-    }
-    return s + (d.lateFine || 0);
-  }, 0);
 
   const cards = [
     { label: 'Total Fees', value: formatCurrency(totalFees), icon: <ReceiptLongIcon sx={{ fontSize: 22 }} />, gradient: 'linear-gradient(135deg, #C9A227, #A67C00)' },
     { label: 'Total Paid', value: formatCurrency(totalPaid), icon: <CheckCircleIcon sx={{ fontSize: 22 }} />, gradient: 'linear-gradient(135deg, #059669, #047857)' },
     { label: 'Outstanding Due', value: formatCurrency(totalDue), icon: <CurrencyRupeeIcon sx={{ fontSize: 22 }} />, gradient: 'linear-gradient(135deg, #dc2626, #b91c1c)' },
-    { label: 'Fine Accrued', value: formatCurrency(totalFine), icon: <WarningAmberIcon sx={{ fontSize: 22 }} />, gradient: 'linear-gradient(135deg, #d97706, #b45309)' },
   ];
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 28 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 28 }}>
       {cards.map((c) => (
         <div key={c.label} style={{
           background: 'var(--card-bg)', border: '1px solid var(--border)',
@@ -241,12 +254,11 @@ function SemesterCard({ fee }) {
           {/* Fee Breakdown */}
           <div style={{ marginTop: 18 }}>
             <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>Fee Breakdown</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
               {[
                 { label: 'Tuition Fee', value: fee.tuitionFee },
+                { label: 'Hostel Fee', value: fee.hostelFee },
                 { label: 'Exam Fee', value: fee.examFee },
-                { label: 'Lab Fee', value: fee.labFee },
-                { label: 'Library Fee', value: fee.libraryFee },
               ].map(item => (
                 <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 8, background: 'var(--bg-secondary, rgba(0,0,0,0.02))' }}>
                   <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{item.label}</span>
@@ -325,6 +337,9 @@ function SemesterCard({ fee }) {
 // ── Main Page Component ──────────────────────────────────────────────────────
 export default function FeeStructure() {
   const { user } = useAuth();
+  const course = detectCourse(user?.department);
+  const totalSemesters = COURSE_SEMESTERS[course] || 8;
+  const feeData = generateFeeData(totalSemesters);
 
   return (
     <div style={{ background: 'var(--primary-bg)' }} className="min-h-full">
@@ -342,18 +357,18 @@ export default function FeeStructure() {
           <div>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>Fee Structure</h1>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>
-              Semester-wise fee details for {user?.name || 'Student'}
+              {course} · {totalSemesters} Semesters · {user?.name || 'Student'}
             </p>
           </div>
         </div>
       </div>
 
       {/* Summary Cards */}
-      <SummaryCards data={FEE_DATA} />
+      <SummaryCards data={feeData} />
 
       {/* Semester-wise Accordion List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {FEE_DATA.map((fee) => (
+        {feeData.map((fee) => (
           <SemesterCard key={fee.semester} fee={fee} />
         ))}
       </div>
