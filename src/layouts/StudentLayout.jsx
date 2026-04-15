@@ -115,6 +115,7 @@ export default function StudentLayout() {
             icon={<GroupsIcon fontSize="small" />}
             defaultOpen={isClubsActive}
           >
+            <SidebarLink to="/student/clubs" icon={<GroupsIcon fontSize="small" />} label="All Clubs" />
             <SidebarLink to="/student/events" icon={<EventIcon fontSize="small" />} label="Events" />
             <SidebarLink to="/student/my-activities" icon={<StarIcon fontSize="small" />} label="My Activities" />
           </SidebarDropdown>
