@@ -124,12 +124,10 @@ function SummaryCards({ data }) {
           background: 'var(--card-bg)', border: '1px solid var(--border)',
           borderRadius: 16, padding: '20px 22px',
           boxShadow: 'var(--shadow)', transition: 'transform 0.2s',
-          position: 'relative', overflow: 'hidden',
         }}
           onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-2px)'; }}
           onMouseOut={e => { e.currentTarget.style.transform = 'none'; }}
         >
-          <div style={{ position: 'absolute', top: -8, right: -8, width: 60, height: 60, borderRadius: '50%', background: `${c.color}10`, }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
             <div style={{ color: c.color }}>{c.icon}</div>
             <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.03em' }}>{c.label}</span>
