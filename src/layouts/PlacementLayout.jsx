@@ -70,7 +70,7 @@ export default function PlacementLayout() {
           <ThemeToggle />
           <Tooltip title="Logout" placement="right">
             <button
-              onClick={() => { logout(); navigate('/login'); }}
+              onClick={() => { logout(); navigate('/'); }}
               style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 12, fontSize: 14, fontWeight: 500, color: 'var(--text-muted)', background: 'transparent', border: 'none', cursor: 'pointer' }}
               onMouseOver={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.12)'; e.currentTarget.style.color = '#FCA5A5'; }}
               onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)'; }}

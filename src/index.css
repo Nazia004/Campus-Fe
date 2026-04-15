@@ -316,9 +316,7 @@ button, a, [role="button"] { transition: all 0.2s ease !important; }
 .rounded-2xl { border-radius: 16px !important; }
 .rounded-3xl { border-radius: 20px !important; }
 
-/* Theme transition on all elements */
-*, *::before, *::after {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+/* Theme transition on specific base elements instead of global * */
+body, #root {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
-/* But don't slow down transforms/opacity */
-button, a { transition: all 0.2s ease !important; }
