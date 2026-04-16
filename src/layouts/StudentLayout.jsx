@@ -19,6 +19,7 @@ const NAV_ITEMS = [
     label: 'Clubs',
     icon: <GroupsIcon fontSize="small" />,
     children: [
+      { label: 'All Clubs',     to: '/student/clubs',         icon: <GroupsIcon fontSize="small" /> },
       { label: 'Events',        to: '/student/events',        icon: <EventIcon fontSize="small" /> },
       { label: 'My Activities', to: '/student/my-activities', icon: <StarIcon fontSize="small" /> },
     ]
