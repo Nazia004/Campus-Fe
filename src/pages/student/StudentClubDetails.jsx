@@ -8,15 +8,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EventIcon from '@mui/icons-material/Event';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import api from '../../api';
+import { CLUB_IMAGE_MAP, FALLBACK_IMAGES } from '../../utils/clubImages';
 
-const CLUB_IMAGES = [
-  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1200&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1200&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&h=400&fit=crop',
-  'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=1200&h=400&fit=crop',
-];
 const GRADIENTS = [
   'from-indigo-500 to-indigo-700', 'from-purple-500 to-purple-700',
   'from-blue-500 to-blue-700', 'from-teal-500 to-teal-700',
@@ -85,7 +78,8 @@ export default function StudentClubDetails() {
   if (!club) return null;
 
   const idx = getIndex(club.name);
-  const imgSrc = CLUB_IMAGES[idx % CLUB_IMAGES.length];
+  const mappedImage = CLUB_IMAGE_MAP[club.name];
+  const imgSrc = mappedImage || FALLBACK_IMAGES[idx % FALLBACK_IMAGES.length];
   const gradient = GRADIENTS[idx % GRADIENTS.length];
   const badgeStyle = BADGE_STYLES[idx % BADGE_STYLES.length];
   const memberCount = club.memberCount || 0;

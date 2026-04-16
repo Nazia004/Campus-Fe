@@ -6,15 +6,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { CLUB_IMAGE_MAP, FALLBACK_IMAGES } from '../utils/clubImages';
 
-const CLUB_IMAGES = [
-  'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=600&h=300&fit=crop',
-];
+
 
 function getIndex(str) {
   let h = 0;
@@ -34,7 +28,8 @@ export default function ClubCard({
 }) {
   const c = club;
   const idx = getIndex(c.name);
-  const imgSrc = CLUB_IMAGES[idx % CLUB_IMAGES.length];
+  const mappedImage = CLUB_IMAGE_MAP[c.name];
+  const imgSrc = mappedImage || FALLBACK_IMAGES[idx % FALLBACK_IMAGES.length];
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex flex-col overflow-hidden">
