@@ -52,13 +52,18 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await api.post('/auth/login', { email, password, role });
+      // 1. Submit only email and password (autodetect role on server)
+      const { data } = await api.post('/auth/login', { email, password });
+      
+      const userRole = data.role || data.user.role;
       login(data.user, data.token);
       toast.success(`Welcome back, ${data.user.name}!`);
-      if (role === 'admin') navigate('/admin/dashboard', { replace: true });
-      else if (role === 'club') navigate('/club/dashboard', { replace: true });
-      else if (role === 'student') navigate('/student/dashboard', { replace: true });
-      else if (role === 'placement') navigate('/placement/dashboard', { replace: true });
+
+      // 2. Navigate based on the role returned by the server
+      if (userRole === 'admin') navigate('/admin/dashboard', { replace: true });
+      else if (userRole === 'club') navigate('/club/dashboard', { replace: true });
+      else if (userRole === 'student') navigate('/student/dashboard', { replace: true });
+      else if (userRole === 'placement') navigate('/placement/dashboard', { replace: true });
       else navigate('/dashboard', { replace: true });
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
@@ -196,13 +201,13 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    placeholder={`Enter ${role} email`}
+                    placeholder={`e.g. ${role}@campuszone.co.in`}
                     style={{ ...inputStyle, paddingLeft: 40 }}
                     onFocus={e => { e.target.style.borderColor = T.primary; e.target.style.boxShadow = `0 0 0 4px ${T.accent10}`; }}
                     onBlur={e => { e.target.style.borderColor = T.border; e.target.style.boxShadow = 'none'; }}
                   />
                   <div style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: T.border, display: 'flex' }}>
-                    <SchoolIcon fontSize="small" />
+                    {activeRole.icon}
                   </div>
                 </div>
               </div>
@@ -231,9 +236,12 @@ export default function Login() {
                     {showPass ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
                   </button>
                 </div>
+                <p style={{ fontSize: 11, color: T.textLight, marginTop: 6, fontWeight: 500 }}>
+                  Hint: Use <span style={{ fontWeight: 700, color: T.primary }}>{activeRole.label}@2025</span>
+                </p>
               </div>
 
-              <div style={{ textAlign: 'right', marginTop: -8 }}>
+              <div style={{ textAlign: 'right', marginTop: -12 }}>
                 <a href="#" style={{ fontSize: 12, color: T.textLight, textDecoration: 'none' }}>Forgot password?</a>
               </div>
 
