@@ -115,6 +115,7 @@ export default function Login() {
           {/* ━━ LEFT PANE (INFO/BRAND) ━━━━━━━━━━━━━━━━━━ */}
           <div 
             className="info-pane"
+            onClick={() => window.location.href = 'https://cgu-odisha.ac.in/'}
             style={{ 
               background: `linear-gradient(160deg, ${T.primary} 0%, ${T.orangeDark || '#441F0E'} 100%)`,
               padding: 48, display: 'flex', flexDirection: 'column', color: '#FFF',
