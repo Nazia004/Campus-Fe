@@ -33,9 +33,16 @@ export default function Navbar() {
         padding: '12px 32px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }} onClick={() => navigate('/')}>
-          <span style={{ fontSize: 22 }}>🎓</span>
-          <span style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>CampusHub</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }} onClick={() => navigate('/')}>
+          <div style={{ 
+            width: 32, height: 32, borderRadius: 8, 
+            background: 'white', border: '1px solid var(--border)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            overflow: 'hidden'
+          }}>
+            <img src="/cvlogo.png" alt="Logo" style={{ width: '85%', height: '85%', objectFit: 'contain' }} />
+          </div>
+          <span style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>CampusHub</span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -56,22 +63,22 @@ export default function Navbar() {
             title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
             style={{
               width: 38, height: 38, borderRadius: '50%',
-              background: 'rgba(201,162,39,0.18)',
-              border: '2px solid #C9A227',
+              background: 'rgba(198,90,46,0.18)',
+              border: '2px solid var(--primary)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 18, cursor: 'pointer', flexShrink: 0,
-              boxShadow: '0 0 8px rgba(201,162,39,0.35)',
+              boxShadow: '0 0 8px rgba(198,90,46,0.35)',
               transition: 'all 0.2s',
             }}
-            onMouseOver={e => { e.currentTarget.style.background = 'rgba(201,162,39,0.35)'; e.currentTarget.style.transform = 'scale(1.1)'; }}
-            onMouseOut={e => { e.currentTarget.style.background = 'rgba(201,162,39,0.18)'; e.currentTarget.style.transform = 'scale(1)'; }}
+            onMouseOver={e => { e.currentTarget.style.background = 'rgba(198,90,46,0.35)'; e.currentTarget.style.transform = 'scale(1.1)'; }}
+            onMouseOut={e => { e.currentTarget.style.background = 'rgba(198,90,46,0.18)'; e.currentTarget.style.transform = 'scale(1)'; }}
           >
             {dark ? '☀️' : '🌙'}
           </button>
 
           <button
             onClick={() => setShowConfirm(true)}
-            style={{ background: 'linear-gradient(135deg,var(--primary),var(--accent))', color: '#fff', border: 'none', borderRadius: 20, padding: '6px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 16px rgba(159,18,57,0.35)' }}
+            style={{ background: 'linear-gradient(135deg,var(--primary),var(--accent))', color: '#fff', border: 'none', borderRadius: 20, padding: '6px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 16px rgba(198,90,46,0.35)' }}
             onMouseOver={e => { e.currentTarget.style.filter = 'brightness(1.15)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
             onMouseOut={e => { e.currentTarget.style.filter = 'none'; e.currentTarget.style.transform = 'none'; }}
           >

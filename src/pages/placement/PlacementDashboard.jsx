@@ -53,9 +53,9 @@ export default function PlacementDashboard() {
             onMouseOver={e => { e.currentTarget.style.background = 'var(--card-bg-hover)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
             onMouseOut={e => { e.currentTarget.style.background = 'var(--card-bg)'; e.currentTarget.style.transform = 'none'; }}
           >
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(201,162,39,0.15)', color: '#C9A227', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>{t.icon}</div>
-            <div style={{ fontSize: 28, fontWeight: 700, color: '#C9A227', lineHeight: 1.1 }}>
-              {loading ? <CircularProgress size={18} sx={{ color: '#C9A227' }} /> : (counts[t.key] || 0)}
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(198,90,46,0.15)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>{t.icon}</div>
+            <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--accent)', lineHeight: 1.1 }}>
+              {loading ? <CircularProgress size={18} sx={{ color: 'var(--accent)' }} /> : (counts[t.key] || 0)}
             </div>
             <div style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500, marginTop: 4 }}>{t.label}</div>
           </button>
@@ -65,7 +65,7 @@ export default function PlacementDashboard() {
       {/* Recent listings */}
       <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, boxShadow: 'var(--shadow)' }}>
         <h2 style={{ fontWeight: 700, color: 'var(--text-primary)', marginBottom: 20, fontSize: 15 }}>Recent Listings</h2>
-        {loading ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: '#C9A227' }} /></div>
+        {loading ? <div className="flex justify-center py-8"><CircularProgress sx={{ color: 'var(--accent)' }} /></div>
           : recent.length === 0 ? (
             <p style={{ color: 'var(--text-secondary)', fontSize: 13, textAlign: 'center', padding: '32px 0' }}>No listings yet. Start by creating one from the sidebar.</p>
           ) : (
@@ -74,12 +74,12 @@ export default function PlacementDashboard() {
                 const t = TYPES.find((x) => x.key === r.type);
                 return (
                   <div key={r._id} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: 12, background: 'var(--bg-secondary)', borderRadius: 12 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(201,162,39,0.15)', color: '#C9A227', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{t?.icon}</div>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(198,90,46,0.15)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{t?.icon}</div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.title}</p>
                       <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0 }}>{r.company || t?.label} · {r.location || 'Location TBD'}</p>
                     </div>
-                    <button onClick={() => navigate(t?.to)} style={{ fontSize: 12, color: '#C9A227', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+                    <button onClick={() => navigate(t?.to)} style={{ fontSize: 12, color: 'var(--primary)', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
                       View <ArrowForwardIcon sx={{ fontSize: 13 }} />
                     </button>
                   </div>

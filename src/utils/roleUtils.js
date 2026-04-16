@@ -19,10 +19,10 @@ export const getRoleFromEmail = (email = '') => {
 // Get dashboard path by role
 export const getDashboardByRole = (role) => {
   switch (role) {
-    case 'admin':       return '/admin-dashboard';
-    case 'placement':   return '/placement-dashboard';
-    case 'club_leader': return '/club-dashboard';
+    case 'admin':       return '/admin/dashboard';
+    case 'placement':   return '/placement/dashboard';
+    case 'club_leader': return '/club/dashboard';
     case 'student':
-    default:            return '/student-dashboard';
+    default:            return '/student/dashboard';
   }
 };

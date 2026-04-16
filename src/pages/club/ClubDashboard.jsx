@@ -32,7 +32,7 @@ const TYPE_BADGE = {
   club:      'border',
 };
 const TYPE_BADGE_STYLE = {
-  club: { background: 'var(--secondary-bg)', color: 'var(--brown)', borderColor: 'var(--gold)' },
+  club: { background: 'var(--bg-secondary)', color: 'var(--primary)', borderColor: 'var(--primary)' },
 };
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -52,7 +52,7 @@ function SectionHeader({ icon, title, action, onAction }) {
       </h2>
       {action && (
         <button onClick={onAction}
-          style={{ fontSize: 12, fontWeight: 600, color: '#C9A227', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 2 }}>
+          style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 2 }}>
           {action} <ArrowForwardIcon sx={{ fontSize: 13 }} />
         </button>
       )}
@@ -78,13 +78,13 @@ function EventChart({ events }) {
     <div className="flex items-end gap-2 h-24 mt-2">
       {months.map((m) => (
         <div key={m.label} className="flex-1 flex flex-col items-center gap-1">
-          <span className="text-xs font-semibold" style={{ color: 'var(--gold)' }}>{m.count || ''}</span>
+          <span className="text-xs font-semibold" style={{ color: 'var(--accent)' }}>{m.count || ''}</span>
           <div className="w-full rounded-t-lg transition-all duration-500"
             style={{
               height: `${Math.max((m.count / max) * 72, m.count ? 8 : 4)}px`,
-              background: m.count ? 'linear-gradient(180deg, var(--gold), var(--brown))' : 'var(--secondary-bg)',
+              background: m.count ? 'linear-gradient(180deg, var(--accent), var(--primary))' : 'var(--bg-secondary)',
             }} />
-          <span className="text-xs" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>{m.label}</span>
+          <span className="text-xs" style={{ color: 'var(--text-muted)', opacity: 0.8 }}>{m.label}</span>
         </div>
       ))}
     </div>
@@ -177,14 +177,14 @@ export default function ClubDashboard() {
             onMouseOver={e => { e.currentTarget.style.background = 'var(--card-bg-hover)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
             onMouseOut={e => { e.currentTarget.style.background = 'var(--card-bg)'; e.currentTarget.style.transform = 'none'; }}
           >
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(201,162,39,0.15)', color: '#C9A227', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(198,90,46,0.15)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
               {s.icon}
             </div>
-            <div style={{ fontSize: 28, fontWeight: 700, color: '#C9A227', lineHeight: 1.1 }}>
-              {loading ? <CircularProgress size={18} sx={{ color: '#C9A227' }} /> : s.value}
+            <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--accent)', lineHeight: 1.1 }}>
+              {loading ? <CircularProgress size={18} sx={{ color: 'var(--accent)' }} /> : s.value}
             </div>
             <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', marginTop: 4 }}>{s.label}</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: 12, fontWeight: 500, color: '#C9A227' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: 12, fontWeight: 600, color: 'var(--primary)' }}>
               <TrendingUpIcon sx={{ fontSize: 13 }} /> Active
             </div>
           </div>
@@ -215,20 +215,20 @@ export default function ClubDashboard() {
               ) : (
                 <div className="space-y-3">
                   {upcomingEvents.slice(0, 3).map((e) => (
-                    <div key={e._id} className="flex items-center gap-3 p-3 rounded-xl transition-colors" style={{ background: 'var(--secondary-bg)' }}>
-                      <div className="w-10 h-10 rounded-lg flex flex-col items-center justify-center flex-shrink-0" style={{ background: 'var(--gold)', color: 'var(--brown)' }}>
+                    <div key={e._id} className="flex items-center gap-3 p-3 rounded-xl transition-colors" style={{ background: 'var(--bg-secondary)' }}>
+                      <div className="w-10 h-10 rounded-lg flex flex-col items-center justify-center flex-shrink-0" style={{ background: 'var(--primary)', color: '#FFF' }}>
                         <span className="text-base font-bold leading-none">{new Date(e.date).getDate()}</span>
-                        <span className="text-xs" style={{ color: 'var(--brown)', opacity: 0.7 }}>{new Date(e.date).toLocaleString('default', { month: 'short' })}</span>
+                        <span className="text-xs" style={{ color: '#FFF', opacity: 0.8 }}>{new Date(e.date).toLocaleString('default', { month: 'short' })}</span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold truncate" style={{ color: 'var(--brown)' }}>{e.title}</p>
-                        <div className="flex gap-2 text-xs mt-0.5" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>
+                        <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{e.title}</p>
+                        <div className="flex gap-2 text-xs mt-0.5" style={{ color: 'var(--text-secondary)', opacity: 0.8 }}>
                           {e.time && <span className="flex items-center gap-0.5"><AccessTimeIcon sx={{ fontSize: 11 }} />{e.time}</span>}
                           {e.venue && <span className="flex items-center gap-0.5"><LocationOnIcon sx={{ fontSize: 11 }} />{e.venue}</span>}
                         </div>
                       </div>
                       {e.club && (
-                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap" style={{ background: 'var(--secondary-bg)', color: 'var(--brown)', border: '1px solid var(--gold)' }}>
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap" style={{ background: 'var(--card-bg)', color: 'var(--primary)', border: '1px solid var(--primary)' }}>
                           {e.club.name}
                         </span>
                       )}
@@ -259,15 +259,15 @@ export default function ClubDashboard() {
               ) : (
                 <div className="space-y-3">
                   {clubs.slice(0, 4).map((c) => (
-                    <div key={c._id} className="flex items-center gap-3 p-3 rounded-xl transition-colors" style={{ background: 'var(--secondary-bg)' }}>
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0" style={{ background: 'var(--gold)', color: 'var(--brown)' }}>
+                    <div key={c._id} className="flex items-center gap-3 p-3 rounded-xl transition-colors" style={{ background: 'var(--bg-secondary)' }}>
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0" style={{ background: 'var(--primary)', color: '#FFF' }}>
                         {c.name[0].toUpperCase()}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold truncate" style={{ color: 'var(--brown)' }}>{c.name}</p>
-                        <p className="text-xs" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>{c.category || 'General'}</p>
+                        <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{c.name}</p>
+                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{c.category || 'General'}</p>
                       </div>
-                      <div className="flex items-center gap-1 text-xs flex-shrink-0" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>
+                      <div className="flex items-center gap-1 text-xs flex-shrink-0" style={{ color: 'var(--text-secondary)' }}>
                         <PeopleIcon sx={{ fontSize: 13 }} />
                         <span>{c.members?.length || 0}</span>
                       </div>
@@ -294,19 +294,19 @@ export default function ClubDashboard() {
               : (
                 <div className="space-y-3">
                   {notifications.map((n, i) => (
-                    <div key={n._id || i} className="flex items-start gap-3 p-3 rounded-xl" style={{ background: 'var(--secondary-bg)' }}>
-                      <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: 'var(--gold)' }} />
+                    <div key={n._id || i} className="flex items-start gap-3 p-3 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
+                      <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: 'var(--accent)' }} />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2 mb-0.5">
-                          <p className="text-sm font-semibold truncate" style={{ color: 'var(--brown)' }}>{n.title}</p>
+                          <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{n.title}</p>
                           <span className={`text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap capitalize flex-shrink-0 ${TYPE_BADGE[n.type] || ''}`}
                             style={TYPE_BADGE_STYLE[n.type] || {}}>
                             {n.type}
                           </span>
                         </div>
-                        <p className="text-xs truncate" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>{n.message}</p>
+                        <p className="text-xs truncate" style={{ color: 'var(--text-secondary)', opacity: 0.8 }}>{n.message}</p>
                       </div>
-                      <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>{relativeTime(n.createdAt)}</span>
+                      <span className="text-xs whitespace-nowrap flex-shrink-0" style={{ color: 'var(--text-muted)' }}>{relativeTime(n.createdAt)}</span>
                     </div>
                   ))}
                 </div>

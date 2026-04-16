@@ -1,17 +1,26 @@
-import { Outlet, Navigate } from 'react-router-dom';
-import AdminSidebar from '../components/AdminSidebar';
-import { useAuth } from '../context/AuthContext';
+import { lazy } from 'react';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import SchoolIcon from '@mui/icons-material/School';
+import GroupsIcon from '@mui/icons-material/Groups';
+import WorkIcon from '@mui/icons-material/Work';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+
+const SharedLayout = lazy(() => import('../components/SharedLayout'));
+
+const NAV_ITEMS = [
+  { label: 'Dashboard',         to: '/admin/dashboard',   icon: <DashboardIcon fontSize="small" /> },
+  { label: 'Manage Students',   to: '/admin/students',    icon: <SchoolIcon fontSize="small" /> },
+  { label: 'Manage Clubs',      to: '/admin/clubs',       icon: <GroupsIcon fontSize="small" /> },
+  { label: 'Manage Placements', to: '/admin/placements',  icon: <WorkIcon fontSize="small" /> },
+];
 
 export default function AdminLayout() {
-  const { user } = useAuth();
-  if (!user || user.role !== 'admin') return <Navigate to="/" replace />;
-
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg)' }}>
-      <AdminSidebar />
-      <main style={{ flex: 1, padding: 32, overflowY: 'auto', background: 'var(--bg)' }}>
-        <Outlet />
-      </main>
-    </div>
+    <SharedLayout 
+      navItems={NAV_ITEMS}
+      portalName="Admin Panel"
+      portalIcon={AdminPanelSettingsIcon}
+      requiredRole="admin"
+    />
   );
 }

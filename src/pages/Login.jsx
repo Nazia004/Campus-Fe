@@ -13,26 +13,27 @@ import api from '../api';
 import { useAuth } from '../context/AuthContext';
 
 // ── Theme tokens ──────────────────────────────────────────────────────────────
+// ── Theme tokens ──────────────────────────────────────────────────────────────
 const T = {
-  bg:          '#FAF3E0',
-  bgAlt:       '#F5EDD4',
+  bg:          '#FAF7F5',
+  bgAlt:       '#F2EBE6',
   bgCard:      '#FFFFFF',
-  primary:     '#C9A227',
-  primaryDark: '#3E2723',
-  accent:      '#A67C00',
-  textMain:    '#2D2D2D',
-  textLight:   '#6D6D6D',
-  border:      '#E8DCCB',
-  gold10:      'rgba(201,162,39,0.10)',
-  gold20:      'rgba(201,162,39,0.20)',
-  gold40:      'rgba(201,162,39,0.40)',
+  primary:     '#C65A2E',
+  primaryDark: '#3A3A3A',
+  accent:      '#E07A4F',
+  textMain:    '#3A3A3A',
+  textLight:   '#5D5754',
+  border:      '#D6D0CC',
+  accent10:    'rgba(198,90,46,0.10)',
+  accent20:    'rgba(198,90,46,0.20)',
+  accent40:    'rgba(198,90,46,0.40)',
 };
 
 const ROLES = [
-  { key: 'student',   label: 'Student',   icon: <SchoolIcon />,             color: '#C9A227' },
-  { key: 'club',      label: 'Club',       icon: <GroupsIcon />,             color: '#C9A227' },
-  { key: 'placement', label: 'Placement',  icon: <WorkIcon />,               color: '#C9A227' },
-  { key: 'admin',     label: 'Admin',      icon: <AdminPanelSettingsIcon />, color: '#C9A227' },
+  { key: 'student',   label: 'Student',   icon: <SchoolIcon />,             color: '#C65A2E' },
+  { key: 'club',      label: 'Club',       icon: <GroupsIcon />,             color: '#C65A2E' },
+  { key: 'placement', label: 'Placement',  icon: <WorkIcon />,               color: '#C65A2E' },
+  { key: 'admin',     label: 'Admin',      icon: <AdminPanelSettingsIcon />, color: '#C65A2E' },
 ];
 
 export default function Login() {
@@ -54,11 +55,11 @@ export default function Login() {
       const { data } = await api.post('/auth/login', { email, password, role });
       login(data.user, data.token);
       toast.success(`Welcome back, ${data.user.name}!`);
-      if (role === 'admin') navigate('/admin/dashboard');
-      else if (role === 'club') navigate('/club/dashboard');
-      else if (role === 'student') navigate('/student/dashboard');
-      else if (role === 'placement') navigate('/placement/dashboard');
-      else navigate('/dashboard');
+      if (role === 'admin') navigate('/admin/dashboard', { replace: true });
+      else if (role === 'club') navigate('/club/dashboard', { replace: true });
+      else if (role === 'student') navigate('/student/dashboard', { replace: true });
+      else if (role === 'placement') navigate('/placement/dashboard', { replace: true });
+      else navigate('/dashboard', { replace: true });
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
     } finally {
@@ -76,11 +77,19 @@ export default function Login() {
     <>
       <style>{`
         @keyframes loginFadeIn {
-          from { opacity: 0; transform: translateY(20px) scale(0.98); }
+          from { opacity: 0; transform: translateY(30px) scale(0.98); }
           to   { opacity: 1; transform: translateY(0) scale(1); }
         }
-        .login-card { animation: loginFadeIn 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+        .login-card { animation: loginFadeIn 0.5s cubic-bezier(0.22,1,0.36,1) both; overflow: hidden; }
+        .info-pane { transition: all 0.4s ease; cursor: pointer; position: relative; overflow: hidden; }
+        .info-pane:hover { transform: scale(1.02); filter: brightness(1.1); }
+        .info-pane::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%); transition: all 0.6s; transform: rotate(25deg); }
+        .info-pane:hover::after { left: 100%; }
         input::placeholder { color: #AAAAAA !important; }
+        @media (max-width: 860px) {
+          .portal-grid { grid-template-columns: 1fr !important; }
+          .info-pane { display: none !important; }
+        }
       `}</style>
 
       <div style={{
@@ -88,56 +97,88 @@ export default function Login() {
         padding: 24, background: `linear-gradient(135deg, ${T.bg} 0%, ${T.bgAlt} 100%)`,
         position: 'relative', overflow: 'hidden', fontFamily: 'Inter, sans-serif',
       }}>
-        {/* Soft gold glow — top-left */}
-        <div style={{ position: 'absolute', top: -60, left: -60, width: 400, height: 400, background: `radial-gradient(circle, ${T.gold20} 0%, transparent 70%)`, borderRadius: '50%', filter: 'blur(40px)', pointerEvents: 'none' }} />
-        {/* Soft gold glow — bottom-right */}
-        <div style={{ position: 'absolute', bottom: -80, right: -60, width: 440, height: 440, background: `radial-gradient(circle, ${T.gold10} 0%, transparent 70%)`, borderRadius: '50%', filter: 'blur(50px)', pointerEvents: 'none' }} />
+        {/* Soft background glows */}
+        <div style={{ position: 'absolute', top: -60, left: -60, width: 400, height: 400, background: `radial-gradient(circle, ${T.accent20} 0%, transparent 70%)`, borderRadius: '50%', filter: 'blur(40px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -80, right: -100, width: 500, height: 500, background: `radial-gradient(circle, ${T.accent10} 0%, transparent 70%)`, borderRadius: '50%', filter: 'blur(50px)', pointerEvents: 'none' }} />
 
-        <div style={{ width: '100%', maxWidth: 460, position: 'relative', zIndex: 1 }}>
-
-          {/* Back button */}
-          <button
-            onClick={() => navigate('/')}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, color: T.textLight, background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, marginBottom: 20, padding: 0, transition: 'color 0.2s' }}
-            onMouseOver={e => e.currentTarget.style.color = T.primary}
-            onMouseOut={e => e.currentTarget.style.color = T.textLight}
+        <div className="portal-grid login-card" style={{
+          width: '100%', maxWidth: 940, background: T.bgCard, border: `1px solid ${T.border}`,
+          borderRadius: 24, boxShadow: '0 20px 60px rgba(62,39,35,0.12)',
+          display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', minHeight: 600,
+        }}>
+          
+          {/* ━━ LEFT PANE (INFO/BRAND) ━━━━━━━━━━━━━━━━━━ */}
+          <div 
+            className="info-pane"
+            style={{ 
+              background: `linear-gradient(160deg, ${T.primary} 0%, ${T.orangeDark || '#441F0E'} 100%)`,
+              padding: 48, display: 'flex', flexDirection: 'column', color: '#FFF',
+              justifyContent: 'space-between', position: 'relative'
+            }}
           >
-            <ArrowBackIcon sx={{ fontSize: 16 }} /> Back to home
-          </button>
-
-          {/* Card */}
-          <div className="login-card" style={{
-            background: T.bgCard, border: `1px solid ${T.border}`,
-            borderRadius: 20, padding: 36,
-            boxShadow: '0 8px 40px rgba(62,39,35,0.12)',
-          }}>
-            {/* Header */}
-            <div style={{ marginBottom: 26 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: T.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <SchoolIcon sx={{ fontSize: 20, color: T.primaryDark }} />
-                </div>
-                <span style={{ fontSize: 16, fontWeight: 700, color: T.primaryDark }}>CampusHub</span>
+            {/* Top Logo */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ background: '#FFF', padding: 6, borderRadius: 10, width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src="/cvlogo.png" alt="Logo" style={{ width: '85%', height: '85%', objectFit: 'contain' }} />
               </div>
-              <h1 style={{ fontSize: 22, fontWeight: 800, color: T.primaryDark, margin: '0 0 5px' }}>Sign in</h1>
-              <p style={{ color: T.textLight, fontSize: 13, margin: 0 }}>Select your role and enter your credentials</p>
+              <span style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.03em' }}>CampusHub</span>
             </div>
 
-            {/* Role selector */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8, padding: 6, background: T.bgAlt, borderRadius: 14, marginBottom: 22, border: `1px solid ${T.border}` }}>
+            {/* Main Message */}
+            <div>
+              <div style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', display: 'inline-block', padding: '6px 14px', borderRadius: 8, fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 20 }}>
+                #1 Campus Management Platform
+              </div>
+              <h2 style={{ fontSize: 44, fontWeight: 900, lineHeight: 1.1, margin: 0, letterSpacing: '-1px' }}>
+                RANKED AMONGST THE <br />
+                <span style={{ color: T.accent }}>TOP UNIVERSITIES</span> GLOBALLY
+              </h2>
+              <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.8)', marginTop: 24, lineHeight: 1.6, maxWidth: 380 }}>
+                A unified ecosystem for students, faculty, and administrators to thrive together in excellence.
+              </p>
+            </div>
+
+            {/* Bottom Proof */}
+            <div style={{ display: 'flex', gap: 24, borderTop: '1px solid rgba(255,255,255,0.2)', paddingTop: 28 }}>
+              <div>
+                <div style={{ fontSize: 24, fontWeight: 900 }}>50K+</div>
+                <div style={{ fontSize: 12, opacity: 0.7, fontWeight: 600 }}>Active Users</div>
+              </div>
+              <div>
+                <div style={{ fontSize: 24, fontWeight: 900 }}>100+</div>
+                <div style={{ fontSize: 12, opacity: 0.7, fontWeight: 600 }}>Partners</div>
+              </div>
+            </div>
+          </div>
+
+          {/* ━━ RIGHT PANE (LOGIN FORM) ━━━━━━━━━━━━━━━━━ */}
+          <div style={{ padding: '56px 48px', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ marginBottom: 36 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: T.primary, fontSize: 18, fontWeight: 800, marginBottom: 4 }}>
+                LOGIN <span style={{ color: T.textLight, fontWeight: 400, margin: '0 4px' }}>|</span> <span style={{ color: T.textLight, fontSize: 16 }}>{activeRole.label.toUpperCase()}</span>
+              </div>
+              <p style={{ color: T.textLight, fontSize: 13, margin: 0 }}>Please enter your credentials to continue</p>
+              {role !== 'admin' && (
+                <button onClick={() => setRole('admin')} style={{ background: 'none', border: 'none', color: T.primary, fontSize: 13, fontWeight: 700, padding: 0, marginTop: 8, cursor: 'pointer', textDecoration: 'underline' }}>
+                  Click here for admin login
+                </button>
+              )}
+            </div>
+
+            {/* Role Header (Mini) */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8, padding: 6, background: T.bgAlt, borderRadius: 14, marginBottom: 26, border: `1px solid ${T.border}` }}>
               {ROLES.map((r) => (
                 <button
                   key={r.key}
                   onClick={() => setRole(r.key)}
                   style={{
                     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-                    padding: '9px 4px', borderRadius: 10, fontSize: 11, fontWeight: 600,
-                    border: role === r.key ? `1px solid ${T.gold40}` : '1px solid transparent',
+                    padding: '10px 4px', borderRadius: 10, fontSize: 10, fontWeight: 700,
+                    border: role === r.key ? `1px solid ${T.accent40}` : '1px solid transparent',
                     cursor: 'pointer', transition: 'all 0.2s',
                     background: role === r.key ? T.bgCard : 'transparent',
                     color: role === r.key ? T.primary : T.textLight,
-                    transform: role === r.key ? 'scale(1.04)' : 'none',
-                    boxShadow: role === r.key ? '0 2px 8px rgba(62,39,35,0.1)' : 'none',
+                    boxShadow: role === r.key ? '0 4px 12px rgba(0,0,0,0.06)' : 'none',
                   }}
                 >
                   {r.icon}
@@ -146,39 +187,42 @@ export default function Login() {
               ))}
             </div>
 
-            {/* Active role badge */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 14px', borderRadius: 10, marginBottom: 22, background: T.gold10, border: `1px solid ${T.gold40}`, color: T.accent, fontSize: 13, fontWeight: 500 }}>
-              {activeRole.icon}
-              Signing in as <strong style={{ color: T.primaryDark }}>{activeRole.label}</strong>
-            </div>
-
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
               <div>
-                <label style={{ fontSize: 12, fontWeight: 600, color: T.textMain, display: 'block', marginBottom: 6 }}>Email Address</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder={role === 'admin' ? 'admin@admin.com' : `Enter your ${role} email`}
-                  style={inputStyle}
-                  onFocus={e => { e.target.style.borderColor = T.primary; e.target.style.boxShadow = `0 0 0 3px ${T.gold10}`; }}
-                  onBlur={e => { e.target.style.borderColor = T.border; e.target.style.boxShadow = 'none'; }}
-                />
+                <label style={{ fontSize: 12, fontWeight: 700, color: T.textMain, display: 'block', marginBottom: 6 }}>Email Address</label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder={`Enter ${role} email`}
+                    style={{ ...inputStyle, paddingLeft: 40 }}
+                    onFocus={e => { e.target.style.borderColor = T.primary; e.target.style.boxShadow = `0 0 0 4px ${T.accent10}`; }}
+                    onBlur={e => { e.target.style.borderColor = T.border; e.target.style.boxShadow = 'none'; }}
+                  />
+                  <div style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: T.border, display: 'flex' }}>
+                    <SchoolIcon fontSize="small" />
+                  </div>
+                </div>
               </div>
+
               <div>
-                <label style={{ fontSize: 12, fontWeight: 600, color: T.textMain, display: 'block', marginBottom: 6 }}>Password</label>
+                <label style={{ fontSize: 12, fontWeight: 700, color: T.textMain, display: 'block', marginBottom: 6 }}>Password</label>
                 <div style={{ position: 'relative' }}>
                   <input
                     type={showPass ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    placeholder="Enter your password"
-                    style={{ ...inputStyle, paddingRight: 44 }}
-                    onFocus={e => { e.target.style.borderColor = T.primary; e.target.style.boxShadow = `0 0 0 3px ${T.gold10}`; }}
+                    placeholder="Enter password"
+                    style={{ ...inputStyle, paddingLeft: 40, paddingRight: 44 }}
+                    onFocus={e => { e.target.style.borderColor = T.primary; e.target.style.boxShadow = `0 0 0 4px ${T.accent10}`; }}
                     onBlur={e => { e.target.style.borderColor = T.border; e.target.style.boxShadow = 'none'; }}
                   />
+                  <div style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: T.border, display: 'flex' }}>
+                    <Visibility fontSize="small" style={{ opacity: 0.5 }} />
+                  </div>
                   <button
                     type="button"
                     onClick={() => setShowPass(!showPass)}
@@ -189,22 +233,41 @@ export default function Login() {
                 </div>
               </div>
 
+              <div style={{ textAlign: 'right', marginTop: -8 }}>
+                <a href="#" style={{ fontSize: 12, color: T.textLight, textDecoration: 'none' }}>Forgot password?</a>
+              </div>
+
               <button
                 type="submit"
                 disabled={loading}
-                style={{ background: T.primary, color: T.primaryDark, border: 'none', borderRadius: 10, padding: '12px 0', fontSize: 15, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: `0 4px 16px ${T.gold40}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s', opacity: loading ? 0.75 : 1, marginTop: 4 }}
-                onMouseOver={e => { if (!loading) { e.currentTarget.style.background = T.accent; e.currentTarget.style.color = '#fff'; e.currentTarget.style.transform = 'translateY(-1px)'; } }}
-                onMouseOut={e => { e.currentTarget.style.background = T.primary; e.currentTarget.style.color = T.primaryDark; e.currentTarget.style.transform = 'none'; }}
+                style={{ background: T.primary, color: '#fff', border: 'none', borderRadius: 12, padding: '14px 0', fontSize: 15, fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: `0 6px 20px ${T.accent40}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 0.2s', opacity: loading ? 0.75 : 1, marginTop: 8 }}
+                onMouseOver={e => { if (!loading) { e.currentTarget.style.background = T.accent; e.currentTarget.style.transform = 'translateY(-2px)'; } }}
+                onMouseOut={e => { e.currentTarget.style.background = T.primary; e.currentTarget.style.transform = 'none'; }}
               >
-                {loading ? <CircularProgress size={20} sx={{ color: T.primaryDark }} /> : `Sign in as ${activeRole.label}`}
+                {loading ? <CircularProgress size={20} sx={{ color: '#fff' }} /> : 'LOGIN'}
               </button>
             </form>
 
-            {role === 'admin' && (
-              <p style={{ textAlign: 'center', fontSize: 11, color: T.textLight, marginTop: 14, marginBottom: 0 }}>
-                Default: admin@admin.com / admin@123
-              </p>
-            )}
+            <div style={{ marginTop: 'auto', paddingTop: 32, textAlign: 'center' }}>
+              <p style={{ fontSize: 12, color: T.textLight, marginBottom: 12 }}>Trouble connecting?</p>
+              <button
+                onClick={() => {
+                  const mockUser = { name: 'Preview User', email: 'dev@preview.com', role: role };
+                  login(mockUser, 'mock-token');
+                  toast.success(`Entering ${role} Portal (Preview Mode)`);
+                  navigate(`/${role}/dashboard`, { replace: true });
+                }}
+                style={{
+                  background: 'none', border: `1px solid ${T.primary}`, color: T.primary,
+                  padding: '8px 24px', borderRadius: 10, fontSize: 12, fontWeight: 800,
+                  cursor: 'pointer', transition: 'all 0.2s'
+                }}
+                onMouseOver={e => { e.currentTarget.style.background = T.accent10; }}
+                onMouseOut={e => { e.currentTarget.style.background = 'none'; }}
+              >
+                Launch Developer Preview 🚀
+              </button>
+            </div>
           </div>
         </div>
       </div>

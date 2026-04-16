@@ -41,15 +41,15 @@ export default function AdminDashboard() {
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
         {[
-          { label: 'Total Students',     value: studentCount === null ? <CircularProgress size={20} sx={{ color: '#C9A227' }} /> : studentCount, icon: <SchoolIcon /> },
+          { label: 'Total Students',     value: studentCount === null ? <CircularProgress size={20} sx={{ color: 'var(--accent)' }} /> : studentCount, icon: <SchoolIcon /> },
           { label: 'Active Clubs',       value: '—', icon: <GroupsIcon /> },
           { label: 'Placement Listings', value: '—', icon: <WorkIcon /> },
         ].map((card) => (
           <div key={card.label} style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, boxShadow: 'var(--shadow)' }}>
-            <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(201,162,39,0.15)', color: '#C9A227', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+            <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(198,90,46,0.15)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
               {card.icon}
             </div>
-            <div style={{ fontSize: 32, fontWeight: 700, color: '#C9A227', marginBottom: 4, lineHeight: 1 }}>{card.value}</div>
+            <div style={{ fontSize: 32, fontWeight: 800, color: 'var(--accent)', marginBottom: 4, lineHeight: 1 }}>{card.value}</div>
             <div style={{ fontSize: 14, color: 'var(--text-secondary)', fontWeight: 500 }}>{card.label}</div>
           </div>
         ))}
@@ -58,7 +58,7 @@ export default function AdminDashboard() {
       {/* Quick links */}
       <div className="mb-4">
         <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <TrendingUpIcon sx={{ fontSize: 20, color: '#C9A227' }} /> Quick Actions
+          <TrendingUpIcon sx={{ fontSize: 20, color: 'var(--primary)' }} /> Quick Actions
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {QUICK_LINKS.map((link) => (
@@ -69,12 +69,12 @@ export default function AdminDashboard() {
               onMouseOver={e => { e.currentTarget.style.background = 'var(--card-bg-hover)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = 'var(--shadow-hover)'; }}
               onMouseOut={e => { e.currentTarget.style.background = 'var(--card-bg)'; e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; }}
             >
-              <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(201,162,39,0.15)', color: '#C9A227', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+              <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(198,90,46,0.15)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
                 {link.icon}
               </div>
               <p style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: 14, margin: '0 0 4px' }}>{link.label}</p>
               <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0 }}>{link.desc}</p>
-              <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: '#C9A227' }}>
+              <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: 'var(--primary)' }}>
                 Go <ArrowForwardIcon sx={{ fontSize: 14 }} />
               </div>
             </button>

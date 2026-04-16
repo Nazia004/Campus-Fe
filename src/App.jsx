@@ -4,7 +4,6 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 
 // Layouts & Page components lazy loaded to reduce initial bundle
-const Landing = lazy(() => import('./pages/Landing'));
 const Login = lazy(() => import('./pages/Login'));
 const AdminLayout = lazy(() => import('./layouts/AdminLayout'));
 const ClubLayout = lazy(() => import('./layouts/ClubLayout'));
@@ -52,14 +51,16 @@ const Loader = () => (
   </div>
 );
 
+const PublicRoute = lazy(() => import('./components/PublicRoute'));
+
 export default function App() {
   return (
     <AuthProvider>
       <Toaster position="top-right" toastOptions={{ style: { borderRadius: '12px', fontFamily: 'Inter, sans-serif', fontSize: '14px' } }} />
       <Suspense fallback={<Loader />}>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
 
           {/* Admin */}
           <Route path="/admin" element={<AdminLayout />}>
@@ -111,7 +112,7 @@ export default function App() {
             <Route path="conferences/:id/applicants" element={<PlacementApplicants />} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Suspense>
     </AuthProvider>

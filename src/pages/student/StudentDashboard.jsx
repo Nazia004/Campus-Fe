@@ -107,12 +107,12 @@ const TABS = [
 ];
 
 const STATUS_STYLE = {
-  Pending:   'bg-yellow-50 text-yellow-700 border border-yellow-200',
+  Pending:   'bg-orange-50 text-orange-600 border border-orange-200',
   Submitted: 'bg-green-50  text-green-700  border border-green-200',
   Overdue:   'bg-red-50    text-red-600    border border-red-200',
 };
 
-const GRADE_COLOR = { 'A+': '#4F46E5', A: '#059669', 'B+': '#0284c7', B: '#d97706', C: '#dc2626' };
+const GRADE_COLOR = { 'A+': '#E07A4F', A: '#C65A2E', 'B+': '#0284c7', B: '#d97706', C: '#dc2626' };
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function relativeTime(dateStr) {
@@ -130,14 +130,14 @@ const TYPE_BADGE = {
   notice:    'border',
 };
 const TYPE_BADGE_STYLE = {
-  club:   { background: 'var(--secondary-bg)', color: 'var(--brown)', borderColor: 'var(--gold)' },
-  notice: { background: 'var(--secondary-bg)', color: 'var(--text-dark)', borderColor: 'var(--secondary-bg)' },
+  club:   { background: 'var(--bg-secondary)', color: 'var(--primary)', borderColor: 'var(--primary)' },
+  notice: { background: 'var(--bg-secondary)', color: 'var(--text-secondary)', borderColor: 'var(--bg-secondary)' },
 };
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 function Card({ children, className = '' }) {
   return (
-    <div className={`rounded-2xl p-6 ${className}`} style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
+    <div className={`rounded-2xl p-6 ${className}`} style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)', transition: 'all 0.3s' }}>
       {children}
     </div>
   );
@@ -166,7 +166,7 @@ function AttendanceTab() {
               </div>
               <LinearProgress
                 variant="determinate" value={pct}
-                sx={{ height: 8, borderRadius: 8, bgcolor: '#f1f5f9',
+                sx={{ height: 8, borderRadius: 8, bgcolor: 'var(--border)',
                   '& .MuiLinearProgress-bar': { bgcolor: color, borderRadius: 8 } }}
               />
             </div>
@@ -213,7 +213,7 @@ function AssignmentsTab() {
                     background: 'var(--primary)', color: '#1C1917',
                     borderRadius: 10, padding: '6px 14px', fontSize: 12, fontWeight: 700,
                     cursor: 'pointer', transition: 'all 0.2s',
-                    boxShadow: '0 2px 8px rgba(201,162,39,0.25)',
+                    boxShadow: '0 2px 8px rgba(198,90,46,0.3)',
                   }}>
                     <CloudUploadIcon sx={{ fontSize: 14 }} />
                     Upload
@@ -504,7 +504,7 @@ export default function StudentDashboard() {
             onClick={() => setActiveTab(t.key)}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all"
             style={activeTab === t.key
-              ? { background: 'var(--primary)', color: '#1C1917', fontWeight: 700 }
+              ? { background: 'var(--primary)', color: '#FFFFFF', fontWeight: 800, boxShadow: 'var(--nav-active-shadow)' }
               : { color: 'var(--text-secondary)' }}
           >
             {t.icon}{t.label}
@@ -540,11 +540,11 @@ export default function StudentDashboard() {
                 onMouseOver={e => { e.currentTarget.style.background = 'var(--card-bg-hover)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
                 onMouseOut={e => { e.currentTarget.style.background = 'var(--card-bg)'; e.currentTarget.style.transform = 'none'; }}
               >
-                <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(201,162,39,0.15)', color: '#C9A227', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+                <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(198,90,46,0.15)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
                   {s.icon}
                 </div>
-                <div style={{ fontSize: 28, fontWeight: 700, color: '#C9A227', lineHeight: 1.1 }}>
-                  {loading ? <CircularProgress size={20} sx={{ color: '#C9A227' }} /> : s.value}
+                <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--accent)', lineHeight: 1.1 }}>
+                  {loading ? <CircularProgress size={20} sx={{ color: 'var(--accent)' }} /> : s.value}
                 </div>
                 <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)', marginTop: 4 }}>{s.label}</div>
               </button>
@@ -557,11 +557,11 @@ export default function StudentDashboard() {
             {/* My Upcoming Events */}
             <Card>
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--brown)' }}>
-                  <EventIcon sx={{ color: 'var(--gold)', fontSize: 18 }} /> My Upcoming Events
+                <h2 className="text-sm font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                  <EventIcon sx={{ color: 'var(--primary)', fontSize: 18 }} /> My Upcoming Events
                 </h2>
                 <button onClick={() => navigate('/student/events')}
-                  className="text-xs font-semibold flex items-center gap-0.5 hover:underline" style={{ color: 'var(--gold)' }}>
+                  className="text-xs font-bold flex items-center gap-0.5 hover:underline" style={{ color: 'var(--primary)' }}>
                   View all <ArrowForwardIcon sx={{ fontSize: 13 }} />
                 </button>
               </div>
@@ -578,19 +578,19 @@ export default function StudentDashboard() {
                   ) : (
                     <div className="space-y-3">
                       {upcomingEvents.slice(0, 4).map((e) => (
-                        <div key={e._id} className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'var(--secondary-bg)' }}>
-                          <div className="w-10 h-10 rounded-lg flex flex-col items-center justify-center flex-shrink-0" style={{ background: 'var(--gold)', color: 'var(--brown)' }}>
+                        <div key={e._id} className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
+                          <div className="w-10 h-10 rounded-lg flex flex-col items-center justify-center flex-shrink-0" style={{ background: 'var(--primary)', color: '#FFF' }}>
                             <span className="text-base font-bold leading-none">{new Date(e.date).getDate()}</span>
-                            <span className="text-xs" style={{ color: 'var(--brown)', opacity: 0.7 }}>{new Date(e.date).toLocaleString('default', { month: 'short' })}</span>
+                            <span className="text-xs" style={{ color: '#FFF', opacity: 0.85 }}>{new Date(e.date).toLocaleString('default', { month: 'short' })}</span>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold truncate" style={{ color: 'var(--brown)' }}>{e.title}</p>
-                            <div className="flex gap-2 text-xs mt-0.5" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>
+                            <p className="text-sm font-bold truncate" style={{ color: 'var(--text-primary)' }}>{e.title}</p>
+                            <div className="flex gap-2 text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
                               {e.time && <span className="flex items-center gap-0.5"><AccessTimeIcon sx={{ fontSize: 11 }} />{e.time}</span>}
                               {e.venue && <span className="flex items-center gap-0.5"><LocationOnIcon sx={{ fontSize: 11 }} />{e.venue}</span>}
                             </div>
                           </div>
-                          {e.club && <Chip label={e.club.name} size="small" sx={{ bgcolor: 'var(--secondary-bg)', color: 'var(--brown)', fontWeight: 600, fontSize: '0.6rem', border: '1px solid var(--gold)' }} />}
+                          {e.club && <Chip label={e.club.name} size="small" sx={{ bgcolor: 'var(--card-bg)', color: 'var(--primary)', fontWeight: 700, fontSize: '0.6rem', border: '1px solid var(--primary)' }} />}
                         </div>
                       ))}
                     </div>
@@ -600,11 +600,11 @@ export default function StudentDashboard() {
             {/* My Clubs */}
             <Card>
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--brown)' }}>
-                  <GroupsIcon sx={{ color: 'var(--gold)', fontSize: 18 }} /> My Clubs
+                <h2 className="text-sm font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                  <GroupsIcon sx={{ color: 'var(--primary)', fontSize: 18 }} /> My Clubs
                 </h2>
                 <button onClick={() => navigate('/student/clubs')}
-                  className="text-xs font-semibold flex items-center gap-0.5 hover:underline" style={{ color: 'var(--gold)' }}>
+                  className="text-xs font-bold flex items-center gap-0.5 hover:underline" style={{ color: 'var(--primary)' }}>
                   Browse more <ArrowForwardIcon sx={{ fontSize: 13 }} />
                 </button>
               </div>
@@ -621,15 +621,15 @@ export default function StudentDashboard() {
                   ) : (
                     <div className="space-y-3">
                       {myClubs.slice(0, 4).map((c) => (
-                        <div key={c._id} className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'var(--secondary-bg)' }}>
-                          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0" style={{ background: 'var(--gold)', color: 'var(--brown)' }}>
+                        <div key={c._id} className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'var(--bg-secondary)' }}>
+                          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0" style={{ background: 'var(--primary)', color: '#FFF' }}>
                             {c.name[0].toUpperCase()}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold truncate" style={{ color: 'var(--brown)' }}>{c.name}</p>
-                            {c.category && <p className="text-xs" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>{c.category}</p>}
+                            <p className="text-sm font-bold truncate" style={{ color: 'var(--text-primary)' }}>{c.name}</p>
+                            {c.category && <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{c.category}</p>}
                           </div>
-                          <Chip label="Joined" size="small" sx={{ bgcolor: 'var(--secondary-bg)', color: 'var(--brown)', fontWeight: 700, fontSize: '0.6rem', border: '1px solid var(--gold)' }} />
+                          <Chip label="Joined" size="small" sx={{ bgcolor: 'var(--card-bg)', color: 'var(--primary)', fontWeight: 800, fontSize: '0.6rem', border: '1px solid var(--primary)' }} />
                         </div>
                       ))}
                     </div>
@@ -643,8 +643,8 @@ export default function StudentDashboard() {
             {/* Recent Notices — live from API */}
             <Card>
               <div className="flex items-center gap-2 mb-5">
-                <NotificationsNoneIcon sx={{ color: 'var(--gold)', fontSize: 18 }} />
-                <h2 className="text-sm font-semibold" style={{ color: 'var(--brown)' }}>Recent Notices</h2>
+                <NotificationsNoneIcon sx={{ color: 'var(--primary)', fontSize: 18 }} />
+                <h2 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>Recent Notices</h2>
               </div>
               {loading
                 ? <div className="flex justify-center py-6"><CircularProgress size={20} sx={{ color: 'var(--gold)' }} /></div>
@@ -676,8 +676,8 @@ export default function StudentDashboard() {
             {/* Upcoming Deadlines */}
             <Card>
               <div className="flex items-center gap-2 mb-5">
-                <AssignmentIcon sx={{ color: 'var(--gold)', fontSize: 18 }} />
-                <h2 className="text-sm font-semibold" style={{ color: 'var(--brown)' }}>Upcoming Deadlines</h2>
+                <AssignmentIcon sx={{ color: 'var(--primary)', fontSize: 18 }} />
+                <h2 className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>Upcoming Deadlines</h2>
               </div>
               <div className="space-y-3">
                 {DEADLINES.map((d, i) => (
@@ -685,8 +685,8 @@ export default function StudentDashboard() {
                     <div className="flex items-center gap-3 min-w-0">
                       <div className={`w-2 h-2 rounded-full flex-shrink-0 ${d.urgent ? 'bg-red-500' : 'bg-yellow-400'}`} />
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold truncate" style={{ color: 'var(--brown)' }}>{d.title}</p>
-                        <p className="text-xs" style={{ color: 'var(--text-dark)', opacity: 0.6 }}>{d.subject}</p>
+                        <p className="text-sm font-bold truncate" style={{ color: 'var(--text-primary)' }}>{d.title}</p>
+                        <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{d.subject}</p>
                       </div>
                     </div>
                     <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ml-3 ${
@@ -748,12 +748,12 @@ function ChatbotPanel() {
             background: 'linear-gradient(135deg, var(--primary), var(--accent, #A67C00))',
             border: 'none', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 6px 28px rgba(201,162,39,0.4)',
+            boxShadow: '0 6px 28px rgba(198,90,46,0.5)',
             transition: 'all 0.3s',
             animation: 'pulseGlow 3s ease-in-out infinite',
           }}
         >
-          <SmartToyIcon sx={{ fontSize: 26, color: '#1C1917' }} />
+          <SmartToyIcon sx={{ fontSize: 26, color: '#FFFFFF' }} />
         </button>
       )}
 

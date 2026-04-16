@@ -28,22 +28,22 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 
 // ── Theme Tokens ──
 const T = {
-  bg:          '#FAF3E0',
-  bgAlt:       '#F5EDD4',
+  bg:          '#FAF7F5',
+  bgAlt:       '#F2EBE6',
   bgCard:      '#FFFFFF',
-  sidebar:     '#EDE0C4',
-  primary:     '#C9A227',
-  primaryDark: '#3E2723',
-  accent:      '#A67C00',
-  textMain:    '#2D2D2D',
-  textLight:   '#6D6D6D',
-  border:      '#E8DCCB',
-  gold10:      'rgba(201,162,39,0.10)',
-  gold15:      'rgba(201,162,39,0.15)',
-  gold20:      'rgba(201,162,39,0.20)',
-  gold30:      'rgba(201,162,39,0.30)',
-  gold40:      'rgba(201,162,39,0.40)',
-  brownDark:   '#2A1B17',
+  sidebar:     '#F5EFEC',
+  primary:     '#C65A2E',
+  primaryDark: '#3A3A3A',
+  accent:      '#E07A4F',
+  textMain:    '#3A3A3A',
+  textLight:   '#5D5754',
+  border:      '#D6D0CC',
+  accent10:    'rgba(198,90,46,0.10)',
+  accent15:    'rgba(198,90,46,0.15)',
+  accent20:    'rgba(198,90,46,0.20)',
+  accent30:    'rgba(198,90,46,0.30)',
+  accent40:    'rgba(198,90,46,0.40)',
+  orangeDark:  '#441F0E',
   problemRed:  '#B4503C',
 };
 
@@ -62,8 +62,8 @@ const KEYFRAMES = `
   to   { opacity: 1; transform: scale(1); }
 }
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(201,162,39,0.4); }
-  50%      { box-shadow: 0 0 0 12px rgba(201,162,39,0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(198,90,46,0.4); }
+  50%      { box-shadow: 0 0 0 12px rgba(198,90,46,0); }
 }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
@@ -193,7 +193,7 @@ function useScrollReveal() {
 // ── Shared styles ──
 const badge = {
   display: 'inline-flex', alignItems: 'center', gap: 8,
-  background: T.gold15, border: `1px solid ${T.gold30}`,
+  background: T.accent15, border: `1px solid ${T.accent30}`,
   color: T.accent, fontSize: 12, fontWeight: 700,
   padding: '5px 16px', borderRadius: 50,
   marginBottom: 16, textTransform: 'uppercase', letterSpacing: 0.5,
@@ -211,8 +211,8 @@ const card = {
 };
 const cardHover = {
   transform: 'translateY(-6px)',
-  boxShadow: `0 14px 44px rgba(201,162,39,0.15)`,
-  borderColor: T.gold30,
+  boxShadow: `0 14px 44px rgba(198,90,46,0.15)`,
+  borderColor: T.accent30,
 };
 
 // ══════════════════════════════════════════════════════════
@@ -245,12 +245,12 @@ export default function Landing() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <div style={{
-            width: 36, height: 36, borderRadius: 10,
-            background: `linear-gradient(135deg, ${T.primary}, ${T.accent})`,
+            width: 38, height: 38, borderRadius: 10,
+            background: 'white', border: `1px solid ${T.border}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: `0 3px 12px ${T.gold40}`,
+            boxShadow: `0 3px 12px ${T.accent20}`, overflow: 'hidden'
           }}>
-            <SchoolIcon sx={{ fontSize: 18, color: T.primaryDark }} />
+            <img src="/cvlogo.png" alt="Logo" style={{ width: '80%', height: '80%', objectFit: 'contain' }} />
           </div>
           <span style={{ fontSize: 18, fontWeight: 800, color: T.primaryDark, letterSpacing: -0.3 }}>CampusHub</span>
         </div>
@@ -293,7 +293,7 @@ export default function Landing() {
         <div style={{ maxWidth: 820, margin: '0 auto', position: 'relative', zIndex: 2 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
-            background: T.gold15, border: `1px solid ${T.gold30}`,
+            background: T.accent15, border: `1px solid ${T.accent30}`,
             color: T.accent, fontSize: 13, fontWeight: 600,
             padding: '6px 18px', borderRadius: 50, marginBottom: 28,
             animation: 'scaleIn 0.6s ease-out 0.2s both',
@@ -682,8 +682,8 @@ function FeatureCard({ icon, title, desc }) {
         transition: 'all 0.35s', position: 'relative', overflow: 'hidden',
         ...(hovered ? {
           transform: 'translateY(-8px)',
-          boxShadow: '0 16px 48px rgba(201,162,39,0.15)',
-          borderColor: T.gold30,
+          boxShadow: '0 16px 48px rgba(198,90,46,0.15)',
+          borderColor: T.accent30,
         } : {}),
       }}
     >
@@ -698,8 +698,8 @@ function FeatureCard({ icon, title, desc }) {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         transition: 'all 0.3s',
         ...(hovered
-          ? { background: `linear-gradient(135deg, ${T.primary}, ${T.accent})`, color: '#FFF', transform: 'scale(1.08)', boxShadow: `0 4px 16px ${T.gold30}` }
-          : { background: T.gold10, color: T.primary }),
+          ? { background: `linear-gradient(135deg, ${T.primary}, ${T.accent})`, color: '#FFF', transform: 'scale(1.08)', boxShadow: `0 4px 16px ${T.accent30}` }
+          : { background: T.accent10, color: T.primary }),
       }}>{icon}</div>
       <div style={{ fontSize: 17, fontWeight: 700, color: T.primaryDark, marginBottom: 8 }}>{title}</div>
       <p style={{ fontSize: 14, color: T.textLight, lineHeight: 1.6, margin: 0 }}>{desc}</p>
