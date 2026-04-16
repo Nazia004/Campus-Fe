@@ -19,13 +19,13 @@ export const CLUB_IMAGE_MAP = {
   'Badminton Club': 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&h=400&fit=crop',
   'Basketball Club': 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800&h=400&fit=crop',
   'Football Club': 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&h=400&fit=crop',
-  'Volleyball Club': 'https://images.unsplash.com/photo-1593786481142-8c117dcf49c4?w=800&h=400&fit=crop',
+  'Volleyball Club': 'https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=800&h=400&fit=crop',
   'Cricket Club': 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&h=400&fit=crop',
   'Athletics Club': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&h=400&fit=crop',
   'Table Tennis Club': 'https://images.unsplash.com/photo-1609710228159-0fa9bd7c0827?w=800&h=400&fit=crop',
 
   // Social & Environmental
-  'NSS (National Service Scheme)': 'https://images.unsplash.com/photo-1593113589914-07599ea3ac16?w=800&h=400&fit=crop',
+  'NSS (National Service Scheme)': 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&h=400&fit=crop',
   'Net Zero Club': 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&h=400&fit=crop',
 };
 
