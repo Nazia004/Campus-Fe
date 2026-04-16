@@ -18,22 +18,22 @@ const T = {
   bg:          '#FAF7F5',
   bgAlt:       '#F2EBE6',
   bgCard:      '#FFFFFF',
-  primary:     '#C65A2E',
-  primaryDark: '#3A3A3A',
-  accent:      '#E07A4F',
+  primary:     '#9b111e',
+  primaryDark: '#4a0309',
+  accent:      '#f5b027',
   textMain:    '#3A3A3A',
   textLight:   '#5D5754',
   border:      '#D6D0CC',
-  accent10:    'rgba(198,90,46,0.10)',
-  accent20:    'rgba(198,90,46,0.20)',
-  accent40:    'rgba(198,90,46,0.40)',
+  accent10:    'rgba(155,17,30,0.10)',
+  accent20:    'rgba(155,17,30,0.20)',
+  accent40:    'rgba(155,17,30,0.40)',
 };
 
 const ROLES = [
-  { key: 'student',   label: 'Student',   icon: <SchoolIcon />,             color: '#C65A2E' },
-  { key: 'club',      label: 'Club',       icon: <GroupsIcon />,             color: '#C65A2E' },
-  { key: 'placement', label: 'Placement',  icon: <WorkIcon />,               color: '#C65A2E' },
-  { key: 'admin',     label: 'Admin',      icon: <AdminPanelSettingsIcon />, color: '#C65A2E' },
+  { key: 'student',   label: 'Student',   icon: <SchoolIcon />,             color: '#9b111e' },
+  { key: 'club',      label: 'Club',       icon: <GroupsIcon />,             color: '#9b111e' },
+  { key: 'placement', label: 'Placement',  icon: <WorkIcon />,               color: '#9b111e' },
+  { key: 'admin',     label: 'Admin',      icon: <AdminPanelSettingsIcon />, color: '#9b111e' },
 ];
 
 export default function Login() {
@@ -117,7 +117,7 @@ export default function Login() {
             className="info-pane"
             onClick={() => window.location.href = 'https://cgu-odisha.ac.in/'}
             style={{ 
-              background: `linear-gradient(160deg, ${T.primary} 0%, ${T.orangeDark || '#441F0E'} 100%)`,
+              background: `linear-gradient(160deg, ${T.primary} 0%, ${T.primaryDark} 100%)`,
               padding: 48, display: 'flex', flexDirection: 'column', color: '#FFF',
               justifyContent: 'space-between', position: 'relative'
             }}
