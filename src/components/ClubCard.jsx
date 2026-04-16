@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const CLUB_IMAGES = [
   'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&h=300&fit=crop',
@@ -82,15 +83,35 @@ export default function ClubCard({
         {/* Meta Section */}
         <div className="space-y-1.5 mb-4">
           <div className="flex items-center gap-2 text-xs text-gray-500">
+            <CalendarMonthIcon sx={{ fontSize: 13, color: '#C9A227' }} />
+            <span>Established 2024</span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <LocationOnIcon sx={{ fontSize: 13, color: '#C9A227' }} />
+            <span className="truncate">{c.venue || 'Campus Grounds'}</span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-gray-500">
             <PeopleIcon sx={{ fontSize: 13, color: '#C9A227' }} />
             <span>{c.memberCount || 0} members</span>
           </div>
-          {c.venue && (
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <LocationOnIcon sx={{ fontSize: 13, color: '#C9A227' }} />
-              <span className="truncate">{c.venue}</span>
-            </div>
-          )}
+        </div>
+
+        {/* Progress bar */}
+        <div className="mb-4">
+          <div className="flex justify-between text-xs mb-1.5">
+            <span className="text-gray-400">Club capacity</span>
+            <span className={`font-semibold ${
+              Math.min(100, ((c.memberCount || 0) / 100) * 100) >= 90 ? 'text-red-500' : Math.min(100, ((c.memberCount || 0) / 100) * 100) >= 60 ? 'text-yellow-500' : 'text-green-600'
+            }`}>{Math.min(100, ((c.memberCount || 0) / 100) * 100)}%</span>
+          </div>
+          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all duration-500 ${
+                Math.min(100, ((c.memberCount || 0) / 100) * 100) >= 90 ? 'bg-red-500' : Math.min(100, ((c.memberCount || 0) / 100) * 100) >= 60 ? 'bg-yellow-400' : 'bg-green-500'
+              }`}
+              style={{ width: `${Math.min(100, ((c.memberCount || 0) / 100) * 100)}%` }}
+            />
+          </div>
         </div>
 
         {/* ── Actions ── */}

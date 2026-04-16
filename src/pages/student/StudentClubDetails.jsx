@@ -104,76 +104,95 @@ export default function StudentClubDetails() {
 
       <div className="bg-white rounded-2xl border border-gray-200 shadow-md overflow-hidden">
         {/* Banner */}
-        <div className="relative h-52 sm:h-64 overflow-hidden">
+        <div className="relative h-56 sm:h-72 overflow-hidden">
           <img src={imgSrc} alt={club.name} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
 
-          <div className={`absolute top-4 left-4 w-13 h-13 w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-xl font-bold text-white shadow-md`}>
-            {club.name[0].toUpperCase()}
-          </div>
-
+          {/* Joined Status */}
           {club.isJoined && (
             <span className="absolute top-4 right-4 text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700 shadow-sm">
               ✓ Joined
             </span>
           )}
 
+          {/* Title overlay */}
           <div className="absolute bottom-4 left-4 right-4">
             {club.category && (
               <span className={`inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full mb-2 ${badgeStyle}`}>
                 {club.category}
               </span>
             )}
-            <h1 className="text-xl sm:text-2xl font-semibold text-white drop-shadow">{club.name}</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold text-white leading-tight drop-shadow">
+              {club.name}
+            </h1>
           </div>
         </div>
 
+        {/* Content */}
         <div className="p-6">
-          {/* Stats */}
-          <div className="flex flex-wrap gap-3 mb-6">
-            <div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 rounded-xl border border-gray-100">
-              <PeopleIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
-              <span className="text-sm font-semibold text-gray-700">{memberCount} Members</span>
-            </div>
-            {club.venue && (
-              <div className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 rounded-xl border border-gray-100">
-                <LocationOnIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
-                <span className="text-sm font-semibold text-gray-700">{club.venue}</span>
+          {/* Meta grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+              <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                <EventIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
               </div>
-            )}
+              <div>
+                <p className="text-xs text-gray-400 font-medium mb-0.5">Established</p>
+                <p className="text-sm font-semibold text-gray-800">2024</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+              <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                <PeopleIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
+              </div>
+              <div>
+                <p className="text-xs text-gray-400 font-medium mb-0.5">Members</p>
+                <p className="text-sm font-semibold text-gray-800">{memberCount}</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+              <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                <LocationOnIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
+              </div>
+              <div>
+                <p className="text-xs text-gray-400 font-medium mb-0.5">Venue</p>
+                <p className="text-sm font-semibold text-gray-800">{club.venue || 'Campus Grounds'}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Members + Progress */}
+          <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <PeopleIcon sx={{ fontSize: 16, color: '#4F46E5' }} />
+                <span className="font-semibold">{memberCount} / 100 capacity</span>
+              </div>
+              <span className={`text-sm font-semibold ${
+                Math.min(100, (memberCount / 100) * 100) >= 90 ? 'text-red-500' : Math.min(100, (memberCount / 100) * 100) >= 60 ? 'text-yellow-500' : 'text-green-600'
+              }`}>
+                {Math.min(100, (memberCount / 100) * 100)}% filled
+              </span>
+            </div>
+            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${
+                  Math.min(100, (memberCount / 100) * 100) >= 90 ? 'bg-red-500' : Math.min(100, (memberCount / 100) * 100) >= 60 ? 'bg-yellow-400' : 'bg-green-500'
+                }`}
+                style={{ width: `${Math.min(100, (memberCount / 100) * 100)}%` }}
+              />
+            </div>
           </div>
 
           {/* Description */}
           {club.description && (
             <div className="mb-6">
-              <h2 className="text-sm font-semibold text-gray-700 mb-2">About</h2>
+              <h2 className="text-sm font-semibold text-gray-700 mb-2">About this Club</h2>
               <p className="text-sm text-gray-500 leading-relaxed">{club.description}</p>
             </div>
           )}
 
-          {/* Member avatars */}
-          {memberCount > 0 && (
-            <div className="mb-6">
-              <h2 className="text-sm font-semibold text-gray-700 mb-3">
-                Members <span className="text-gray-400 font-normal">({memberCount})</span>
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {avatarLetters.map((letter, i) => (
-                  <div
-                    key={i}
-                    className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold ${AVATAR_COLORS[i % AVATAR_COLORS.length]}`}
-                  >
-                    {letter}
-                  </div>
-                ))}
-                {memberCount > 8 && (
-                  <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-xs font-semibold text-gray-500">
-                    +{memberCount - 8}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+          {/* Removed Avatar Grid to maintain exact layout as EventDetails */}
 
           {/* Club Events */}
           {events.length > 0 && (
