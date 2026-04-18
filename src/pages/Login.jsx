@@ -237,9 +237,7 @@ export default function Login() {
                     {showPass ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
                   </button>
                 </div>
-                <p style={{ fontSize: 11, color: T.textLight, marginTop: 6, fontWeight: 500 }}>
-                  Hint: Use <span style={{ fontWeight: 700, color: T.primary }}>{activeRole.label}@2025</span>
-                </p>
+
               </div>
 
               <div style={{ textAlign: 'right', marginTop: -12 }}>
@@ -257,26 +255,7 @@ export default function Login() {
               </button>
             </form>
 
-            <div style={{ marginTop: 'auto', paddingTop: 32, textAlign: 'center' }}>
-              <p style={{ fontSize: 12, color: T.textLight, marginBottom: 12 }}>Trouble connecting?</p>
-              <button
-                onClick={() => {
-                  const mockUser = { name: 'Preview User', email: 'dev@preview.com', role: role };
-                  login(mockUser, 'mock-token');
-                  toast.success(`Entering ${role} Portal (Preview Mode)`);
-                  navigate(`/${role}/dashboard`, { replace: true });
-                }}
-                style={{
-                  background: 'none', border: `1px solid ${T.primary}`, color: T.primary,
-                  padding: '8px 24px', borderRadius: 10, fontSize: 12, fontWeight: 800,
-                  cursor: 'pointer', transition: 'all 0.2s'
-                }}
-                onMouseOver={e => { e.currentTarget.style.background = T.accent10; }}
-                onMouseOut={e => { e.currentTarget.style.background = 'none'; }}
-              >
-                Launch Developer Preview 🚀
-              </button>
-            </div>
+
           </div>
         </div>
       </div>
