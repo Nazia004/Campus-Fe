@@ -2,7 +2,7 @@ export const CLUB_IMAGE_MAP = {
   // Technical
   'Coding Club': 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop',
   'Cyber Security Club': 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&h=400&fit=crop',
-  'Google Developer Groups (GDG on Campus)': 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&h=400&fit=crop',
+  'Google Developer Groups': 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800&h=400&fit=crop',
   'Sir C.V. Raman Science Club': 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=400&fit=crop',
 
   // Cultural
