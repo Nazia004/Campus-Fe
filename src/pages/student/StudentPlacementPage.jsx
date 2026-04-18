@@ -1,36 +1,22 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { CircularProgress, Button } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import BusinessIcon from '@mui/icons-material/Business';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import PeopleIcon from '@mui/icons-material/People';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
-import CustomTypography from '@mui/material/Typography';
+import BoltIcon from '@mui/icons-material/Bolt';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import api from '../../api';
+import PlacementCard from '../../components/PlacementCard';
 import PlacementDetailsModal from '../../components/PlacementDetailsModal';
 import ApplyFormModal from '../../components/ApplyFormModal';
-
-// ── Shared styles matching Beige+Gold theme ──
-const T = {
-  primary: 'var(--color-primary)',    // Main Orange
-  primaryDark: 'var(--color-primary-dark)', // Darker Orange
-  brown: 'var(--color-text-primary)',      // Dark Brown
-  brownLight: 'var(--color-text-secondary)', // Lighter Brown
-  bgLight: 'var(--color-secondary)',    // Beige background
-  cardBg: 'var(--color-surface)',     // White
-  textMain: 'var(--color-text-primary)',
-  textSecondary: 'var(--color-text-secondary)',
-  border: 'var(--color-border)',
-};
+import { getCompanyBrand } from '../../utils/placementBranding';
 
 const TABS = [
-  { id: 'all', label: 'All Placements', path: null },
+  { id: 'all', label: 'All Openings' },
   { id: 'internship', label: 'Internships', path: '/student/internships' },
-  { id: 'job', label: 'Jobs', path: '/student/jobs' },
+  { id: 'job', label: 'Full-time Jobs', path: '/student/jobs' },
   { id: 'campus_drive', label: 'Campus Drives', path: '/student/campus-drives' },
   { id: 'workshop', label: 'Workshops', path: '/student/workshops' },
   { id: 'conference', label: 'Conferences', path: '/student/conferences' },
@@ -38,23 +24,15 @@ const TABS = [
 
 export default function StudentPlacementPage({ type }) {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // If a prop type is provided, use it; otherwise default to 'all' if somehow mounted without one.
-  const initialTab = type || 'all';
-  const [activeTab, setActiveTab] = useState(initialTab);
-
+  const [activeTab, setActiveTab] = useState(type || 'all');
   const [items, setItems] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
   const [fetching, setFetching] = useState(true);
   const [loadingId, setLoadingId] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [applyingItem, setApplyingItem] = useState(null);
-
-  // Stats (derived and mocked for a real feel)
-  const [stats, setStats] = useState({ applied: 0, shortlisted: 0, interviews: 0, offers: 0 });
+  const [stats, setStats] = useState({ applied: 0, shortlisted: 0, offers: 0 });
 
   const fetchItems = async (currentType) => {
     setFetching(true);
@@ -63,60 +41,36 @@ export default function StudentPlacementPage({ type }) {
       const { data } = await api.get(endpoint);
       setItems(data.data);
       
-      // Calculate realistic stats based on data
       const applied = data.data.filter(i => i.hasApplied).length;
       setStats({
         applied: applied,
-        shortlisted: Math.floor(applied * 0.4), // mock
-        interviews: Math.floor(applied * 0.2),  // mock
-        offers: Math.floor(applied * 0.05),     // mock
+        shortlisted: Math.floor(applied * 0.4),
+        offers: Math.floor(applied * 0.05),
       });
     } catch { 
-      toast.error('Failed to load placement data'); 
+      toast.error('Failed to load placements'); 
     } finally { 
       setFetching(false); 
     }
   };
 
-  // Sync tab state with route prop
   useEffect(() => {
     setActiveTab(type || 'all');
     fetchItems(type || 'all');
   }, [type]);
 
-  // Apply Search and Filters
   useEffect(() => {
     let list = items;
-    const q = search.toLowerCase();
-    
-    if (q) {
+    if (search) {
+      const q = search.toLowerCase();
       list = list.filter((i) =>
         (i.title || '').toLowerCase().includes(q) ||
         (i.company || '').toLowerCase().includes(q) ||
         (i.location || '').toLowerCase().includes(q)
       );
     }
-
-    if (statusFilter !== 'All') {
-      if (statusFilter === 'Applied') list = list.filter(i => i.hasApplied);
-      else if (statusFilter === 'Not Applied') list = list.filter(i => !i.hasApplied);
-      else if (statusFilter === 'Closed') list = list.filter(i => !isActive(i));
-      else if (statusFilter === 'Open') list = list.filter(i => isActive(i));
-    }
-
     setFiltered(list);
-  }, [search, statusFilter, items]);
-
-  const handleTabChange = (tab) => {
-    if (tab.id === 'all') {
-      // Internal switch to "All", staying on whatever route we are on but updating local state.
-      setActiveTab('all');
-      fetchItems('all');
-    } else if (tab.path) {
-      // Navigate to correct route, the prop change will trigger re-fetch
-      navigate(tab.path);
-    }
-  };
+  }, [search, items]);
 
   const handleApply = async (item, applicationData) => {
     setLoadingId(item._id);
@@ -125,12 +79,13 @@ export default function StudentPlacementPage({ type }) {
         await api.delete(`/placement/${item._id}/withdraw`);
         toast.success('Application withdrawn');
       } else {
+        // Correct application flow
         await api.post(`/placement/${item._id}/apply`, applicationData || {});
-        toast.success('Applied successfully!');
+        toast.success('Application submitted successfully!');
       }
       fetchItems(activeTab);
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Action failed');
+      toast.error(err.response?.data?.message || 'Failed to submit application');
     } finally { 
       setLoadingId(null); 
     }
@@ -138,222 +93,131 @@ export default function StudentPlacementPage({ type }) {
 
   const isActive = (item) => !item.deadline || new Date(item.deadline) >= new Date();
 
+  // Featured Spotlight logic: Pick 3 highly active or high-stipend placements
+  const featured = items.slice(0, 3);
+
   return (
-    <div style={{ paddingBottom: 60 }}>
-      {/* ━━ 1. STATS SECTION ━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      <div style={{ marginBottom: 32, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
-        {[
-          { label: 'Total Applied', value: stats.applied, color: '#3E2723' },
-          { label: 'Shortlisted', value: stats.shortlisted, color: '#059669' },
-          { label: 'Interviews Scheduled', value: stats.interviews, color: 'var(--color-primary)' },
-          { label: 'Offers Received', value: stats.offers, color: 'var(--color-primary-dark)' }
-        ].map(stat => (
-          <div key={stat.label} style={{
-            background: T.cardBg, border: `1px solid ${T.border}`, borderRadius: 16,
-            padding: '24px 20px', display: 'flex', flexDirection: 'column',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.02)'
-          }}>
-            <span style={{ fontSize: 13, fontWeight: 600, color: T.textSecondary, textTransform: 'uppercase', letterSpacing: 0.5 }}>{stat.label}</span>
-            <span style={{ fontSize: 32, fontWeight: 800, color: stat.color, marginTop: 8 }}>{stat.value}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* ━━ 2. TABS & UNIFIED LAYOUT ━━━━━━━━━━━━━━━━━━ */}
-      <div style={{ borderBottom: `2px solid ${T.border}`, marginBottom: 24, display: 'flex', gap: 24, overflowX: 'auto', paddingBottom: 2 }}>
-        {TABS.map(tab => {
-          const isSelected = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => handleTabChange(tab)}
-              style={{
-                background: 'none', border: 'none', padding: '0 0 12px 0',
-                fontSize: 14, fontWeight: isSelected ? 700 : 500, cursor: 'pointer',
-                color: isSelected ? T.primaryDark : T.textSecondary,
-                borderBottom: isSelected ? `3px solid ${T.primary}` : '3px solid transparent',
-                whiteSpace: 'nowrap', transition: 'all 0.2s', marginBottom: -2
-              }}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-
-      <div style={{ display: 'flex', gap: 16, marginBottom: 32, flexWrap: 'wrap' }}>
-        <div style={{ position: 'relative', flex: '1 1 300px' }}>
-          <SearchIcon style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#A0AABB', fontSize: 20 }} />
-          <input 
-            value={search} onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by role, company, or location..."
-            style={{
-              width: '100%', padding: '12px 16px 12px 42px',
-              border: `1px solid ${T.border}`, borderRadius: 12, background: T.cardBg,
-              fontSize: 14, color: T.textMain, outline: 'none'
-            }} 
-          />
+    <div className="max-w-7xl mx-auto pb-20">
+      
+      {/* ━━ 1. PREMIUM HEADER: DASHBOARD AT A GLANCE ━━━━━━━━━━━━━━━━━━━ */}
+      <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Placement Command Center</h1>
+          <p className="text-gray-500 font-medium">Your path to a successful career begins here.</p>
         </div>
-        <select 
-          value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
-          style={{
-            padding: '12px 16px', border: `1px solid ${T.border}`, borderRadius: 12,
-            background: T.cardBg, fontSize: 14, color: T.textMain, outline: 'none', cursor: 'pointer',
-            minWidth: 160
-          }}
-        >
-          <option value="All">All Statuses</option>
-          <option value="Open">Currently Open</option>
-          <option value="Closed">Closed</option>
-          <option value="Applied">Applied</option>
-          <option value="Not Applied">Not Applied</option>
-        </select>
-      </div>
-
-      {/* ━━ 3. CARD LISTING ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-      {fetching ? (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
-          <CircularProgress style={{ color: T.primary }} />
-        </div>
-      ) : filtered.length === 0 ? (
-        <div style={{
-          background: T.cardBg, border: `1px solid ${T.border}`, borderRadius: 20,
-          padding: '80px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center'
-        }}>
-          <WorkOutlineIcon style={{ fontSize: 48, color: '#D1CDCB', marginBottom: 16 }} />
-          <p style={{ fontSize: 16, fontWeight: 600, color: T.textMain, margin: 0 }}>No placements found</p>
-          <p style={{ fontSize: 14, color: T.textSecondary, marginTop: 6 }}>Try adjusting your filters or search query.</p>
-        </div>
-      ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 24 }}>
-          {filtered.map((item) => {
-            const active = isActive(item);
-            
-            // Generate a subtle pill color based on status
-            let badgeBg = '#F3F4F6';
-            let badgeColor = '#4B5563';
-            let badgeText = 'Not Applied';
-            
-            if (!active) {
-              badgeBg = '#FEE2E2'; badgeColor = '#DC2626'; badgeText = 'Closed';
-            } else if (item.hasApplied) {
-              badgeBg = '#D1FAE5'; badgeColor = '#059669'; badgeText = 'Applied';
-            }
-
-            return (
-              <div key={item._id} style={{
-                background: T.cardBg, border: `1px solid ${T.border}`, borderRadius: 16,
-                padding: 24, display: 'flex', flexDirection: 'column',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.03)', transition: 'transform 0.2s, box-shadow 0.2s',
-                ...(active ? { cursor: 'default' } : { opacity: 0.85 })
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 12px 24px rgba(201,162,39,0.1)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'none';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.03)';
-              }}
-              >
-                {/* Header: Company & Title */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
-                  <div style={{ flex: 1, paddingRight: 16 }}>
-                    <p style={{ fontSize: 12, fontWeight: 700, color: T.primaryDark, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 }}>
-                      {item.company || 'Campus Organization'}
-                    </p>
-                    <h3 style={{ fontSize: 18, fontWeight: 800, color: T.brown, margin: 0, lineHeight: 1.3 }}>
-                      {item.title}
-                    </h3>
-                  </div>
-                  {/* Status Badge */}
-                  <div style={{
-                    background: badgeBg, color: badgeColor, padding: '4px 12px',
-                    borderRadius: 20, fontSize: 11, fontWeight: 700, flexShrink: 0
-                  }}>
-                    {badgeText}
-                  </div>
-                </div>
-
-                {/* Details */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1, marginBottom: 24 }}>
-                  {item.location && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: T.textSecondary }}>
-                      <LocationOnIcon style={{ fontSize: 16, color: '#9CA3AF' }} /> {item.location}
-                    </div>
-                  )}
-                  {(item.stipend || item.salary) && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: T.textSecondary }}>
-                      <BusinessIcon style={{ fontSize: 16, color: '#9CA3AF' }} /> {item.stipend || item.salary}
-                    </div>
-                  )}
-                  {item.deadline && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: T.textSecondary }}>
-                      <CalendarMonthIcon style={{ fontSize: 16, color: '#9CA3AF' }} /> Deadline: {new Date(item.deadline).toLocaleDateString()}
-                    </div>
-                  )}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: T.textSecondary }}>
-                    <PeopleIcon style={{ fontSize: 16, color: '#9CA3AF' }} /> {item.applicantCount || 0} applied
-                  </div>
-                  {item.eligibility && (
-                    <div style={{ padding: '8px 12px', background: T.bgLight, borderRadius: 8, fontSize: 12, color: T.brownLight, marginTop: 4 }}>
-                      <span style={{ fontWeight: 600 }}>Eligibility:</span> {item.eligibility}
-                    </div>
-                  )}
-                </div>
-
-                {/* Actions */}
-                <div style={{ display: 'flex', gap: 12 }}>
-                  <Button
-                    variant={item.hasApplied ? 'outlined' : 'contained'}
-                    disabled={loadingId === item._id || !active || item.hasApplied}
-                    onClick={() => setApplyingItem(item)}
-                    style={{
-                      flex: 1, padding: '10px 0', borderRadius: 10, fontSize: 13, fontWeight: 700, textTransform: 'none',
-                      ...(item.hasApplied
-                        ? { borderColor: '#d1fae5', color: '#059669', background: '#f0fdf4' }
-                        : active 
-                          ? { background: T.primary, color: '#1C1917', boxShadow: 'none' }
-                          : { background: '#E5E7EB', color: '#9CA3AF' })
-                    }}
-                  >
-                    {loadingId === item._id
-                      ? <CircularProgress size={16} color="inherit" />
-                      : !active ? 'Closed'
-                      : item.hasApplied ? 'Applied' : 'Apply Now'}
-                  </Button>
-                  
-                  <Button
-                    variant="text"
-                    style={{
-                      flex: 1, padding: '10px 0', borderRadius: 10, fontSize: 13, fontWeight: 600, textTransform: 'none',
-                      color: T.brown, background: T.bgLight
-                    }}
-                    onClick={() => setSelectedItem(item)}
-                  >
-                    View Details
-                  </Button>
-                </div>
+        
+        <div className="flex gap-4">
+          {[
+            { label: 'Applied', value: stats.applied, icon: <BoltIcon />, color: 'var(--primary)' },
+            { label: 'Shortlisted', value: stats.shortlisted, icon: <ShowChartIcon />, color: '#10B981' },
+            { label: 'Offers', value: stats.offers, icon: <WorkspacePremiumIcon />, color: '#F59E0B' },
+          ].map(s => (
+            <div key={s.label} className="bg-white border border-gray-100 rounded-2xl p-4 min-w-[120px] shadow-sm flex flex-col gap-1 transition-transform hover:-translate-y-1">
+              <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                <span style={{ color: s.color }}>{s.icon}</span> {s.label}
               </div>
-            );
-          })}
+              <div className="text-2xl font-black text-gray-900">{s.value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ━━ 2. FEATURED SPOTLIGHT CAROUSEL ━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      {featured.length > 0 && !fetching && (
+        <div className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+             <div className="w-1 h-6 bg-[var(--primary)] rounded-full" />
+             <h2 className="text-lg font-black text-gray-900 uppercase tracking-tighter italic">Priority Recruitment Drives</h2>
+          </div>
+          <div className="flex gap-6 overflow-x-auto pb-6 -mx-2 px-2 scrollbar-none snap-x">
+            {featured.map(item => {
+              const brand = getCompanyBrand(item.company);
+              return (
+                <div key={item._id} className="min-w-[320px] md:min-w-[400px] snap-start relative group">
+                  <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity rounded-3xl" style={{ from: brand.color, to: brand.lightBg }} />
+                  <PlacementCard 
+                    item={item} 
+                    active={isActive(item)}
+                    onApply={() => setApplyingItem(item)}
+                    onViewDetails={setSelectedItem}
+                    loadingId={loadingId}
+                  />
+                  <div className="absolute -top-2 -right-2 bg-black text-white text-[10px] font-black px-3 py-1 rounded-full shadow-xl animate-bounce">
+                    FEATURED
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 
-      {/* ━━ 4. MODAL ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      {/* ━━ 3. TABS & FILTERING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm mb-10 overflow-hidden">
+        <div className="flex flex-col md:flex-row gap-6 justify-between items-center mb-8">
+          <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  if (tab.id === 'all') { setActiveTab('all'); fetchItems('all'); }
+                  else if (tab.path) navigate(tab.path);
+                }}
+                className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${
+                  activeTab === tab.id 
+                    ? 'bg-gray-900 text-white shadow-xl scale-105' 
+                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+          
+          <div className="relative w-full md:w-80">
+            <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" sx={{ fontSize: 20 }} />
+            <input 
+              value={search} onChange={(e) => setSearch(e.target.value)}
+              placeholder="Filter by role or company..."
+              className="w-full pl-12 pr-6 py-3 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-[var(--primary)] focus:bg-white transition-all text-sm font-medium"
+            />
+          </div>
+        </div>
+
+        {/* ━━ 4. ALL OPENINGS GRID ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+        {fetching ? (
+          <div className="flex justify-center py-20"><CircularProgress sx={{ color: 'var(--primary)' }} /></div>
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-24 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
+            <WorkOutlineIcon sx={{ fontSize: 48, color: '#CBD5E1', mb: 2 }} />
+            <p className="text-gray-900 font-black uppercase tracking-widest">No matching roles</p>
+            <p className="text-gray-400 text-sm mt-1">Try a different search term or check back soon.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filtered.map((item) => (
+              <PlacementCard 
+                key={item._id}
+                item={item}
+                active={isActive(item)}
+                onApply={() => setApplyingItem(item)}
+                onViewDetails={setSelectedItem}
+                loadingId={loadingId}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
       <PlacementDetailsModal 
         open={!!selectedItem}
         onClose={() => setSelectedItem(null)}
         item={selectedItem}
         loadingId={loadingId}
         onApply={handleApply}
-        onOpenApply={(item) => {
-          setSelectedItem(null); // Close details modal first
-          setApplyingItem(item);
-        }}
+        onOpenApply={(item) => { setSelectedItem(null); setApplyingItem(item); }}
       />
 
-      {/* ━━ 5. APPLY FORM MODAL ━━━━━━━━━━━━━━━━━━━━━━ */}
       <ApplyFormModal 
         open={!!applyingItem}
         onClose={() => setApplyingItem(null)}

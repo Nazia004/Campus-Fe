@@ -5,17 +5,8 @@ import BusinessIcon from '@mui/icons-material/Business';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
-const T = {
-  primary: 'var(--color-primary)',
-  primaryDark: 'var(--color-primary-dark)',
-  brown: 'var(--color-text-primary)',
-  bgLight: 'var(--color-secondary)',
-  cardBg: 'var(--color-surface)',
-  textMain: 'var(--color-text-primary)',
-  textSecondary: 'var(--color-text-secondary)',
-  border: 'var(--color-border)',
-};
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import { getCompanyBrand } from '../utils/placementBranding';
 
 export default function PlacementDetailsModal({
   open,
@@ -27,7 +18,9 @@ export default function PlacementDetailsModal({
 }) {
   if (!item) return null;
 
+  const brand = getCompanyBrand(item.company);
   const isActive = !item.deadline || new Date(item.deadline) >= new Date();
+  const initials = (item.company || 'C').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
 
   return (
     <Dialog 
@@ -37,141 +30,129 @@ export default function PlacementDetailsModal({
       fullWidth
       PaperProps={{
         style: {
-          borderRadius: 20,
-          background: T.cardBg,
-          boxShadow: '0 24px 60px rgba(62, 39, 35, 0.15)',
+          borderRadius: 32,
+          background: '#fff',
+          boxShadow: '0 40px 100px rgba(0,0,0,0.15)',
+          overflow: 'hidden'
         }
       }}
     >
-      <div style={{ position: 'relative', padding: '32px 32px 24px 32px', borderBottom: `1px solid ${T.border}`}}>
+      <div style={{ position: 'relative', padding: '40px 40px 0 40px' }}>
         <IconButton 
           onClick={onClose}
-          style={{ position: 'absolute', top: 16, right: 16, color: T.textSecondary }}
+          style={{ position: 'absolute', top: 24, right: 24, color: '#9CA3AF' }}
         >
           <CloseIcon />
         </IconButton>
 
-        <p style={{ fontSize: 13, fontWeight: 800, color: T.primaryDark, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
-          {item.company || 'Campus Organization'}
-        </p>
-        <h2 style={{ fontSize: 24, fontWeight: 800, color: T.brown, margin: 0, lineHeight: 1.2 }}>
-          {item.title}
-        </h2>
+        <div className="flex items-center gap-5 mb-8">
+          <div 
+            className="w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl"
+            style={{ background: brand.lightBg, color: brand.color }}
+          >
+            {initials}
+          </div>
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 800, color: brand.color, textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 4 }}>
+              {item.company || 'Direct Recruitment'}
+            </p>
+            <h2 style={{ fontSize: 28, fontWeight: 900, color: '#111827', margin: 0, lineHeight: 1.1, letterSpacing: '-0.03em' }}>
+              {item.title}
+            </h2>
+          </div>
+        </div>
 
-        <div style={{ display: 'flex', gap: 12, marginTop: 16, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <span style={{
             background: isActive ? '#ECFCCB' : '#FEE2E2', 
-            color: isActive ? '#4D7C0F' : '#DC2626', 
-            padding: '4px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700
+            color: isActive ? '#15803D' : '#DC2626', 
+            padding: '6px 16px', borderRadius: 100, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5
           }}>
-            {isActive ? 'Open for Applications' : 'Closed'}
+            {isActive ? 'Accepting Applications' : 'Closed'}
           </span>
           {item.hasApplied && (
             <span style={{
-              background: '#D1FAE5', color: '#059669', 
-              padding: '4px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700,
-              display: 'flex', alignItems: 'center', gap: 4
+              background: '#D1FAE5', color: '#065F46', 
+              padding: '6px 16px', borderRadius: 100, fontSize: 11, fontWeight: 800,
+              display: 'flex', alignItems: 'center', gap: 6, textTransform: 'uppercase', letterSpacing: 0.5
             }}>
-              <CheckCircleIcon style={{ fontSize: 14 }} /> Applied
+              <CheckCircleIcon style={{ fontSize: 14 }} /> Already Applied
             </span>
           )}
         </div>
       </div>
 
-      <DialogContent style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: 24 }}>
-        {/* Meta Grid */}
+      <DialogContent style={{ padding: '40px' }}>
         <div style={{ 
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20,
-          background: T.bgLight, padding: 24, borderRadius: 16
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 1,
+          background: '#F3F4F6', borderRadius: 24, padding: 1, overflow: 'hidden'
         }}>
-          {item.location && (
-            <div>
-              <p style={{ fontSize: 12, fontWeight: 600, color: T.textSecondary, marginBottom: 4 }}>LOCATION</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, color: T.textMain, fontWeight: 500 }}>
-                <LocationOnIcon style={{ fontSize: 18, color: T.primaryDark }} /> {item.location}
+          {[
+            { label: 'Location', value: item.location, icon: <LocationOnIcon /> },
+            { label: item.type === 'internship' ? 'Stipend' : 'Remuneration', value: item.stipend || item.salary || 'Competitive', icon: <BusinessIcon /> },
+            { label: 'Closing Date', value: item.deadline ? new Date(item.deadline).toLocaleDateString() : 'N/A', icon: <CalendarMonthIcon /> },
+          ].map((meta, idx) => (
+            <div key={idx} style={{ background: '#fff', padding: '20px 24px' }}>
+              <p style={{ fontSize: 10, fontWeight: 800, color: '#9CA3AF', textTransform: 'uppercase', marginBottom: 8, letterSpacing: 0.5 }}>{meta.label}</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 15, color: '#374151', fontWeight: 700 }}>
+                <span style={{ color: brand.color }}>{meta.icon}</span> {meta.value}
               </div>
             </div>
-          )}
-          {(item.stipend || item.salary) && (
-            <div>
-              <p style={{ fontSize: 12, fontWeight: 600, color: T.textSecondary, marginBottom: 4 }}>
-                {item.type === 'internship' ? 'STIPEND' : 'SALARY'}
-              </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, color: T.textMain, fontWeight: 500 }}>
-                <BusinessIcon style={{ fontSize: 18, color: T.primaryDark }} /> {item.stipend || item.salary}
-              </div>
-            </div>
-          )}
-          {item.deadline && (
-            <div>
-              <p style={{ fontSize: 12, fontWeight: 600, color: T.textSecondary, marginBottom: 4 }}>DEADLINE</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, color: T.textMain, fontWeight: 500 }}>
-                <CalendarMonthIcon style={{ fontSize: 18, color: T.primaryDark }} /> {new Date(item.deadline).toLocaleDateString()}
-              </div>
-            </div>
-          )}
+          ))}
         </div>
 
-        {/* Description */}
-        <div>
-          <h3 style={{ fontSize: 16, fontWeight: 800, color: T.brown, marginBottom: 12 }}>Description & Role Overview</h3>
-          <div style={{ 
-            fontSize: 14, color: T.textMain, lineHeight: 1.6, 
-            whiteSpace: 'pre-wrap' 
-          }}>
-            {item.description || 'No detailed description provided for this listing.'}
-          </div>
+        <div style={{ marginTop: 40 }}>
+           <div className="flex items-center gap-3 mb-4">
+             <div className="w-1.5 h-6 rounded-full" style={{ background: brand.color }} />
+             <h3 style={{ fontSize: 18, fontWeight: 900, color: '#111827', margin: 0 }}>Role Overview</h3>
+           </div>
+           <div style={{ fontSize: 15, color: '#4B5563', lineHeight: 1.8, whiteSpace: 'pre-wrap', fontWeight: 500 }}>
+             {item.description || 'Our team is looking for passionate individuals to join our growing organization. No further details provided at this time.'}
+           </div>
         </div>
 
-        {/* Requirements / Eligibility */}
         {item.eligibility && (
-          <div>
-            <h3 style={{ fontSize: 16, fontWeight: 800, color: T.brown, marginBottom: 12 }}>Eligibility Criteria</h3>
-            <div style={{ fontSize: 14, color: T.textMain, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
+          <div style={{ marginTop: 32 }}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-1.5 h-6 rounded-full" style={{ background: brand.color }} />
+              <h3 style={{ fontSize: 18, fontWeight: 900, color: '#111827', margin: 0 }}>Candidate Profile</h3>
+            </div>
+            <div style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.8, padding: '20px', background: brand.lightBg, borderRadius: 16, border: `1px dashed ${brand.color}66` }}>
               {item.eligibility}
             </div>
           </div>
         )}
       </DialogContent>
 
-      <DialogActions style={{ padding: '24px 32px', borderTop: `1px solid ${T.border}` }}>
-        <Button 
-          onClick={onClose} 
-          style={{ color: T.textSecondary, fontWeight: 600, textTransform: 'none', marginRight: 'auto' }}
-        >
-          Cancel
-        </Button>
-        
-        {item.applyLink && (
-          <Button 
-            variant="outlined"
-            onClick={() => window.open(item.applyLink, '_blank')}
-            style={{ 
-              color: T.brown, borderColor: T.border, fontWeight: 600, textTransform: 'none', borderRadius: 8, padding: '8px 24px' 
-            }}
-          >
-            Official Website
-          </Button>
-        )}
-
+      <DialogActions style={{ padding: '0 40px 40px 40px', justifyContent: 'flex-start', gap: 16 }}>
         <Button
-          variant={item.hasApplied ? 'outlined' : 'contained'}
+          variant="contained"
           disabled={loadingId === item._id || !isActive || item.hasApplied}
           onClick={() => onOpenApply(item)}
           style={{
-            padding: '8px 32px', borderRadius: 8, fontSize: 14, fontWeight: 700, textTransform: 'none',
-            ...(item.hasApplied
-              ? { borderColor: '#d1fae5', color: '#059669', background: '#f0fdf4' }
-              : isActive 
-                ? { background: T.primary, color: '#1C1917', boxShadow: 'none' }
-                : { background: '#E5E7EB', color: '#9CA3AF' })
+            minWidth: 180, padding: '14px 24px', borderRadius: 16, fontSize: 13, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1,
+            background: isActive && !item.hasApplied ? 'var(--primary)' : '#E5E7EB',
+            color: isActive && !item.hasApplied ? '#fff' : '#9CA3AF',
+            boxShadow: isActive && !item.hasApplied ? '0 10px 30px rgba(198,90,46,0.3)' : 'none'
           }}
         >
           {loadingId === item._id
             ? <CircularProgress size={20} color="inherit" />
             : !isActive ? 'Closed'
-            : item.hasApplied ? 'Applied' : 'Apply Now'}
+            : item.hasApplied ? 'Already Applied' : 'Start Application'}
         </Button>
+
+        {item.applyLink && (
+          <Button 
+            variant="outlined"
+            onClick={() => window.open(item.applyLink, '_blank')}
+            style={{ 
+              padding: '14px 24px', borderRadius: 16, fontSize: 13, fontWeight: 800, textTransform: 'none', borderColor: '#E5E7EB', color: '#374151'
+            }}
+          >
+            Visit Website
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );
