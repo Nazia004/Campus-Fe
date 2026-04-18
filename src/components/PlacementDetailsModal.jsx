@@ -20,7 +20,14 @@ export default function PlacementDetailsModal({
 
   const brand = getCompanyBrand(item.company);
   const isActive = !item.deadline || new Date(item.deadline) >= new Date();
-  const initials = (item.company || 'C').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  const initials = (item.company || 'C')
+    .replace(/[^\w\s]/gi, '') // Remove special characters like ( )
+    .split(' ')
+    .filter(Boolean)
+    .map(n => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
     <Dialog 

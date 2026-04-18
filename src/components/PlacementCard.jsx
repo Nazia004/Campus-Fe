@@ -24,7 +24,14 @@ export default function PlacementCard({
     statusBadge = { bg: '#D1FAE5', color: '#059669', text: 'Applied' };
   }
 
-  const initials = (item.company || 'C').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  const initials = (item.company || 'C')
+    .replace(/[^\w\s]/gi, '') // Remove special characters like ( )
+    .split(' ')
+    .filter(Boolean)
+    .map(n => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex flex-col p-6 relative overflow-hidden group">
