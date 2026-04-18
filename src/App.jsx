@@ -9,12 +9,15 @@ const AdminLayout = lazy(() => import('./layouts/AdminLayout'));
 const ClubLayout = lazy(() => import('./layouts/ClubLayout'));
 const StudentLayout = lazy(() => import('./layouts/StudentLayout'));
 const PlacementLayout = lazy(() => import('./layouts/PlacementLayout'));
+const FacultyLayout = lazy(() => import('./layouts/FacultyLayout'));
 
 // Lazy loading pages to drastically reduce lag and bundle size
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const ManageStudents = lazy(() => import('./pages/admin/ManageStudents'));
 const ManageClubs = lazy(() => import('./pages/admin/ManageClubs'));
 const ManagePlacements = lazy(() => import('./pages/admin/ManagePlacements'));
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
+
 
 const ClubDashboard = lazy(() => import('./pages/club/ClubDashboard'));
 const ClubsPage = lazy(() => import('./pages/club/ClubsPage'));
@@ -45,6 +48,9 @@ const Workshops = lazy(() => import('./pages/placement/Workshops'));
 const Conferences = lazy(() => import('./pages/placement/Conferences'));
 const PlacementApplicants = lazy(() => import('./pages/placement/PlacementApplicants'));
 
+const FacultyDashboard = lazy(() => import('./pages/faculty/FacultyDashboard'));
+
+
 const Loader = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50">
     <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
@@ -61,6 +67,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/admin-login" element={<PublicRoute><AdminLogin /></PublicRoute>} />
 
           {/* Admin */}
           <Route path="/admin" element={<AdminLayout />}>
@@ -110,6 +117,11 @@ export default function App() {
             <Route path="workshops/:id/applicants" element={<PlacementApplicants />} />
             <Route path="conferences" element={<Conferences />} />
             <Route path="conferences/:id/applicants" element={<PlacementApplicants />} />
+          </Route>
+
+          {/* Faculty */}
+          <Route path="/faculty" element={<FacultyLayout />}>
+            <Route path="dashboard" element={<FacultyDashboard />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

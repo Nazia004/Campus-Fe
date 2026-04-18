@@ -9,6 +9,8 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+
 import api from '../api';
 import { useAuth } from '../context/AuthContext';
 
@@ -32,8 +34,8 @@ const T = {
 const ROLES = [
   { key: 'student',   label: 'Student',   icon: <SchoolIcon />,             color: 'var(--color-primary)' },
   { key: 'club',      label: 'Club',       icon: <GroupsIcon />,             color: 'var(--color-primary)' },
+  { key: 'faculty',   label: 'Faculty',    icon: <SupervisorAccountIcon />,  color: 'var(--color-primary)' },
   { key: 'placement', label: 'Placement',  icon: <WorkIcon />,               color: 'var(--color-primary)' },
-  { key: 'admin',     label: 'Admin',      icon: <AdminPanelSettingsIcon />, color: 'var(--color-primary)' },
 ];
 
 export default function Login() {
@@ -164,11 +166,9 @@ export default function Login() {
                 LOGIN <span style={{ color: T.textLight, fontWeight: 400, margin: '0 4px' }}>|</span> <span style={{ color: T.textLight, fontSize: 16 }}>{activeRole.label.toUpperCase()}</span>
               </div>
               <p style={{ color: T.textLight, fontSize: 13, margin: 0 }}>Please enter your credentials to continue</p>
-              {role !== 'admin' && (
-                <button onClick={() => setRole('admin')} style={{ background: 'none', border: 'none', color: T.primary, fontSize: 13, fontWeight: 700, padding: 0, marginTop: 8, cursor: 'pointer', textDecoration: 'underline' }}>
-                  Click here for admin login
-                </button>
-              )}
+              <button onClick={() => navigate('/admin-login')} style={{ background: 'none', border: 'none', color: T.primary, fontSize: 13, fontWeight: 700, padding: 0, marginTop: 8, cursor: 'pointer', textDecoration: 'underline' }}>
+                Click here for admin login
+              </button>
             </div>
 
             {/* Role Header (Mini) */}

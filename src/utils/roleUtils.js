@@ -22,6 +22,7 @@ export const getDashboardByRole = (role) => {
     case 'admin':       return '/admin/dashboard';
     case 'placement':   return '/placement/dashboard';
     case 'club_leader': return '/club/dashboard';
+    case 'faculty':     return '/faculty/dashboard';
     case 'student':
     default:            return '/student/dashboard';
   }
