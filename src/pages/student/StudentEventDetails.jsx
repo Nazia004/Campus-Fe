@@ -12,7 +12,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
-import { QRCodeCanvas } from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import api from '../../api';
 
 const BOOKMARK_KEY = 'bookmarked_events';
@@ -251,13 +251,13 @@ export default function StudentEventDetails() {
                 
                 <div className="flex flex-col md:flex-row items-center gap-6">
                   <div className="p-3 bg-[var(--bg-secondary)] rounded-2xl border-2 border-dashed border-[var(--border)]">
-                    <QRCodeCanvas 
+                    <QRCodeSVG 
                       value={`EVPASS:${event._id}:${id}`}
                       size={120}
                       level={"H"}
                       includeMargin={false}
-                      fgColor="var(--text-primary)"
-                      bgColor="transparent"
+                      fgColor="currentColor"
+                      className="text-[var(--text-primary)]"
                     />
                   </div>
                   <div className="flex-1 text-center md:text-left">
