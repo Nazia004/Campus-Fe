@@ -103,7 +103,7 @@ export default function StudentPlacementPage({ type }) {
       <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Placement Command Center</h1>
-          <p className="text-gray-500 font-medium">Your path to a successful career begins here.</p>
+          <p className="text-gray-600 font-medium">Your path to a successful career begins here.</p>
         </div>
         
         <div className="flex gap-4">
@@ -113,7 +113,7 @@ export default function StudentPlacementPage({ type }) {
             { label: 'Offers', value: stats.offers, icon: <WorkspacePremiumIcon />, color: '#F59E0B' },
           ].map(s => (
             <div key={s.label} className="bg-white border border-gray-100 rounded-2xl p-4 min-w-[120px] shadow-sm flex flex-col gap-1 transition-transform hover:-translate-y-1">
-              <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+              <div className="flex items-center gap-2 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
                 <span style={{ color: s.color }}>{s.icon}</span> {s.label}
               </div>
               <div className="text-2xl font-black text-gray-900">{s.value}</div>
@@ -174,7 +174,7 @@ export default function StudentPlacementPage({ type }) {
                 className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${
                   activeTab === tab.id 
                     ? 'bg-gray-900 text-white shadow-xl scale-105' 
-                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
+                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                 }`}
               >
                 {tab.label}
@@ -199,7 +199,7 @@ export default function StudentPlacementPage({ type }) {
           <div className="text-center py-24 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
             <WorkOutlineIcon sx={{ fontSize: 48, color: '#CBD5E1', mb: 2 }} />
             <p className="text-gray-900 font-black uppercase tracking-widest">No matching roles</p>
-            <p className="text-gray-400 text-sm mt-1">Try a different search term or check back soon.</p>
+            <p className="text-gray-500 text-sm mt-1">Try a different search term or check back soon.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

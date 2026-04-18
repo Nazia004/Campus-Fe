@@ -17,7 +17,7 @@ export default function PlacementCard({
   const brand = getCompanyBrand(item.company);
   
   // Status style
-  let statusBadge = { bg: 'var(--bg-secondary)', color: 'var(--text-muted)', text: 'Not Applied' };
+  let statusBadge = { bg: '#F1F5F9', color: '#475569', text: 'Not Applied' };
   if (!active) {
     statusBadge = { bg: '#FEE2E2', color: '#DC2626', text: 'Closed' };
   } else if (item.hasApplied) {
@@ -56,7 +56,7 @@ export default function PlacementCard({
 
       {/* Title & Company */}
       <div className="mb-5">
-        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">
           {item.company || 'Campus Drive'}
         </p>
         <h3 className="text-lg font-black text-gray-900 leading-tight group-hover:text-[var(--primary)] transition-colors">
@@ -66,19 +66,19 @@ export default function PlacementCard({
 
       {/* Meta Info */}
       <div className="grid grid-cols-2 gap-y-3 gap-x-2 mb-6">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+        <div className="flex items-center gap-2 text-xs text-gray-600 font-medium">
           <LocationOnIcon sx={{ fontSize: 14, color: brand.color }} />
           <span className="truncate">{item.location}</span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+        <div className="flex items-center gap-2 text-xs text-gray-600 font-medium">
           <BusinessIcon sx={{ fontSize: 14, color: brand.color }} />
           <span className="truncate">{item.stipend || item.salary || 'Competitive'}</span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+        <div className="flex items-center gap-2 text-xs text-gray-600 font-medium">
           <CalendarMonthIcon sx={{ fontSize: 14, color: brand.color }} />
           <span className="truncate">{item.deadline ? new Date(item.deadline).toLocaleDateString() : 'No Deadline'}</span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-gray-500">
+        <div className="flex items-center gap-2 text-xs text-gray-600 font-medium">
           <PeopleIcon sx={{ fontSize: 14, color: brand.color }} />
           <span>{item.applicantCount || 0} applied</span>
         </div>
@@ -87,8 +87,8 @@ export default function PlacementCard({
       {/* Eligibility Badge */}
       {item.eligibility && (
         <div className="mb-6 p-2.5 bg-gray-50 rounded-xl border border-gray-100">
-          <p className="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-tighter">Eligibility</p>
-          <p className="text-xs font-bold text-gray-700 truncate">{item.eligibility}</p>
+          <p className="text-[9px] font-black text-gray-500 uppercase mb-1 tracking-tighter">Eligibility</p>
+          <p className="text-xs font-bold text-gray-800 truncate">{item.eligibility}</p>
         </div>
       )}
 

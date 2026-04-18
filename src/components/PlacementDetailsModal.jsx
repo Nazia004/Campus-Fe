@@ -47,7 +47,7 @@ export default function PlacementDetailsModal({
       <div style={{ position: 'relative', padding: '40px 40px 0 40px' }}>
         <IconButton 
           onClick={onClose}
-          style={{ position: 'absolute', top: 24, right: 24, color: '#9CA3AF' }}
+          style={{ position: 'absolute', top: 24, right: 24, color: '#64748B' }}
         >
           <CloseIcon />
         </IconButton>
@@ -100,7 +100,7 @@ export default function PlacementDetailsModal({
             { label: 'Closing Date', value: item.deadline ? new Date(item.deadline).toLocaleDateString() : 'N/A', icon: <CalendarMonthIcon /> },
           ].map((meta, idx) => (
             <div key={idx} style={{ background: '#fff', padding: '20px 24px' }}>
-              <p style={{ fontSize: 10, fontWeight: 800, color: '#9CA3AF', textTransform: 'uppercase', marginBottom: 8, letterSpacing: 0.5 }}>{meta.label}</p>
+              <p style={{ fontSize: 10, fontWeight: 800, color: '#475569', textTransform: 'uppercase', marginBottom: 8, letterSpacing: 0.5 }}>{meta.label}</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 15, color: '#374151', fontWeight: 700 }}>
                 <span style={{ color: brand.color }}>{meta.icon}</span> {meta.value}
               </div>
@@ -113,7 +113,7 @@ export default function PlacementDetailsModal({
              <div className="w-1.5 h-6 rounded-full" style={{ background: brand.color }} />
              <h3 style={{ fontSize: 18, fontWeight: 900, color: '#111827', margin: 0 }}>Role Overview</h3>
            </div>
-           <div style={{ fontSize: 15, color: '#4B5563', lineHeight: 1.8, whiteSpace: 'pre-wrap', fontWeight: 500 }}>
+           <div style={{ fontSize: 15, color: '#374151', lineHeight: 1.8, whiteSpace: 'pre-wrap', fontWeight: 500 }}>
              {item.description || 'Our team is looking for passionate individuals to join our growing organization. No further details provided at this time.'}
            </div>
         </div>
@@ -124,7 +124,7 @@ export default function PlacementDetailsModal({
               <div className="w-1.5 h-6 rounded-full" style={{ background: brand.color }} />
               <h3 style={{ fontSize: 18, fontWeight: 900, color: '#111827', margin: 0 }}>Candidate Profile</h3>
             </div>
-            <div style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.8, padding: '20px', background: brand.lightBg, borderRadius: 16, border: `1px dashed ${brand.color}66` }}>
+            <div style={{ fontSize: 14, color: '#374151', lineHeight: 1.8, padding: '20px', background: brand.lightBg, borderRadius: 16, border: `1px dashed ${brand.color}66` }}>
               {item.eligibility}
             </div>
           </div>
