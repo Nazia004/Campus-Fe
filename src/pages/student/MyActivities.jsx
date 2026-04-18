@@ -90,8 +90,8 @@ function ClubsTab({ clubs, navigate }) {
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {clubs.map((c) => (
         <div key={c._id} className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden">
-          <div className="h-20 flex items-center justify-center border-b" style={{ background: '#FAF3E0', borderColor: '#E8DCCB' }}>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-extrabold border-2" style={{ background: 'rgba(232,220,203,0.5)', color: '#3E2723', borderColor: '#E8DCCB' }}>
+          <div className="h-20 flex items-center justify-center border-b" style={{ background: 'var(--color-secondary)', borderColor: 'var(--color-border)' }}>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-extrabold border-2" style={{ background: 'rgba(232,220,203,0.5)', color: 'var(--color-text-primary)', borderColor: 'var(--color-border)' }}>
               {c.name[0].toUpperCase()}
             </div>
           </div>
@@ -156,9 +156,9 @@ function PlacementsTab({ placements, navigate }) {
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {placements.map((item) => (
         <div key={item._id} className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden">
-          <div className="h-20 flex flex-col items-center justify-center px-3 border-b" style={{ background: '#FAF3E0', borderColor: '#E8DCCB' }}>
-            <p className="font-extrabold text-sm text-center line-clamp-2 leading-tight" style={{ color: '#3E2723' }}>{item.title}</p>
-            {item.company && <p className="text-xs mt-0.5 truncate" style={{ color: '#6D6D6D' }}>{item.company}</p>}
+          <div className="h-20 flex flex-col items-center justify-center px-3 border-b" style={{ background: 'var(--color-secondary)', borderColor: 'var(--color-border)' }}>
+            <p className="font-extrabold text-sm text-center line-clamp-2 leading-tight" style={{ color: 'var(--color-text-primary)' }}>{item.title}</p>
+            {item.company && <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--color-text-secondary)' }}>{item.company}</p>}
           </div>
           <div className="p-4 flex flex-col flex-1">
             <Chip label={item.type.replace('_', ' ')} size="small"

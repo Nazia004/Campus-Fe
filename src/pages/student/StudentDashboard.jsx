@@ -112,7 +112,7 @@ const STATUS_STYLE = {
   Overdue:   'bg-red-50    text-red-600    border border-red-200',
 };
 
-const GRADE_COLOR = { 'A+': '#E07A4F', A: '#C65A2E', 'B+': '#0284c7', B: '#d97706', C: '#dc2626' };
+const GRADE_COLOR = { 'A+': 'var(--color-primary-light)', A: 'var(--color-primary)', 'B+': '#0284c7', B: '#d97706', C: 'var(--color-error)' };
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function relativeTime(dateStr) {
@@ -155,7 +155,7 @@ function AttendanceTab() {
       <div className="space-y-5">
         {ATTENDANCE.map((a) => {
           const pct = Math.round((a.attended / a.total) * 100);
-          const color = pct >= 75 ? '#4F46E5' : pct >= 60 ? '#f59e0b' : '#ef4444';
+          const color = pct >= 75 ? 'var(--color-success)' : pct >= 60 ? '#f59e0b' : 'var(--color-error)';
           return (
             <div key={a.subject}>
               <div className="flex justify-between text-sm mb-1.5">
@@ -301,7 +301,7 @@ function ResultsTab() {
             <p className="text-2xl font-extrabold" style={{ color: 'var(--text-primary)' }}>{r.marks}<span className="text-sm font-normal" style={{ color: 'var(--text-muted)' }}>/{r.total}</span></p>
             <LinearProgress variant="determinate" value={(r.marks / r.total) * 100}
               sx={{ mt: 1.5, height: 6, borderRadius: 6, bgcolor: '#f1f5f9',
-                '& .MuiLinearProgress-bar': { bgcolor: GRADE_COLOR[r.grade] || '#4F46E5', borderRadius: 6 } }} />
+                '& .MuiLinearProgress-bar': { bgcolor: GRADE_COLOR[r.grade] || 'var(--color-primary)', borderRadius: 6 } }} />
           </Card>
         ))}
       </div>
@@ -745,7 +745,7 @@ function ChatbotPanel() {
           style={{
             position: 'fixed', bottom: 28, right: 28, zIndex: 1000,
             width: 56, height: 56, borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--primary), var(--accent, #A67C00))',
+            background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))',
             border: 'none', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: '0 6px 28px rgba(198,90,46,0.5)',
@@ -769,7 +769,7 @@ function ChatbotPanel() {
           {/* Header */}
           <div style={{
             padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            background: 'linear-gradient(135deg, var(--primary), var(--accent, #A67C00))',
+            background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))',
             color: '#1C1917',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>

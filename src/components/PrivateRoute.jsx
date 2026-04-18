@@ -8,7 +8,7 @@ export default function PrivateRoute({ children, allowedRoles }) {
   const token = localStorage.getItem('campushub_token');
 
   if (!token || !user)
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
 
   if (allowedRoles && !allowedRoles.includes(user.role))
     return <Navigate to={getDashboardByRole(user.role)} replace />;

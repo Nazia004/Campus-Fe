@@ -269,7 +269,7 @@ export default function Landing() {
         </div>
 
         <HoverButton
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/')}
           style={{
             background: `linear-gradient(135deg, ${T.primary}, ${T.accent})`,
             color: T.primaryDark, border: 'none', borderRadius: 10,
@@ -329,7 +329,7 @@ export default function Landing() {
             animation: 'fadeInUp 0.7s ease-out 0.6s both',
           }}>
             <HoverButton
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/')}
               style={{
                 background: `linear-gradient(135deg, ${T.primary}, ${T.accent})`,
                 color: T.primaryDark, border: 'none', borderRadius: 14,
@@ -608,7 +608,7 @@ export default function Landing() {
             using CampusHub to streamline campus life.
           </p>
           <HoverButton
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/')}
             style={{
               background: `linear-gradient(135deg, ${T.primary}, ${T.accent})`,
               color: T.primaryDark, border: 'none', borderRadius: 14,

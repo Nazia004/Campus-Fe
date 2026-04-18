@@ -78,7 +78,7 @@ export default function StudentEvents() {
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-1">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#FAF3E0' }}>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-secondary)' }}>
             <CalendarMonthIcon sx={{ fontSize: 18, color: 'var(--primary)' }} />
           </div>
           <h1 className="text-xl font-semibold text-gray-900">Events</h1>
@@ -101,7 +101,7 @@ export default function StudentEvents() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col items-center justify-center py-20 text-center">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ background: '#FAF3E0' }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'var(--color-secondary)' }}>
             <CalendarMonthIcon sx={{ fontSize: 28, color: 'var(--primary)' }} />
           </div>
           <p className="text-base font-semibold text-gray-700 mb-1">No events found</p>

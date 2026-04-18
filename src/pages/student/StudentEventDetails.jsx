@@ -76,7 +76,7 @@ export default function StudentEventDetails() {
   };
 
   if (loading) return (
-    <div className="flex justify-center py-24"><CircularProgress sx={{ color: '#4F46E5' }} /></div>
+    <div className="flex justify-center py-24"><CircularProgress sx={{ color: 'var(--color-primary)' }} /></div>
   );
   if (!event) return null;
 
@@ -118,8 +118,8 @@ export default function StudentEventDetails() {
             className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 hover:bg-white flex items-center justify-center shadow-sm transition-colors"
           >
             {bookmarked
-              ? <BookmarkIcon sx={{ fontSize: 19, color: '#4F46E5' }} />
-              : <BookmarkBorderIcon sx={{ fontSize: 19, color: '#6B7280' }} />}
+              ? <BookmarkIcon sx={{ fontSize: 19, color: 'var(--color-primary)' }} />
+              : <BookmarkBorderIcon sx={{ fontSize: 19, color: 'var(--color-text-secondary)' }} />}
           </button>
 
           {/* Title overlay */}
@@ -141,7 +141,7 @@ export default function StudentEventDetails() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
             <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
               <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                <CalendarTodayIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
+                <CalendarTodayIcon sx={{ fontSize: 15, color: 'var(--color-primary)' }} />
               </div>
               <div>
                 <p className="text-xs text-gray-400 font-medium mb-0.5">Date</p>
@@ -151,7 +151,7 @@ export default function StudentEventDetails() {
             {event.time && (
               <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
                 <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                  <AccessTimeIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
+                  <AccessTimeIcon sx={{ fontSize: 15, color: 'var(--color-primary)' }} />
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 font-medium mb-0.5">Time</p>
@@ -162,7 +162,7 @@ export default function StudentEventDetails() {
             {event.venue && (
               <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
                 <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                  <LocationOnIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
+                  <LocationOnIcon sx={{ fontSize: 15, color: 'var(--color-primary)' }} />
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 font-medium mb-0.5">Venue</p>
@@ -176,7 +176,7 @@ export default function StudentEventDetails() {
           <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <PeopleIcon sx={{ fontSize: 16, color: '#4F46E5' }} />
+                <PeopleIcon sx={{ fontSize: 16, color: 'var(--color-primary)' }} />
                 <span className="font-semibold">{event.registrationCount || 0} / {capacity} attending</span>
               </div>
               <span className={`text-sm font-semibold ${

@@ -7,14 +7,14 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const T = {
-  primary: '#C9A227',    // Gold
-  primaryDark: '#A67C00', // Darker Gold
-  brown: '#3E2723',      // Dark Brown
-  bgLight: '#FAF3E0',    // Beige background
-  cardBg: '#FFFFFF',     // White
-  textMain: '#2D2D2D',
-  textSecondary: '#6D6D6D',
-  border: '#E8DCCB',
+  primary: 'var(--color-primary)',
+  primaryDark: 'var(--color-primary-dark)',
+  brown: 'var(--color-text-primary)',
+  bgLight: 'var(--color-secondary)',
+  cardBg: 'var(--color-surface)',
+  textMain: 'var(--color-text-primary)',
+  textSecondary: 'var(--color-text-secondary)',
+  border: 'var(--color-border)',
 };
 
 export default function PlacementDetailsModal({

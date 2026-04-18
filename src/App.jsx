@@ -59,8 +59,8 @@ export default function App() {
       <Toaster position="top-right" toastOptions={{ style: { borderRadius: '12px', fontFamily: 'Inter, sans-serif', fontSize: '14px' } }} />
       <Suspense fallback={<Loader />}>
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/" element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/login" element={<Navigate to="/" replace />} />
 
           {/* Admin */}
           <Route path="/admin" element={<AdminLayout />}>
@@ -112,7 +112,7 @@ export default function App() {
             <Route path="conferences/:id/applicants" element={<PlacementApplicants />} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
     </AuthProvider>

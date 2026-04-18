@@ -59,7 +59,7 @@ export default function ClubCard({
             </span>
           )}
           {c.isJoined && (
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ background: '#FAF3E0', color: 'var(--primary)' }}>
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ background: 'var(--color-secondary)', color: 'var(--primary)' }}>
               ✓ Joined
             </span>
           )}
@@ -78,15 +78,15 @@ export default function ClubCard({
         {/* Meta Section */}
         <div className="space-y-1.5 mb-4">
           <div className="flex items-center gap-2 text-xs text-gray-500">
-            <CalendarMonthIcon sx={{ fontSize: 13, color: '#C9A227' }} />
+            <CalendarMonthIcon sx={{ fontSize: 13, color: 'var(--color-primary)' }} />
             <span>Established 2024</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500">
-            <LocationOnIcon sx={{ fontSize: 13, color: '#C9A227' }} />
+            <LocationOnIcon sx={{ fontSize: 13, color: 'var(--color-primary)' }} />
             <span className="truncate">{c.venue || 'Campus Grounds'}</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500">
-            <PeopleIcon sx={{ fontSize: 13, color: '#C9A227' }} />
+            <PeopleIcon sx={{ fontSize: 13, color: 'var(--color-primary)' }} />
             <span>{c.memberCount || 0} members</span>
           </div>
         </div>
@@ -130,7 +130,7 @@ export default function ClubCard({
                   <VisibilityIcon sx={{ fontSize: 13 }} /> Members
                 </button>
               )}
-              <button onClick={() => onEdit(c)} className="flex-1 flex items-center justify-center gap-1 text-xs font-semibold py-2 rounded-xl transition-colors" style={{ color: 'var(--primary)', background: '#FAF3E0' }}>
+              <button onClick={() => onEdit(c)} className="flex-1 flex items-center justify-center gap-1 text-xs font-semibold py-2 rounded-xl transition-colors" style={{ color: 'var(--color-primary)', background: 'var(--color-secondary)' }}>
                 <EditIcon sx={{ fontSize: 13 }} /> Edit
               </button>
               <button onClick={() => onDelete(c._id)} className="flex-1 flex items-center justify-center gap-1 text-xs font-semibold text-red-500 bg-red-50 hover:bg-red-100 py-2 rounded-xl transition-colors">

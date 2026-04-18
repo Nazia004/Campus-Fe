@@ -68,7 +68,7 @@ export default function EventCard({
 
         {/* Club tag — top left */}
         {e.club && (
-          <span className="absolute top-3 left-3 text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm" style={{ background: '#FAF3E0', color: '#1C1917' }}>
+          <span className="absolute top-3 left-3 text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm" style={{ background: 'var(--color-secondary)', color: '#1C1917' }}>
             {e.club.name}
           </span>
         )}
@@ -93,7 +93,7 @@ export default function EventCard({
             {upcoming ? 'Upcoming' : 'Past'}
           </span>
           {e.isRegistered && (
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ background: '#FAF3E0', color: 'var(--primary)' }}>
+            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ background: 'var(--color-secondary)', color: 'var(--primary)' }}>
               ✓ RSVP'd
             </span>
           )}
@@ -111,17 +111,17 @@ export default function EventCard({
         {/* Meta */}
         <div className="space-y-1.5 mb-4">
           <div className="flex items-center gap-2 text-xs text-gray-500">
-            <AccessTimeIcon sx={{ fontSize: 13, color: '#C9A227' }} />
+            <AccessTimeIcon sx={{ fontSize: 13, color: 'var(--color-primary)' }} />
             <span>{dateStr}{e.time ? ` · ${e.time}` : ''}</span>
           </div>
           {e.venue && (
             <div className="flex items-center gap-2 text-xs text-gray-500">
-              <LocationOnIcon sx={{ fontSize: 13, color: '#C9A227' }} />
+              <LocationOnIcon sx={{ fontSize: 13, color: 'var(--color-primary)' }} />
               <span className="truncate">{e.venue}</span>
             </div>
           )}
           <div className="flex items-center gap-2 text-xs text-gray-500">
-            <PeopleIcon sx={{ fontSize: 13, color: '#C9A227' }} />
+            <PeopleIcon sx={{ fontSize: 13, color: 'var(--color-primary)' }} />
             <span>{e.registrationCount || 0} going</span>
           </div>
         </div>
@@ -166,7 +166,7 @@ export default function EventCard({
                   <VisibilityIcon sx={{ fontSize: 13 }} /> Regs
                 </button>
               )}
-              <button onClick={() => onEdit(e)} className="flex-1 flex items-center justify-center gap-1 text-xs font-semibold py-2 rounded-xl transition-colors" style={{ color: 'var(--primary)', background: '#FAF3E0' }}>
+              <button onClick={() => onEdit(e)} className="flex-1 flex items-center justify-center gap-1 text-xs font-semibold py-2 rounded-xl transition-colors" style={{ color: 'var(--color-primary)', background: 'var(--color-secondary)' }}>
                 <EditIcon sx={{ fontSize: 13 }} /> Edit
               </button>
               <button onClick={() => onDelete(e._id)} className="flex-1 flex items-center justify-center gap-1 text-xs font-semibold text-red-500 bg-red-50 hover:bg-red-100 py-2 rounded-xl transition-colors">

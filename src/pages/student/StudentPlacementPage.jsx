@@ -16,15 +16,15 @@ import ApplyFormModal from '../../components/ApplyFormModal';
 
 // ── Shared styles matching Beige+Gold theme ──
 const T = {
-  primary: '#C9A227',    // Gold
-  primaryDark: '#A67C00', // Darker Gold
-  brown: '#3E2723',      // Dark Brown
-  brownLight: '#5D4037', // Lighter Brown
-  bgLight: '#FAF3E0',    // Beige background
-  cardBg: '#FFFFFF',     // White
-  textMain: '#2D2D2D',
-  textSecondary: '#6D6D6D',
-  border: '#E8DCCB',
+  primary: 'var(--color-primary)',    // Main Orange
+  primaryDark: 'var(--color-primary-dark)', // Darker Orange
+  brown: 'var(--color-text-primary)',      // Dark Brown
+  brownLight: 'var(--color-text-secondary)', // Lighter Brown
+  bgLight: 'var(--color-secondary)',    // Beige background
+  cardBg: 'var(--color-surface)',     // White
+  textMain: 'var(--color-text-primary)',
+  textSecondary: 'var(--color-text-secondary)',
+  border: 'var(--color-border)',
 };
 
 const TABS = [
@@ -145,8 +145,8 @@ export default function StudentPlacementPage({ type }) {
         {[
           { label: 'Total Applied', value: stats.applied, color: '#3E2723' },
           { label: 'Shortlisted', value: stats.shortlisted, color: '#059669' },
-          { label: 'Interviews Scheduled', value: stats.interviews, color: '#4F46E5' },
-          { label: 'Offers Received', value: stats.offers, color: '#C9A227' }
+          { label: 'Interviews Scheduled', value: stats.interviews, color: 'var(--color-primary)' },
+          { label: 'Offers Received', value: stats.offers, color: 'var(--color-primary-dark)' }
         ].map(stat => (
           <div key={stat.label} style={{
             background: T.cardBg, border: `1px solid ${T.border}`, borderRadius: 16,

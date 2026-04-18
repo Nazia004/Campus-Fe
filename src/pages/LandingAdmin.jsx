@@ -10,7 +10,7 @@ export default function LandingAdmin() {
         <div className="flex gap-3">
           <button onClick={() => navigate('/')} className="text-rose-200 hover:text-white text-sm transition">Student?</button>
           <button onClick={() => navigate('/faculty')} className="text-rose-200 hover:text-white text-sm transition">Faculty?</button>
-          <button onClick={() => navigate('/login')} className="bg-white text-rose-800 font-semibold px-5 py-2 rounded-full hover:bg-rose-50 transition">
+          <button onClick={() => navigate('/')} className="bg-white text-rose-800 font-semibold px-5 py-2 rounded-full hover:bg-rose-50 transition">
             Admin Login
           </button>
         </div>
@@ -24,7 +24,7 @@ export default function LandingAdmin() {
         <p className="text-rose-200 text-lg max-w-xl mb-8">
           Manage students, faculty, departments, notices, and the entire college system from a single powerful dashboard.
         </p>
-        <button onClick={() => navigate('/login')} className="bg-white text-rose-800 font-bold px-8 py-3 rounded-full text-lg hover:bg-rose-50 transition shadow-lg">
+        <button onClick={() => navigate('/')} className="bg-white text-rose-800 font-bold px-8 py-3 rounded-full text-lg hover:bg-rose-50 transition shadow-lg">
           Enter Admin Panel
         </button>
       </div>

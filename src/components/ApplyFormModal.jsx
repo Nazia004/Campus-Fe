@@ -6,14 +6,14 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useAuth } from '../context/AuthContext';
 
 const T = {
-  primary: '#C9A227',    // Gold
-  primaryDark: '#A67C00', // Darker Gold
+  primary: 'var(--color-primary)',    // Main Orange
+  primaryDark: 'var(--color-primary-dark)', // Darker Orange
   brown: '#3E2723',      // Dark Brown
-  bgLight: '#FAF3E0',    // Beige background
-  cardBg: '#FFFFFF',     // White
-  textMain: '#2D2D2D',
-  textSecondary: '#6D6D6D',
-  border: '#E8DCCB',
+  bgLight: 'var(--color-secondary)',    // Beige background
+  cardBg: 'var(--color-surface)',     // White
+  textMain: 'var(--color-text-primary)',
+  textSecondary: 'var(--color-text-secondary)',
+  border: 'var(--color-border)',
 };
 
 const inputStyle = {

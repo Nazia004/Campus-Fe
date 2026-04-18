@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 
-const NAVY  = '#1F3C88';
-const AQUA  = '#2EC4B6';
-const AQUA_DARK = '#1FA99E';
-const BG    = '#F4F9F9';
+const NAVY  = 'var(--color-primary)';
+const AQUA  = 'var(--color-primary-light)';
+const AQUA_DARK = 'var(--color-primary-dark)';
+const BG    = 'var(--color-bg)';
 
 const features = [
   { icon: '📚', title: 'Academics',       desc: 'Manage courses, timetables, assignments and academic records across departments.' },
@@ -34,7 +34,7 @@ export default function LandingUser() {
           <span className="text-xl font-bold text-white tracking-tight">CampusHub</span>
         </div>
         <button
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/')}
           style={{ background: AQUA, color: '#fff' }}
           onMouseOver={(e) => e.currentTarget.style.background = AQUA_DARK}
           onMouseOut={(e) => e.currentTarget.style.background = AQUA}
@@ -53,11 +53,11 @@ export default function LandingUser() {
         <h1 className="text-5xl font-extrabold mb-4 leading-tight">
           Your Campus, Connected.
         </h1>
-        <p style={{ color: '#B2EBE8' }} className="text-lg max-w-2xl mx-auto mb-8">
+        <p style={{ color: 'var(--color-secondary)' }} className="text-lg max-w-2xl mx-auto mb-8">
           Manage academics, events, placements, and communication — all in one platform.
         </p>
         <button
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/')}
           style={{ background: AQUA, color: '#fff' }}
           onMouseOver={(e) => e.currentTarget.style.background = AQUA_DARK}
           onMouseOut={(e) => e.currentTarget.style.background = AQUA}
@@ -87,7 +87,7 @@ export default function LandingUser() {
       </div>
 
       {/* Features */}
-      <div style={{ background: '#E8F6F5' }} className="px-8 py-14">
+      <div style={{ background: 'var(--color-secondary)' }} className="px-8 py-14">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-center text-2xl font-bold mb-2" style={{ color: NAVY }}>
             Everything you need, in one place
@@ -98,7 +98,7 @@ export default function LandingUser() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {features.map((f) => (
               <div key={f.title} className="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition border border-gray-100">
-                <div style={{ background: '#E8F6F5' }} className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                <div style={{ background: 'var(--color-secondary)' }} className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
                   {f.icon}
                 </div>
                 <h3 className="text-base font-bold mb-1" style={{ color: NAVY }}>{f.title}</h3>
@@ -112,13 +112,13 @@ export default function LandingUser() {
       {/* CTA Banner */}
       <div style={{ background: `linear-gradient(135deg, ${NAVY} 0%, ${AQUA} 100%)` }} className="text-white text-center px-6 py-14">
         <h2 className="text-3xl font-extrabold mb-3">Ready to get started?</h2>
-        <p style={{ color: '#B2EBE8' }} className="text-base mb-6 max-w-lg mx-auto">
+        <p style={{ color: 'var(--color-secondary)' }} className="text-base mb-6 max-w-lg mx-auto">
           Join your campus community and access everything from one unified dashboard.
         </p>
         <button
-          onClick={() => navigate('/login')}
+          onClick={() => navigate('/')}
           style={{ background: '#fff', color: NAVY }}
-          onMouseOver={(e) => e.currentTarget.style.background = '#E8F6F5'}
+          onMouseOver={(e) => e.currentTarget.style.background = 'var(--color-secondary)'}
           onMouseOut={(e) => e.currentTarget.style.background = '#fff'}
           className="font-bold px-8 py-3 rounded-full text-lg transition shadow-lg"
         >
@@ -128,7 +128,7 @@ export default function LandingUser() {
 
       {/* Footer */}
       <div style={{ background: NAVY }} className="text-center py-6">
-        <p style={{ color: '#B2EBE8' }} className="text-sm">© 2025 CampusHub · All rights reserved</p>
+        <p style={{ color: 'var(--color-secondary)' }} className="text-sm">© 2025 CampusHub · All rights reserved</p>
       </div>
     </div>
   );

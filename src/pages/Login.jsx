@@ -15,25 +15,25 @@ import { useAuth } from '../context/AuthContext';
 // ── Theme tokens ──────────────────────────────────────────────────────────────
 // ── Theme tokens ──────────────────────────────────────────────────────────────
 const T = {
-  bg:          '#FAF7F5',
-  bgAlt:       '#F2EBE6',
-  bgCard:      '#FFFFFF',
-  primary:     '#9b111e',
-  primaryDark: '#4a0309',
-  accent:      '#f5b027',
-  textMain:    '#3A3A3A',
-  textLight:   '#5D5754',
-  border:      '#D6D0CC',
+  bg:          'var(--color-bg)',
+  bgAlt:       'var(--color-secondary)',
+  bgCard:      'var(--color-surface)',
+  primary:     'var(--color-primary)',
+  primaryDark: 'var(--color-primary-dark)',
+  accent:      'var(--color-primary-light)',
+  textMain:    'var(--color-text-primary)',
+  textLight:   'var(--color-text-secondary)',
+  border:      'var(--color-border)',
   accent10:    'rgba(155,17,30,0.10)',
   accent20:    'rgba(155,17,30,0.20)',
   accent40:    'rgba(155,17,30,0.40)',
 };
 
 const ROLES = [
-  { key: 'student',   label: 'Student',   icon: <SchoolIcon />,             color: '#9b111e' },
-  { key: 'club',      label: 'Club',       icon: <GroupsIcon />,             color: '#9b111e' },
-  { key: 'placement', label: 'Placement',  icon: <WorkIcon />,               color: '#9b111e' },
-  { key: 'admin',     label: 'Admin',      icon: <AdminPanelSettingsIcon />, color: '#9b111e' },
+  { key: 'student',   label: 'Student',   icon: <SchoolIcon />,             color: 'var(--color-primary)' },
+  { key: 'club',      label: 'Club',       icon: <GroupsIcon />,             color: 'var(--color-primary)' },
+  { key: 'placement', label: 'Placement',  icon: <WorkIcon />,               color: 'var(--color-primary)' },
+  { key: 'admin',     label: 'Admin',      icon: <AdminPanelSettingsIcon />, color: 'var(--color-primary)' },
 ];
 
 export default function Login() {

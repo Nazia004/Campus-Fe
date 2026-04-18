@@ -16,8 +16,7 @@ export default function Navbar() {
     navigate('/', { replace: true });
   };
 
-  const roleBadge = isRole('admin')
-    ? { background: 'rgba(225,29,72,0.2)', color: 'var(--accent)', border: '1px solid rgba(225,29,72,0.35)' }
+    ? { background: 'rgba(225,29,72,0.2)', color: 'var(--color-primary-dark)', border: '1px solid rgba(225,29,72,0.35)' }
     : isRole('placement')
     ? { background: 'rgba(16,185,129,0.2)', color: '#6EE7B7', border: '1px solid rgba(16,185,129,0.3)' }
     : isRole('club_leader')
@@ -53,7 +52,7 @@ export default function Navbar() {
             </span>
           </div>
 
-          <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,var(--primary),var(--accent))', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#fff' }}>
+          <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg,var(--color-primary),var(--color-primary-dark))', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#fff' }}>
             {getUserField('name', 'G').charAt(0).toUpperCase()}
           </div>
 
@@ -78,7 +77,7 @@ export default function Navbar() {
 
           <button
             onClick={() => setShowConfirm(true)}
-            style={{ background: 'linear-gradient(135deg,var(--primary),var(--accent))', color: '#fff', border: 'none', borderRadius: 20, padding: '6px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 16px rgba(198,90,46,0.35)' }}
+            style={{ background: 'linear-gradient(135deg,var(--color-primary),var(--color-primary-dark))', color: '#fff', border: 'none', borderRadius: 20, padding: '6px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 16px rgba(198,90,46,0.35)' }}
             onMouseOver={e => { e.currentTarget.style.filter = 'brightness(1.15)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
             onMouseOut={e => { e.currentTarget.style.filter = 'none'; e.currentTarget.style.transform = 'none'; }}
           >

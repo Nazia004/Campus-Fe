@@ -3,6 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function LoginFaculty() {
   const navigate = useNavigate();
-  useEffect(() => { navigate('/login', { replace: true }); }, []);
+  useEffect(() => { navigate('/', { replace: true }); }, []);
   return null;
 }

@@ -134,7 +134,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    if (!user) { navigate('/login'); return; }
+    if (!user) { navigate('/'); return; }
     toast.success(`Welcome back, ${user.name}! 👋`, { id: 'welcome' });
     loadCommunication();
   }, []);

@@ -23,7 +23,7 @@ export default function SharedLayout({
 
   // Role Guard
   if (!user || (requiredRole && user.role !== requiredRole)) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return (
@@ -94,7 +94,7 @@ export default function SharedLayout({
               onClick={() => { 
                 logout(); 
                 toast.success('Signed out successfully');
-                navigate('/login', { replace: true }); 
+                navigate('/', { replace: true }); 
               }}
               style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 12, fontSize: 14, fontWeight: 600, color: 'var(--text-secondary)', background: 'transparent', border: 'none', cursor: 'pointer', marginTop: 4 }}
               onMouseOver={e => { e.currentTarget.style.background = 'rgba(198,90,46,0.1)'; e.currentTarget.style.color = 'var(--primary)'; }}

@@ -73,7 +73,7 @@ export default function StudentClubDetails() {
   };
 
   if (loading) return (
-    <div className="flex justify-center py-24"><CircularProgress sx={{ color: '#4F46E5' }} /></div>
+    <div className="flex justify-center py-24"><CircularProgress sx={{ color: 'var(--color-primary)' }} /></div>
   );
   if (!club) return null;
 
@@ -128,7 +128,7 @@ export default function StudentClubDetails() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
             <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
               <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                <EventIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
+                <EventIcon sx={{ fontSize: 15, color: 'var(--color-primary)' }} />
               </div>
               <div>
                 <p className="text-xs text-gray-400 font-medium mb-0.5">Established</p>
@@ -137,7 +137,7 @@ export default function StudentClubDetails() {
             </div>
             <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
               <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                <PeopleIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
+                <PeopleIcon sx={{ fontSize: 15, color: 'var(--color-primary)' }} />
               </div>
               <div>
                 <p className="text-xs text-gray-400 font-medium mb-0.5">Members</p>
@@ -146,7 +146,7 @@ export default function StudentClubDetails() {
             </div>
             <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
               <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                <LocationOnIcon sx={{ fontSize: 15, color: '#4F46E5' }} />
+                <LocationOnIcon sx={{ fontSize: 15, color: 'var(--color-primary)' }} />
               </div>
               <div>
                 <p className="text-xs text-gray-400 font-medium mb-0.5">Venue</p>
@@ -159,7 +159,7 @@ export default function StudentClubDetails() {
           <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <PeopleIcon sx={{ fontSize: 16, color: '#4F46E5' }} />
+                <PeopleIcon sx={{ fontSize: 16, color: 'var(--color-primary)' }} />
                 <span className="font-semibold">{memberCount} / 100 capacity</span>
               </div>
               <span className={`text-sm font-semibold ${
@@ -200,7 +200,7 @@ export default function StudentClubDetails() {
                   return (
                     <div key={ev._id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">
                       <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${upcoming ? 'bg-indigo-100' : 'bg-gray-200'}`}>
-                        <EventIcon sx={{ fontSize: 16, color: upcoming ? '#4F46E5' : '#9CA3AF' }} />
+                        <EventIcon sx={{ fontSize: 16, color: upcoming ? 'var(--color-primary)' : '#9CA3AF' }} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-gray-800 truncate">{ev.title}</p>
