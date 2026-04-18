@@ -11,14 +11,12 @@ import api from '../../api';
 import { CLUB_IMAGE_MAP, FALLBACK_IMAGES } from '../../utils/clubImages';
 
 const GRADIENTS = [
-  'from-indigo-500 to-indigo-700', 'from-purple-500 to-purple-700',
-  'from-blue-500 to-blue-700', 'from-teal-500 to-teal-700',
-  'from-violet-500 to-violet-700', 'from-sky-500 to-sky-700',
+  'from-[var(--primary)] to-[var(--primary-dark)]', 'from-[var(--accent)] to-[var(--accent-hover)]',
+  'from-[var(--primary-light)] to-[var(--primary)]', 'from-[var(--secondary)] to-[var(--bg-secondary)]',
 ];
 const BADGE_STYLES = [
-  'bg-indigo-100 text-indigo-700', 'bg-purple-100 text-purple-700',
-  'bg-blue-100 text-blue-700', 'bg-teal-100 text-teal-700',
-  'bg-violet-100 text-violet-700', 'bg-sky-100 text-sky-700',
+  'bg-[var(--nav-hover-bg)] text-[var(--primary)]', 'bg-[var(--accent-light)] text-[var(--accent)]',
+  'bg-[var(--secondary)] text-[var(--text-secondary)]',
 ];
 const AVATAR_COLORS = [
   'bg-indigo-100 text-indigo-700', 'bg-blue-100 text-blue-700',
@@ -126,31 +124,31 @@ export default function StudentClubDetails() {
         <div className="p-6">
           {/* Meta grid */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-              <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                <EventIcon sx={{ fontSize: 15, color: 'var(--color-primary)' }} />
+            <div className="flex items-start gap-3 p-3 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border)]">
+              <div className="w-8 h-8 rounded-lg bg-[var(--nav-hover-bg)] flex items-center justify-center flex-shrink-0">
+                <EventIcon sx={{ fontSize: 15, color: 'var(--primary)' }} />
               </div>
               <div>
-                <p className="text-xs text-gray-400 font-medium mb-0.5">Established</p>
-                <p className="text-sm font-semibold text-gray-800">2024</p>
+                <p className="text-xs text-[var(--text-muted)] font-medium mb-0.5">Established</p>
+                <p className="text-sm font-semibold text-[var(--text-primary)]">2024</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-              <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                <PeopleIcon sx={{ fontSize: 15, color: 'var(--color-primary)' }} />
+            <div className="flex items-start gap-3 p-3 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border)]">
+              <div className="w-8 h-8 rounded-lg bg-[var(--nav-hover-bg)] flex items-center justify-center flex-shrink-0">
+                <PeopleIcon sx={{ fontSize: 15, color: 'var(--primary)' }} />
               </div>
               <div>
-                <p className="text-xs text-gray-400 font-medium mb-0.5">Members</p>
-                <p className="text-sm font-semibold text-gray-800">{memberCount}</p>
+                <p className="text-xs text-[var(--text-muted)] font-medium mb-0.5">Members</p>
+                <p className="text-sm font-semibold text-[var(--text-primary)]">{memberCount}</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-              <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                <LocationOnIcon sx={{ fontSize: 15, color: 'var(--color-primary)' }} />
+            <div className="flex items-start gap-3 p-3 bg-[var(--bg-secondary)] rounded-xl border border-[var(--border)]">
+              <div className="w-8 h-8 rounded-lg bg-[var(--nav-hover-bg)] flex items-center justify-center flex-shrink-0">
+                <LocationOnIcon sx={{ fontSize: 15, color: 'var(--primary)' }} />
               </div>
               <div>
-                <p className="text-xs text-gray-400 font-medium mb-0.5">Venue</p>
-                <p className="text-sm font-semibold text-gray-800">{club.venue || 'Campus Grounds'}</p>
+                <p className="text-xs text-[var(--text-muted)] font-medium mb-0.5">Venue</p>
+                <p className="text-sm font-semibold text-[var(--text-primary)]">{club.venue || 'Campus Grounds'}</p>
               </div>
             </div>
           </div>
@@ -234,8 +232,8 @@ export default function StudentClubDetails() {
             onClick={handleJoin}
             className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors ${
               club.isJoined
-                ? 'border-2 border-red-400 text-red-500 hover:bg-red-50'
-                : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm'
+                ? 'border-2 border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--nav-hover-bg)]'
+                : 'bg-[var(--primary)] text-white hover:bg-[var(--accent)] shadow-sm'
             }`}
           >
             {actionLoading

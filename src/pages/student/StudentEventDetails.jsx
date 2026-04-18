@@ -132,7 +132,7 @@ export default function StudentEventDetails() {
           {event.club && (
             <button
               onClick={() => navigate(`/student/clubs/${event.club._id}`)}
-              className="absolute top-4 left-4 text-xs font-semibold px-3 py-1.5 rounded-full bg-indigo-600/90 text-white shadow-lg backdrop-blur-sm flex items-center gap-1.5 hover:bg-indigo-700 transition-all cursor-pointer border border-white/20"
+              className="absolute top-4 left-4 text-xs font-semibold px-3 py-1.5 rounded-full bg-[var(--primary)] text-white shadow-lg backdrop-blur-sm flex items-center gap-1.5 hover:bg-[var(--accent)] transition-all cursor-pointer border border-white/20"
             >
               <PeopleIcon sx={{ fontSize: 14 }} />
               {event.club.name}
@@ -179,7 +179,7 @@ export default function StudentEventDetails() {
                       href={getGoogleCalendarUrl(event)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 underline flex items-center gap-0.5"
+                      className="text-[10px] font-bold text-[var(--accent)] hover:opacity-80 underline flex items-center gap-0.5 transition-opacity"
                     >
                       <ControlPointIcon sx={{ fontSize: 11 }} /> Sync
                     </a>
@@ -244,35 +244,37 @@ export default function StudentEventDetails() {
 
           {/* Digital Ticket / Entry Pass */}
           {event.isRegistered && (
-            <div className="mb-8 p-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-3xl overflow-hidden shadow-xl transform hover:scale-[1.01] transition-transform">
-              <div className="bg-white rounded-[22px] p-6 relative">
-                <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-gray-50 rounded-full shadow-inner" />
-                <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-gray-50 rounded-full shadow-inner" />
+            <div className="mb-8 p-1 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] rounded-3xl overflow-hidden shadow-xl transform hover:scale-[1.01] transition-transform">
+              <div className="bg-[var(--card-bg)] rounded-[22px] p-6 relative border border-[var(--border)]">
+                <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[var(--bg)] rounded-full shadow-inner" />
+                <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-[var(--bg)] rounded-full shadow-inner" />
                 
                 <div className="flex flex-col md:flex-row items-center gap-6">
-                  <div className="p-3 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                  <div className="p-3 bg-[var(--bg-secondary)] rounded-2xl border-2 border-dashed border-[var(--border)]">
                     <QRCodeCanvas 
                       value={`EVPASS:${event._id}:${id}`}
                       size={120}
                       level={"H"}
                       includeMargin={false}
+                      fgColor="var(--text-primary)"
+                      bgColor="transparent"
                     />
                   </div>
                   <div className="flex-1 text-center md:text-left">
-                    <div className="flex items-center justify-center md:justify-start gap-2 text-indigo-600 mb-2">
+                    <div className="flex items-center justify-center md:justify-start gap-2 text-[var(--accent)] mb-2">
                       <QrCode2Icon sx={{ fontSize: 20 }} />
                       <span className="text-[10px] font-black uppercase tracking-[0.2em]">Verified Entry Pass</span>
                     </div>
-                    <h3 className="font-black text-xl text-gray-900 mb-1 leading-none uppercase">Official Attendee</h3>
-                    <p className="text-xs text-gray-400 font-medium mb-4">Pass ID: {event._id.slice(-8).toUpperCase()}</p>
+                    <h3 className="font-black text-xl text-[var(--text-primary)] mb-1 leading-none uppercase">Official Attendee</h3>
+                    <p className="text-xs text-[var(--text-muted)] font-medium mb-4">Pass ID: {event._id.slice(-8).toUpperCase()}</p>
                     <div className="flex flex-wrap justify-center md:justify-start gap-2">
-                      <div className="px-3 py-1 bg-green-50 rounded-lg border border-green-100 flex items-center gap-1.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                        <span className="text-[10px] font-bold text-green-700 uppercase">Valid for Scan</span>
+                      <div className="px-3 py-1 bg-[var(--nav-hover-bg)] rounded-lg border border-[var(--border)] flex items-center gap-1.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
+                        <span className="text-[10px] font-bold text-[var(--accent)] uppercase">Valid for Scan</span>
                       </div>
                       <button 
                         onClick={() => window.print()}
-                        className="px-3 py-1 bg-gray-900 text-white rounded-lg text-[10px] font-bold uppercase transition-all hover:bg-black flex items-center gap-1.5"
+                        className="px-3 py-1 bg-[var(--primary)] text-white rounded-lg text-[10px] font-bold uppercase transition-all hover:bg-[var(--accent)] flex items-center gap-1.5"
                       >
                         <ContentPasteIcon sx={{ fontSize: 11 }} /> Print Pass
                       </button>
@@ -289,10 +291,10 @@ export default function StudentEventDetails() {
             onClick={handleRegister}
             className={`w-full py-3 rounded-xl text-sm font-semibold transition-colors ${
               !upcoming
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                ? 'bg-[var(--bg-secondary)] text-[var(--text-muted)] cursor-not-allowed'
                 : event.isRegistered
-                ? 'border-2 border-red-400 text-red-500 hover:bg-red-50'
-                : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm'
+                ? 'border-2 border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--nav-hover-bg)]'
+                : 'bg-[var(--primary)] text-white hover:bg-[var(--accent)] shadow-sm'
             }`}
           >
             {actionLoading
