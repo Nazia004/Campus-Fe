@@ -8,7 +8,12 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PeopleIcon from '@mui/icons-material/People';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import QrCode2Icon from '@mui/icons-material/QrCode2';
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import { QRCodeCanvas } from 'qrcode.react';
 import api from '../../api';
 
 const BOOKMARK_KEY = 'bookmarked_events';
@@ -29,6 +34,22 @@ function getIndex(str) {
   for (let i = 0; i < str.length; i++) h = str.charCodeAt(i) + ((h << 5) - h);
   return Math.abs(h);
 }
+
+// Helper for Google Calendar URL
+const getGoogleCalendarUrl = (event) => {
+  const base = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
+  const title = encodeURIComponent(event.title);
+  const details = encodeURIComponent(event.description || '');
+  const location = encodeURIComponent(event.venue || '');
+  
+  // Format date: YYYYMMDDTHHMMSSZ
+  const start = new Date(event.date);
+  const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // 2 hours duration
+  
+  const formatDate = (date) => date.toISOString().replace(/-|:|\.\d\d\d/g, '');
+  
+  return `${base}&text=${title}&details=${details}&location=${location}&dates=${formatDate(start)}/${formatDate(end)}`;
+};
 
 export default function StudentEventDetails() {
   const { id } = useParams();
@@ -83,7 +104,10 @@ export default function StudentEventDetails() {
   const upcoming = new Date(event.date) >= new Date();
   const capacity = event.capacity || 100;
   const filled = Math.min(100, Math.round(((event.registrationCount || 0) / capacity) * 100));
-  const imgSrc = EVENT_IMAGES[getIndex(event.title) % EVENT_IMAGES.length];
+  
+  // PRIORITIZE DB IMAGE
+  const imgSrc = event.image || EVENT_IMAGES[getIndex(event.title) % EVENT_IMAGES.length];
+  
   const dateStr = new Date(event.date).toLocaleDateString('en-US', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
   });
@@ -107,9 +131,13 @@ export default function StudentEventDetails() {
 
           {/* Club tag */}
           {event.club && (
-            <span className="absolute top-4 left-4 text-xs font-semibold px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 shadow-sm">
+            <button
+              onClick={() => navigate(`/student/clubs/${event.club._id}`)}
+              className="absolute top-4 left-4 text-xs font-semibold px-3 py-1.5 rounded-full bg-indigo-600/90 text-white shadow-lg backdrop-blur-sm flex items-center gap-1.5 hover:bg-indigo-700 transition-all cursor-pointer border border-white/20"
+            >
+              <PeopleIcon sx={{ fontSize: 14 }} />
               {event.club.name}
-            </span>
+            </button>
           )}
 
           {/* Bookmark */}
@@ -145,7 +173,19 @@ export default function StudentEventDetails() {
               </div>
               <div>
                 <p className="text-xs text-gray-400 font-medium mb-0.5">Date</p>
-                <p className="text-sm font-semibold text-gray-800">{dateStr}</p>
+                <div className="flex items-center justify-between gap-10">
+                  <p className="text-sm font-semibold text-gray-800">{dateStr}</p>
+                  {upcoming && (
+                    <a
+                      href={getGoogleCalendarUrl(event)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 underline flex items-center gap-0.5"
+                    >
+                      <ControlPointIcon sx={{ fontSize: 11 }} /> Sync
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
             {event.time && (
@@ -196,10 +236,50 @@ export default function StudentEventDetails() {
           </div>
 
           {/* Description */}
-          {event.description && (
             <div className="mb-6">
               <h2 className="text-sm font-semibold text-gray-700 mb-2">About this Event</h2>
               <p className="text-sm text-gray-500 leading-relaxed">{event.description}</p>
+            </div>
+          )}
+
+          {/* Digital Ticket / Entry Pass */}
+          {event.isRegistered && (
+            <div className="mb-8 p-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-3xl overflow-hidden shadow-xl transform hover:scale-[1.01] transition-transform">
+              <div className="bg-white rounded-[22px] p-6 relative">
+                <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-gray-50 rounded-full shadow-inner" />
+                <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-gray-50 rounded-full shadow-inner" />
+                
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <div className="p-3 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                    <QRCodeCanvas 
+                      value={`EVPASS:${event._id}:${id}`}
+                      size={120}
+                      level={"H"}
+                      includeMargin={false}
+                    />
+                  </div>
+                  <div className="flex-1 text-center md:text-left">
+                    <div className="flex items-center justify-center md:justify-start gap-2 text-indigo-600 mb-2">
+                      <QrCode2Icon sx={{ fontSize: 20 }} />
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Verified Entry Pass</span>
+                    </div>
+                    <h3 className="font-black text-xl text-gray-900 mb-1 leading-none uppercase">Official Attendee</h3>
+                    <p className="text-xs text-gray-400 font-medium mb-4">Pass ID: {event._id.slice(-8).toUpperCase()}</p>
+                    <div className="flex flex-wrap justify-center md:justify-start gap-2">
+                      <div className="px-3 py-1 bg-green-50 rounded-lg border border-green-100 flex items-center gap-1.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-[10px] font-bold text-green-700 uppercase">Valid for Scan</span>
+                      </div>
+                      <button 
+                        onClick={() => window.print()}
+                        className="px-3 py-1 bg-gray-900 text-white rounded-lg text-[10px] font-bold uppercase transition-all hover:bg-black flex items-center gap-1.5"
+                      >
+                        <ContentPasteIcon sx={{ fontSize: 11 }} /> Print Pass
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
