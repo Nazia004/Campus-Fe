@@ -124,27 +124,27 @@ export default function StudentPlacementPage({ type }) {
 
       {/* ━━ 2. ANNOUNCEMENT TICKER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
       {featured.length > 0 && !fetching && (
-        <div className="mb-10 group cursor-pointer overflow-hidden border-y border-gray-800 bg-[#1E1E1E] shadow-lg transition-all hover:bg-[#252525]">
+        <div className="mb-10 group cursor-pointer overflow-hidden border-y border-gray-100 bg-[#2D2D2D] shadow-lg transition-all hover:bg-[#353535]">
           <div className="max-w-7xl mx-auto flex items-center h-12">
             {/* Static Badge */}
-            <div className="z-10 bg-[#FFB800] px-4 h-full flex items-center shadow-[4px_0_15px_rgba(0,0,0,0.3)]">
-              <span className="text-[11px] font-black text-black uppercase tracking-[0.2em]">Announcement</span>
+            <div className="z-10 bg-[var(--primary)] px-4 h-full flex items-center shadow-[4px_0_15px_rgba(0,0,0,0.3)]">
+              <span className="text-[11px] font-black text-white uppercase tracking-[0.2em]">Announcement</span>
             </div>
 
             {/* Scrolling Content */}
             <div className="relative flex-1 overflow-hidden h-full flex items-center">
-              <div className="flex animate-[ticker_30s_linear_infinite] group-hover:[animation-play-state:paused] whitespace-nowrap">
+              <div className="flex animate-[ticker_35s_linear_infinite] group-hover:[animation-play-state:paused] whitespace-nowrap">
                 {/* Double the list for seamless loop */}
                 {[...featured, ...featured].map((item, idx) => (
                   <div 
                     key={`${item._id}-${idx}`}
                     onClick={() => setSelectedItem(item)}
-                    className="inline-flex items-center px-12 text-sm font-bold text-gray-200 hover:text-[#FFB800] transition-colors"
+                    className="inline-flex items-center px-12 text-sm font-bold text-gray-200 hover:text-[var(--primary-light)] transition-colors"
                   >
                     <span className="opacity-40 mr-4">/</span>
-                    <span className="text-[10px] uppercase tracking-widest text-[#FFB800] mr-2">New Opportunity:</span>
+                    <span className="text-[10px] uppercase tracking-widest text-[var(--color-primary-light)] mr-2">New Opportunity:</span>
                     {item.company} is hiring for {item.title} 
-                    <span className="ml-3 px-2 py-0.5 rounded bg-gray-800 text-[9px] text-gray-400">View Details →</span>
+                    <span className="ml-3 px-2 py-0.5 rounded bg-gray-700 text-[9px] text-gray-400 group-hover:bg-[var(--primary)] group-hover:text-white transition-all">View Details →</span>
                   </div>
                 ))}
               </div>
