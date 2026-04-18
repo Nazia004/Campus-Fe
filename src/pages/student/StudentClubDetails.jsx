@@ -78,8 +78,8 @@ export default function StudentClubDetails() {
   if (!club) return null;
 
   const idx = getIndex(club.name);
-  const mappedImage = CLUB_IMAGE_MAP[club.name];
-  const imgSrc = mappedImage || FALLBACK_IMAGES[idx % FALLBACK_IMAGES.length];
+  // PRIORITIZE DB IMAGE OR MAPPING
+  const imgSrc = club.image || CLUB_IMAGE_MAP[club.name] || FALLBACK_IMAGES[idx % FALLBACK_IMAGES.length];
   const gradient = GRADIENTS[idx % GRADIENTS.length];
   const badgeStyle = BADGE_STYLES[idx % BADGE_STYLES.length];
   const memberCount = club.memberCount || 0;
