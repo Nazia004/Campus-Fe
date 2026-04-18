@@ -8,7 +8,6 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PeopleIcon from '@mui/icons-material/People';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
@@ -236,6 +235,7 @@ export default function StudentEventDetails() {
           </div>
 
           {/* Description */}
+          {event.description && (
             <div className="mb-6">
               <h2 className="text-sm font-semibold text-gray-700 mb-2">About this Event</h2>
               <p className="text-sm text-gray-500 leading-relaxed">{event.description}</p>
