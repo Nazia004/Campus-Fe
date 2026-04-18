@@ -11,6 +11,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BusinessIcon from '@mui/icons-material/Business';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import api from '../../api';
+import ClubCard from '../../components/ClubCard';
+import EventCard from '../../components/EventCard';
 
 export default function MyActivities() {
   const navigate = useNavigate();
@@ -87,24 +89,9 @@ function ClubsTab({ clubs, navigate }) {
     </div>
   );
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {clubs.map((c) => (
-        <div key={c._id} className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden">
-          <div className="h-20 flex items-center justify-center border-b" style={{ background: '#FAF3E0', borderColor: '#E8DCCB' }}>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl font-extrabold border-2" style={{ background: 'rgba(232,220,203,0.5)', color: '#3E2723', borderColor: '#E8DCCB' }}>
-              {c.name[0].toUpperCase()}
-            </div>
-          </div>
-          <div className="p-4 flex flex-col flex-1">
-            <h3 className="font-bold text-slate-900 text-sm truncate mb-1">{c.name}</h3>
-            {c.category && <Chip label={c.category} size="small" sx={{ mb: 1, alignSelf: 'flex-start', bgcolor: '#f5f3ff', color: '#7c3aed', fontWeight: 600, fontSize: '0.6rem' }} />}
-            <p className="text-xs text-slate-400 line-clamp-2 flex-1">{c.description || 'No description.'}</p>
-            {c.venue && <div className="flex items-center gap-1 text-xs text-slate-400 mt-2"><LocationOnIcon sx={{ fontSize: 12 }} />{c.venue}</div>}
-            <div className="mt-3 pt-3 border-t border-slate-100">
-              <Chip label="✓ Member" size="small" sx={{ bgcolor: '#ecfdf5', color: '#059669', fontWeight: 700, fontSize: '0.65rem' }} />
-            </div>
-          </div>
-        </div>
+        <ClubCard key={c._id} club={{...c, isJoined: true}} onViewDetails={(club) => navigate(`/student/clubs/${club._id}`)} />
       ))}
     </div>
   );
@@ -125,8 +112,8 @@ function EventsTab({ upcomingEvents, pastEvents, myEvents, navigate }) {
           <h2 className="text-sm font-bold text-slate-600 uppercase tracking-wider mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full inline-block" style={{ background: 'var(--primary)' }} /> Upcoming ({upcomingEvents.length})
           </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {upcomingEvents.map((e) => <EventCard key={e._id} event={e} upcoming />)}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {upcomingEvents.map((e) => <EventCard key={e._id} event={{...e, isRegistered: true}} onViewDetails={(event) => navigate(`/student/events/${event._id}`)} />)}
           </div>
         </div>
       )}
@@ -135,8 +122,8 @@ function EventsTab({ upcomingEvents, pastEvents, myEvents, navigate }) {
           <h2 className="text-sm font-bold text-slate-600 uppercase tracking-wider mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-slate-400 inline-block" /> Past ({pastEvents.length})
           </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {pastEvents.map((e) => <EventCard key={e._id} event={e} upcoming={false} />)}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {pastEvents.map((e) => <EventCard key={e._id} event={{...e, isRegistered: true}} onViewDetails={(event) => navigate(`/student/events/${event._id}`)} />)}
           </div>
         </div>
       )}
@@ -178,24 +165,4 @@ function PlacementsTab({ placements, navigate }) {
   );
 }
 
-function EventCard({ event: e, upcoming }) {
-  return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden">
-      <div className="h-20 flex flex-col items-center justify-center border-b" style={{ background: upcoming ? '#FAF3E0' : '#F3F4F6', borderColor: '#E8DCCB' }}>
-        <span className="text-2xl font-extrabold leading-none" style={{ color: upcoming ? '#3E2723' : '#9CA3AF' }}>{new Date(e.date).getDate()}</span>
-        <span className="text-xs font-semibold" style={{ color: upcoming ? 'var(--primary)' : '#9CA3AF' }}>{new Date(e.date).toLocaleString('default', { month: 'short' })} {new Date(e.date).getFullYear()}</span>
-      </div>
-      <div className="p-4 flex flex-col flex-1">
-        <h3 className="font-bold text-slate-900 text-sm truncate mb-1">{e.title}</h3>
-        {e.club && <Chip label={e.club.name} size="small" sx={{ mb: 1, alignSelf: 'flex-start', bgcolor: '#f5f3ff', color: '#7c3aed', fontWeight: 600, fontSize: '0.6rem' }} />}
-        <div className="space-y-1 mt-1">
-          {e.time && <div className="flex items-center gap-1 text-xs text-slate-400"><AccessTimeIcon sx={{ fontSize: 12 }} />{e.time}</div>}
-          {e.venue && <div className="flex items-center gap-1 text-xs text-slate-400"><LocationOnIcon sx={{ fontSize: 12 }} /><span className="truncate">{e.venue}</span></div>}
-        </div>
-        <div className="mt-3 pt-3 border-t border-slate-100">
-          <Chip label="✓ Registered" size="small" sx={{ bgcolor: '#eff6ff', color: '#2563eb', fontWeight: 700, fontSize: '0.65rem' }} />
-        </div>
-      </div>
-    </div>
-  );
-}
+
