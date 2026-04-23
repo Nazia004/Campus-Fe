@@ -102,7 +102,7 @@ export default function AdminLogin() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="admin@campuszone.co.in"
+              placeholder="admin@campusync.co.in"
               style={inputStyle}
               onFocus={e => { e.target.style.borderColor = T.primary; e.target.style.boxShadow = `0 0 0 4px ${T.accent10}`; }}
               onBlur={e => { e.target.style.borderColor = T.border; e.target.style.boxShadow = 'none'; }}
