@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import api from '../../api';
+import { CircularProgress } from '@mui/material';
 
 export default function FacultyDashboard() {
   const { user } = useAuth();
+  const [stats, setStats] = useState({ department: '', studentCount: null });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    api.get('/faculty/stats')
+      .then(({ data }) => setStats(data.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -17,23 +28,25 @@ export default function FacultyDashboard() {
               Welcome Back, {user?.name}! 👋
             </h1>
             <p className="text-slate-500 font-medium mt-1">
-              Faculty Portal &bull; Department of CGU
+              Faculty Portal &bull; Department of {stats.department || '...'}
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-            <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Ongoing Classes</p>
-            <p className="text-2xl font-black text-slate-900">03</p>
+            <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">My Department Students</p>
+            <p className="text-2xl font-black text-slate-900">
+              {stats.studentCount === null ? <CircularProgress size={20} /> : stats.studentCount}
+            </p>
           </div>
           <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
             <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Pending Assignments</p>
             <p className="text-2xl font-black text-slate-900">12</p>
           </div>
           <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-            <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Students Assisted</p>
-            <p className="text-2xl font-black text-slate-900">140+</p>
+            <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Notice Activity</p>
+            <p className="text-2xl font-black text-slate-900">03</p>
           </div>
         </div>
       </div>

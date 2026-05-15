@@ -49,6 +49,7 @@ const Conferences = lazy(() => import('./pages/placement/Conferences'));
 const PlacementApplicants = lazy(() => import('./pages/placement/PlacementApplicants'));
 
 const FacultyDashboard = lazy(() => import('./pages/faculty/FacultyDashboard'));
+const DepartmentStudents = lazy(() => import('./pages/faculty/DepartmentStudents'));
 
 
 const Loader = () => (
@@ -122,6 +123,7 @@ export default function App() {
           {/* Faculty */}
           <Route path="/faculty" element={<FacultyLayout />}>
             <Route path="dashboard" element={<FacultyDashboard />} />
+            <Route path="students" element={<DepartmentStudents />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />
