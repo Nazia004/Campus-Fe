@@ -100,7 +100,6 @@ The frontend is configured for easy deployment on platforms like **Vercel**, **N
 ## 🤝 Contributing
 
 This project was collaboratively developed as a full-stack academic and portfolio project focused on scalable campus management solutions.
-
 ---
 
 ## 📄 License
